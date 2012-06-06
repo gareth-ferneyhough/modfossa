@@ -1,3 +1,10 @@
+/*
+ * main.cpp
+ *
+ *  Created on: May 30, 2012
+ *      Author: gareth
+ */
+
 #include <assert.h>
 
 #include <algorithm>
