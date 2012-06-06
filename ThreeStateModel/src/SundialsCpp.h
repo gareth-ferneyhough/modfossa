@@ -8,6 +8,7 @@
 #ifndef SUNDIALSCPP_H_
 #define SUNDIALSCPP_H_
 
+#include <cstdio>
 #include <cvode/cvode.h>
 #include <nvector/nvector_serial.h>
 #include <cvode/cvode_dense.h>
@@ -18,8 +19,6 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
-
-#include "SundialsCpp.h"
 
 using namespace boost::numeric::ublas;
 
