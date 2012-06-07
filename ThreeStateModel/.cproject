@@ -69,8 +69,16 @@
 		<buildTargets>
 			<target name="Run CMake" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>cmake</buildCommand>
-				<buildArguments>-E chdir build/ cmake -D CMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" ..</buildArguments>
+				<buildArguments>-E chdir build/ cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=../scripts -G "Unix Makefiles" ..</buildArguments>
 				<buildTarget/>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>false</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="install" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-C ${ProjDirPath}/build</buildArguments>
+				<buildTarget>install</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>false</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>

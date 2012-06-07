@@ -15,6 +15,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/python.hpp>
+#include <pyublas/numpy.hpp>
 
 #include "SundialsCpp.h"
 
@@ -22,9 +23,10 @@ using namespace boost::numeric::ublas;
 
 static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot,
 		void *f_data) {
-	// y(0) = PC1
-	// y(1) = PC2
-	// y(2) = PO
+	/* y(0) = PC1
+	 * y(1) = PC2
+	 * y(2) = PO
+	 */
 
 	int kon1 = 1;
 	int koff1 = 100;
@@ -64,31 +66,27 @@ std::vector<double> drange(double first, double increment, double last) {
 	return range;
 }
 
-void solve() {
+pyublas::numpy_matrix<double> solve() {
 
 	std::vector<double> tspan = drange(0, 0.001, 0.1);
-	matrix<double> y;
-
+	matrix<double> result;
 	std::vector<double> initial_conditions;
 
-	// Initial conditions. Start in open state.
-	// pC1(0) = 0
-	// pC2(0) = 0
-	// pO(0)  = 1
+	/* Initial conditions. Start in open state.
+	 * pC1(0) = 0
+	 * pC2(0) = 0
+	 * pO(0)  = 1
+	 */
 
 	initial_conditions.push_back(0);
 	initial_conditions.push_back(0);
 	initial_conditions.push_back(1);
 
 	SundialsCpp open_solver;
-	open_solver.solve(channelProb, tspan, initial_conditions, y);
+	open_solver.solve(channelProb, tspan, initial_conditions, result);
 
-	for (int i = 0; i < y.size1(); ++i) {
-		for (int j = 0; j < y.size2(); ++j) {
-			std::cout << y(i, j) << " ";
-		}
-		std::cout << std::endl;
-	}
+	// Implicitly convert result to pyublas::numpy_matrix
+	return result;
 }
 
 BOOST_PYTHON_MODULE(libModFossa) {
