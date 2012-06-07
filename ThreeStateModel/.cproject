@@ -69,7 +69,7 @@
 		<buildTargets>
 			<target name="Run CMake" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>cmake</buildCommand>
-				<buildArguments>-E chdir build/ cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=../scripts -G "Unix Makefiles" ..</buildArguments>
+				<buildArguments>-E chdir build/ cmake -D CMAKE_BUILD_TYPE=Debug -D CMAKE_INSTALL_PREFIX=../python -G "Unix Makefiles" ..</buildArguments>
 				<buildTarget/>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>false</useDefaultCommand>
