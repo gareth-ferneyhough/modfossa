@@ -14,6 +14,7 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include <boost/python.hpp>
 
 #include "SundialsCpp.h"
 
@@ -63,7 +64,7 @@ std::vector<double> drange(double first, double increment, double last) {
 	return range;
 }
 
-int main() {
+void solve() {
 
 	std::vector<double> tspan = drange(0, 0.001, 0.1);
 	matrix<double> y;
@@ -88,6 +89,9 @@ int main() {
 		}
 		std::cout << std::endl;
 	}
+}
 
-	return 0;
+BOOST_PYTHON_MODULE(libModFossa) {
+	using namespace boost::python;
+	def("solve", solve);
 }
