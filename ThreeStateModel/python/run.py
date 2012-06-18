@@ -1,11 +1,32 @@
 import numpy
 import pyublas
 import matplotlib.pyplot as plt
-import libModFossa
+from libModFossa import *
+
+addState('C1')
+addState('C2')
+
+## Check it out: open(conducting states must have the capital letter 'O' in them.
+## This is how the model knows to make it conducting.
+addState('O') 
 
 
-mat = libModFossa.solve()
+kon1 = 1
+koff1 = 100
+kon2 = 1
+koff2 = 100
 
+connect('C1', 'C2', kon1)
+connect('C2', 'C1', koff1)
+connect('C2', 'O', kon2)
+connect('O', 'C2', koff2)
+
+setInitialState('O')
+setTspan(0, 0.001, 0.1);
+
+mat = run()
+
+## Do ALL the plotting ## 
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.plot(mat[:,0])
@@ -18,4 +39,3 @@ ax.set_ylabel('Probability')
 ax.set_title('Channel Probability')
 
 plt.show()
-

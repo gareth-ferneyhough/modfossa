@@ -18,10 +18,7 @@
 
 #include "Model.h"
 
-//using namespace boost::numeric::ublas;
 using namespace ModFossa;
-
-
 
 /* Function: drange
  *
@@ -64,30 +61,32 @@ pyublas::numpy_matrix<double> solve() {
 	return model->run();
 }
 
-//pyublas::numpy_matrix<double> solve() {
-//
-//	std::vector<double> tspan = drange(0, 0.001, 0.1);
-//	matrix<double> result;
-//	std::vector<double> initial_conditions;
-//
-//	/* Initial conditions. Start in open state.
-//	 * pC1(0) = 0
-//	 * pC2(0) = 0
-//	 * pO(0)  = 1
-//	 */
-//
-//	initial_conditions.push_back(0);
-//	initial_conditions.push_back(0);
-//	initial_conditions.push_back(1);
-//
-//	SundialsCpp open_solver;
-//	open_solver.solve(channelProb, tspan, initial_conditions, result);
-//
-//	// Implicitly convert result to pyublas::numpy_matrix
-//	return result;
-//}
-//
+void addState(std::string name){
+	Model::getInstance()->addState(name);
+}
+
+void connect(std::string in, std::string out, double rate){
+	Model::getInstance()->connect(in, out, rate);
+}
+
+void setInitialState(std::string name){
+	Model::getInstance()->setInitialState(name);
+}
+
+void setTspan(double first, double increment, double last){
+	Model::getInstance()->setTspan(drange(first, increment, last));
+}
+
+pyublas::numpy_matrix<double> run(){
+	return Model::getInstance()->run();
+}
+
 BOOST_PYTHON_MODULE(libModFossa) {
 	using namespace boost::python;
 	def("solve", solve);
+	def("addState", addState);
+	def("connect", connect);
+	def("setInitialState", setInitialState);
+	def("setTspan", setTspan);
+	def("run", run);
 }

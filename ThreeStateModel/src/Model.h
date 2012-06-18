@@ -59,26 +59,9 @@ private:
 	std::vector<double> times;
 };
 
+// Static function used by Sundials
 static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot,
 		void *f_data) {
-	/* y(0) = PC1
-	 * y(1) = PC2
-	 * y(2) = PO
-	 */
-
-	//int kon1 = 1;
-	//int koff1 = 100;
-	//int kon2 = 1;
-	//int koff2 = 100;
-
-	//double pC1 = NV_Ith_S(y_vec, 0);
-	//double pC2 = NV_Ith_S(y_vec, 1);
-	//double pO  = NV_Ith_S(y_vec, 2);
-
-	// p_dot[i] = model.inProb[i] - model.outProb[i];
-	//double pC1_dot = -kon1 * pC1 + koff1 * pC2;
-	//double pC2_dot = -koff1 * pC2 + kon1 * pC1 -kon2 * pC2 + koff2 * pO;
-	//double pO_dot = -koff2 * pO + kon2 * pC2;
 
 	Model* model = Model::getInstance();
 	model->setState(y_vec);
@@ -87,12 +70,6 @@ static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot,
 		double p_dot_i = model->inProb(i) - model->outProb(i);
 		NV_Ith_S(ydot, i) = p_dot_i;
 	}
-
-	//NV_Ith_S(ydot, 0) = pC1_dot;
-	//NV_Ith_S(ydot, 1) = pC2_dot;
-	//NV_Ith_S(ydot, 2) = pO_dot;
-
-
 
 	return 0;
 }
