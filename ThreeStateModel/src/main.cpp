@@ -16,7 +16,7 @@
 #include <boost/python.hpp>
 #include <pyublas/numpy.hpp>
 
-#include "Model.h"
+#include <ModFossa/Model.h>
 
 using namespace ModFossa;
 

@@ -6,7 +6,7 @@
  */
 
 #include <math.h>
-#include "SundialsCpp.h"
+#include <ModFossa/SundialsCpp.h>
 
 
 SundialsCpp::SundialsCpp() :

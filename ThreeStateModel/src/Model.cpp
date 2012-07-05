@@ -5,7 +5,7 @@
  *      Author: gareth
  */
 
-#include "Model.h"
+#include <ModFossa/Model.h>
 
 namespace ModFossa {
 
