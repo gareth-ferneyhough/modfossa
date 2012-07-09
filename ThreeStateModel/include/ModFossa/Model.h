@@ -13,20 +13,20 @@
 
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include <boost/noncopyable.hpp>
 
 #include "SundialsCpp.h"
-#include "uncopyable.h"
 
 namespace ModFossa {
-typedef std::string state_name;
+typedef std::string StateName;
 
 struct Transition {
-	state_name source;
+	StateName source;
 	double rate;
 };
 
 struct State {
-	state_name name;
+	StateName name;
 	std::vector<Transition> in_transitions;
 	std::vector<Transition> out_transitions;
 	bool is_initial;
@@ -34,13 +34,13 @@ struct State {
 	double current_probability;
 };
 
-class Model {
+class Model : private boost::noncopyable{
 public:
 	static Model* getInstance();
-	void addState(state_name);
-	void connect(state_name from, state_name to, double rate);
-	void setInitialState(state_name);
-	void setTspan(std::vector<double> times);
+	void addState(StateName);
+	void connect(StateName from, StateName to, double rate);
+	void setInitialState(StateName);
+	void setIntegrationWindow(std::vector<double> times);
 	boost::numeric::ublas::matrix<double> run();
 
 	int numStates() const;
@@ -48,10 +48,9 @@ public:
 	double inProb(int index);
 	double outProb(int index);
 
-	State* getStateByName(state_name name);
+	State* getStateByName(StateName name);
 
 private:
-	DISALLOW_COPY_AND_ASSIGN(Model);
 	Model();
 	~Model();
 

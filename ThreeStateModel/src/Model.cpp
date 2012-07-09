@@ -15,27 +15,27 @@ Model::Model() {
 Model::~Model() {
 }
 
-Model* Model::getInstance()
-{
-  static Model instance_;
-  return &instance_;
+Model* Model::getInstance() {
+	static Model instance_;
+	return &instance_;
 }
 
-void Model::addState(state_name name) {
+void Model::addState(StateName name) {
 	State state;
 	state.name = name;
 	state.is_initial = false;
 
 	// Conducting states must have a capital 'O' in their name!
-	if(name.find('O') != -1)
+	if (name.find('O') != -1) {
 		state.is_conducting = true;
-
-	else state.is_conducting = false;
+	} else {
+		state.is_conducting = false;
+	}
 
 	states.push_back(state);
 }
 
-void Model::connect(state_name from, state_name to, double rate) {
+void Model::connect(StateName from, StateName to, double rate) {
 	State* from_state = getStateByName(from);
 	State* to_state = getStateByName(to);
 
@@ -50,12 +50,12 @@ void Model::connect(state_name from, state_name to, double rate) {
 	to_state->in_transitions.push_back(incoming);
 }
 
-void Model::setInitialState(state_name name) {
+void Model::setInitialState(StateName name) {
 	State* state = getStateByName(name);
 	state->is_initial = true;
 }
 
-void Model::setTspan(std::vector<double> times) {
+void Model::setIntegrationWindow(std::vector<double> times) {
 	this->times = times;
 }
 
@@ -63,11 +63,12 @@ boost::numeric::ublas::matrix<double> Model::run() {
 	boost::numeric::ublas::matrix<double> result;
 	std::vector<double> initial_conditions;
 
-	for(int i = 0; i < states.size(); ++i){
-		if(states[i].is_initial == 1)
+	for (unsigned int i = 0; i < states.size(); ++i) {
+		if (states[i].is_initial == 1) {
 			initial_conditions.push_back(1);
-		else
+		} else {
 			initial_conditions.push_back(0);
+		}
 	}
 
 	SundialsCpp open_solver;
@@ -81,7 +82,7 @@ int Model::numStates() const {
 }
 
 void Model::setState(const N_Vector& state) {
-	for(int i = 0; i < states.size(); ++i){
+	for (unsigned int i = 0; i < states.size(); ++i) {
 		states[i].current_probability = NV_Ith_S(state, i);
 	}
 }
@@ -90,7 +91,7 @@ double Model::inProb(int index) {
 	double in_prob = 0;
 	State state = states[index];
 
-	for(int i = 0; i < state.in_transitions.size(); ++i){
+	for (unsigned int i = 0; i < state.in_transitions.size(); ++i) {
 		Transition incoming_transition = state.in_transitions[i];
 		double incoming_rate = incoming_transition.rate;
 		State* incoming_state = getStateByName(incoming_transition.source);
@@ -105,7 +106,7 @@ double Model::outProb(int index) {
 	double out_prob = 0;
 	State state = states[index];
 
-	for(int i = 0; i < state.out_transitions.size(); ++i){
+	for (unsigned int i = 0; i < state.out_transitions.size(); ++i) {
 		Transition outgoing_transition = state.out_transitions[i];
 		double outgoing_rate = outgoing_transition.rate;
 		out_prob += outgoing_rate * state.current_probability;
@@ -114,12 +115,13 @@ double Model::outProb(int index) {
 	return out_prob;
 }
 
-State* Model::getStateByName(state_name name){
-	for(int i = 0; i < states.size(); ++i) {
-		if(states[i].name == name)
+State* Model::getStateByName(StateName name) {
+	for (unsigned int i = 0; i < states.size(); ++i) {
+		if (states[i].name == name) {
 			return &(states[i]);
+		}
 	}
-		return NULL;
+	return NULL;
 }
 
 } /* namespace ModFossa */

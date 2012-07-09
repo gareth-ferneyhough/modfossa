@@ -37,12 +37,17 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
+					<fileInfo id="0.426130443.1310116731" name="Model.cpp" rcbsApplicability="disable" resourcePath="src/Model.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.199629596.1328279180">
+						<tool id="org.eclipse.cdt.build.core.settings.holder.199629596.1328279180" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.1622525310">
+							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.629633062" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+						</tool>
+					</fileInfo>
 					<fileInfo id="0.426130443.1645554877" name="SundialsCpp.cpp" rcbsApplicability="disable" resourcePath="src/SundialsCpp.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.199629596.160750645">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.199629596.160750645" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.1622525310">
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.897746896" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>
 					</fileInfo>
-					<fileInfo id="0.426130443.143732346" name="main.cpp" rcbsApplicability="disable" resourcePath="src/main.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.199629596.1966596860">
+					<fileInfo id="0.426130443.143732346" name="main.cpp" rcbsApplicability="disable" resourcePath="src/ModFossaPyInterface.cpp" toolsToInvoke="org.eclipse.cdt.build.core.settings.holder.199629596.1966596860">
 						<tool id="org.eclipse.cdt.build.core.settings.holder.199629596.1966596860" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder.1622525310">
 							<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1911273917" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 						</tool>

@@ -22,7 +22,7 @@ connect('C2', 'O', kon2)
 connect('O', 'C2', koff2)
 
 setInitialState('O')
-setTspan(0, 0.001, 0.1);
+setIntegrationWindow(0, 0.001, 0.1);
 
 mat = run()
 
