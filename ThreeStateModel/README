@@ -1,0 +1,39 @@
+ModFossa Ion Channel Simulator 
+==============================
+
+http://public.modfossa.here
+
+Gareth Ferneyhough, University of Nevada, Reno. 
+gareth.ferneyhough@gmail.com
+
+
+Overview
+---------
+
+Simple three-state ion channel model using Sundials ODE Solver, 
+Boost:Python and PyUblas
+
+Build instructions
+------------------
+
+This requires Boost (including Boost:Python and Ublas), 
+Sundials ODE Solver, and PyUblas. They are available here:
+
+	https://computation.llnl.gov/casc/sundials/download/download.html
+	http://www.boost.org/
+	git clone http://git.tiker.net/trees/pyublas.git
+	
+To build, create a new directory called 'build' and invoke cmake from the
+new build directory like so:
+
+	cmake -D CMAKE_INSTALL_PREFIX=../python ../CMake
+	
+This will generate makefiles in the build directory. You can change the install 
+prefix if you wish. Then type the usual 'make' and 'make install'. You can build
+documentation with 'make Documentation'.
+
+Running
+-------
+
+Run 'run.py' in the 'Python' directory. Make sure libModFossa.so is in 
+the same directory, or somewhere where Python can find it.
