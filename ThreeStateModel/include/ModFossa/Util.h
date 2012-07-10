@@ -12,13 +12,13 @@
  *
  */
 std::vector<double> drange(double first, double increment, double last) {
-	std::vector<double> range;
+    std::vector<double> range;
 
-	double t = first;
-	while (t <= last) {
-		range.push_back(t);
-		t += increment;
-	}
+    double t = first;
+    while (t <= last) {
+        range.push_back(t);
+        t += increment;
+    }
 
-	return range;
+    return range;
 }

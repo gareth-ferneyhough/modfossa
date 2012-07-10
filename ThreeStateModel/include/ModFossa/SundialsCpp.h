@@ -24,16 +24,17 @@ using namespace boost::numeric::ublas;
 
 class SundialsCpp {
 public:
-	SundialsCpp();
-	virtual ~SundialsCpp();
-	int solve(CVRhsFn, std::vector<double> tspan, std::vector<double> y0, matrix<double>& y);
+    SundialsCpp();
+    virtual ~SundialsCpp();
+    int solve(CVRhsFn, std::vector<double> tspan, std::vector<double> y0,
+            matrix<double>& y);
 
 private:
-	void init();
+    void init();
 
-	realtype reltol; //= 1e-6;
-	realtype abstol; //= 1e-8;
-	void* cvode_mem;
+    realtype reltol; //= 1e-6;
+    realtype abstol; //= 1e-8;
+    void* cvode_mem;
 };
 
 #endif /* SUNDIALSCPP_H_ */

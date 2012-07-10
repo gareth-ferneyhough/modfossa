@@ -12,7 +12,6 @@
 #include <iostream>
 #include <vector>
 
-
 #include <boost/python.hpp>
 #include <pyublas/numpy.hpp>
 
@@ -21,31 +20,31 @@
 
 using namespace ModFossa;
 
-void addState(std::string name){
-	Model::getInstance()->addState(name);
+void addState(std::string name) {
+    Model::getInstance()->addState(name);
 }
 
-void connect(std::string in, std::string out, double rate){
-	Model::getInstance()->connect(in, out, rate);
+void connect(std::string in, std::string out, double rate) {
+    Model::getInstance()->connect(in, out, rate);
 }
 
-void setInitialState(std::string name){
-	Model::getInstance()->setInitialState(name);
+void setInitialState(std::string name) {
+    Model::getInstance()->setInitialState(name);
 }
 
-void setIntegrationWindow(double first, double increment, double last){
-	Model::getInstance()->setIntegrationWindow(drange(first, increment, last));
+void setIntegrationWindow(double first, double increment, double last) {
+    Model::getInstance()->setIntegrationWindow(drange(first, increment, last));
 }
 
-pyublas::numpy_matrix<double> run(){
-	return Model::getInstance()->run();
+pyublas::numpy_matrix<double> run() {
+    return Model::getInstance()->run();
 }
 
 BOOST_PYTHON_MODULE(libModFossa) {
-	using namespace boost::python;
-	def("addState", addState);
-	def("connect", connect);
-	def("setInitialState", setInitialState);
-	def("setIntegrationWindow", setIntegrationWindow);
-	def("run", run);
+    using namespace boost::python;
+    def("addState", addState);
+    def("connect", connect);
+    def("setInitialState", setInitialState);
+    def("setIntegrationWindow", setIntegrationWindow);
+    def("run", run);
 }
