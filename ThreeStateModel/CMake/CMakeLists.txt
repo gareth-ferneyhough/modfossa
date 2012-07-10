@@ -26,8 +26,8 @@ endif()
 
 
 set(EXTRA_LIBS ${EXTRA_LIBS} sundials_cvode sundials_nvecserial)
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src/)
-set(INC_DIR ${CMAKE_SOURCE_DIR}/include/)
+set(SRC_DIR ${CMAKE_SOURCE_DIR}/../src/)
+set(INC_DIR ${CMAKE_SOURCE_DIR}/../include/)
 
 #set(CMAKE_CXX_FLAGS "-Wall -W -Wshadow -pedantic-errors -pedantic -Wextra -Werror")
 
