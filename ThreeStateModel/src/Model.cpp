@@ -25,14 +25,12 @@ void Model::addState(StateName name) {
     state.name = name;
     state.is_initial = false;
 
-    // Conducting states must have a capital 'O' in their name!
-    if (name.find('O') != -1) {
-        state.is_conducting = true;
-    } else {
-        state.is_conducting = false;
-    }
-
     states.push_back(state);
+}
+
+void Model::setConducting(StateName name) {
+    State* state = getStateByName(name);
+    state->is_conducting = true;
 }
 
 void Model::connect(StateName from, StateName to, double rate) {

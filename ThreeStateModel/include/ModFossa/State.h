@@ -5,10 +5,13 @@
  *      Author: gareth
  */
 
+#include <vector>
 #include <ModFossa/Transition.h>
 
 class State {
 public:
+    State();
+
     StateName name;
     std::vector<Transition> in_transitions;
     std::vector<Transition> out_transitions;

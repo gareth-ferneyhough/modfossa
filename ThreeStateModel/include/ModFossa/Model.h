@@ -24,6 +24,7 @@ class Model: private boost::noncopyable {
 public:
     static Model* getInstance();
     void addState(StateName);
+    void setConducting(StateName);
     void connect(StateName from, StateName to, double rate);
     void setInitialState(StateName);
     void setIntegrationWindow(std::vector<double> times);

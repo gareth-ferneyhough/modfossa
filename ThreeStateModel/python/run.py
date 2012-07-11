@@ -5,10 +5,8 @@ from libModFossa import *
 
 addState('C1')
 addState('C2')
-
-## Check it out: open(conducting states must have the capital letter 'O' in them.
-## This is how the model knows to make it conducting.
 addState('O') 
+setConducting('O')
 
 
 kon1 = 1

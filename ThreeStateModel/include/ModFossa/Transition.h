@@ -5,6 +5,8 @@
  *      Author: gareth
  */
 
+#include <string>
+
 typedef std::string StateName;
 
 class Transition {
