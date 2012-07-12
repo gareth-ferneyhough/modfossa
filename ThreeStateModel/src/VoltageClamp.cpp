@@ -8,7 +8,6 @@
 #include <ModFossa/VoltageClamp.h>
 
 VoltageClamp::VoltageClamp() {
-
 }
 
 VoltageClamp::VoltageClamp(VoltageEvent v_start, VoltageEvent v_step,

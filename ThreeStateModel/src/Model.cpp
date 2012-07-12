@@ -5,6 +5,8 @@
  *      Author: gareth
  */
 
+#include <vector>
+
 #include <ModFossa/Model.h>
 
 namespace ModFossa {
@@ -58,6 +60,23 @@ void Model::setIntegrationWindow(std::vector<double> times) {
 }
 
 boost::numeric::ublas::matrix<double> Model::run() {
+    // Create voltage protocol. The values must be set already.
+    voltage_protocol.generateVoltageProtocol();
+
+    // Test voltage protocol
+    std::vector<VoltageClamp>::iterator it;
+    for (it = voltage_protocol.voltage_clamps.begin();
+            it != voltage_protocol.voltage_clamps.end(); ++it) {
+        std::cout << it->getVoltageAtTime(0) << " ";
+        std::cout << it->getVoltageAtTime(0.01) << " ";
+        std::cout << it->getVoltageAtTime(0.1) << " ";
+        std::cout << it->getVoltageAtTime(0.101) << " ";
+        std::cout << it->getVoltageAtTime(1.1) << " ";
+        std::cout << it->getVoltageAtTime(1.11) << " ";
+        std::cout << it->getVoltageAtTime(2.1) << " ";
+        std::cout << it->getVoltageAtTime(2.2) << "\n";
+    }
+
     boost::numeric::ublas::matrix<double> result;
     std::vector<double> initial_conditions;
 

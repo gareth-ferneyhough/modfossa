@@ -11,7 +11,6 @@
 VoltageProtocol::VoltageProtocol() :
         v_hold_start(-1), v_hold_finish(-1), start_time(-1), step_time(-1), finish_time(
                 -1), end_time(-1) {
-
 }
 
 void VoltageProtocol::setVstep(std::vector<double> voltages) {
