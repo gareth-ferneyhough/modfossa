@@ -75,6 +75,23 @@ boost::numeric::ublas::matrix<double> Model::run() {
     return result;
 }
 
+void Model::setVstep(std::vector<double> voltages) {
+    voltage_protocol.setVstep(voltages);
+}
+
+void Model::setVholdStart(double v_hold_start) {
+    voltage_protocol.setVholdStart(v_hold_start);
+}
+
+void Model::setVholdFinish(double v_hold_finish) {
+    voltage_protocol.setVholdFinish(v_hold_finish);
+}
+
+void Model::setEventTimes(double start, double step, double finish,
+        double end) {
+    voltage_protocol.setEventTimes(start, step, finish, end);
+}
+
 int Model::numStates() const {
     return states.size();
 }

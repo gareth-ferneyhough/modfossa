@@ -17,6 +17,7 @@
 
 #include <ModFossa/SundialsCpp.h>
 #include <ModFossa/State.h>
+#include <ModFossa/VoltageProtocol.h>
 
 namespace ModFossa {
 
@@ -28,6 +29,11 @@ public:
     void connect(StateName from, StateName to, double rate);
     void setInitialState(StateName);
     void setIntegrationWindow(std::vector<double> times);
+    void setVstep(std::vector<double> voltages);
+    void setVholdStart(double);
+    void setVholdFinish(double);
+    void setEventTimes(double start, double step, double finish, double end);
+
     boost::numeric::ublas::matrix<double> run();
 
     int numStates() const;
@@ -43,6 +49,8 @@ private:
 
     std::vector<State> states;
     std::vector<double> times;
+
+    VoltageProtocol voltage_protocol;
 };
 
 static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot, void *f_data);

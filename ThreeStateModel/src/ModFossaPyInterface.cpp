@@ -40,16 +40,37 @@ void setIntegrationWindow(double first, double increment, double last) {
     Model::getInstance()->setIntegrationWindow(drange(first, increment, last));
 }
 
+void setVstep(double first, double increment, double last) {
+    Model::getInstance()->setVstep(drange(first, increment, last));
+}
+
+void setVholdStart(double v_hold_start) {
+    Model::getInstance()->setVholdStart(v_hold_start);
+}
+
+void setVholdFinish(double v_hold_finish) {
+    Model::getInstance()->setVholdFinish(v_hold_finish);
+}
+
+void setEventTimes(double start, double step, double finish, double end) {
+    Model::getInstance()->setEventTimes(start, step, finish, end);
+}
+
 pyublas::numpy_matrix<double> run() {
     return Model::getInstance()->run();
 }
 
-BOOST_PYTHON_MODULE(libModFossa) {
+BOOST_PYTHON_MODULE(libModFossa)
+{
     using namespace boost::python;
     def("addState", addState);
     def("setConducting", setConducting);
     def("connect", connect);
     def("setInitialState", setInitialState);
     def("setIntegrationWindow", setIntegrationWindow);
+    def("setVstep", setVstep);
+    def("setVholdStart", setVholdStart);
+    def("setVholdFinish", setVholdFinish);
+    def("setEventTimes", setEventTimes);
     def("run", run);
 }

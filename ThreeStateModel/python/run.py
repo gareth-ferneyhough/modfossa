@@ -22,6 +22,12 @@ connect('O', 'C2', koff2)
 setInitialState('O')
 setIntegrationWindow(0, 0.001, 0.1);
 
+## Set voltage protocol ##
+setVstep(-100, 20, 140)
+setVholdStart(-50)
+setVholdFinish(-80)
+setEventTimes(0, 0.1, 1.1, 2.1)
+
 mat = run()
 
 ## Do ALL the plotting ## 
