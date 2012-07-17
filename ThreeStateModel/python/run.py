@@ -29,9 +29,10 @@ setVholdFinish(-80)
 setEventTimes(0, 0.1, 1.1, 2.1)
 
 mat = run()
+voltageProtocol = getVoltageProtocol()
 
 ## Do ALL the plotting ## 
-fig = plt.figure()
+fig = plt.figure(1)
 ax = fig.add_subplot(111)
 ax.plot(mat[:,0])
 ax.plot(mat[:,1])
@@ -42,4 +43,16 @@ ax.set_xlabel('Time (ms)')
 ax.set_ylabel('Probability')
 ax.set_title('Channel Probability')
 
+#plt.show()
+
+## Plot voltage protocol ##
+fig = plt.figure(2)
+ax = fig.add_subplot(111)
+for row in range(voltageProtocol.shape[0]):
+    ax.plot(voltageProtocol[row,:])
+    
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('Voltage (mV)')
+ax.set_title('Voltage Protocol')    
+    
 plt.show()

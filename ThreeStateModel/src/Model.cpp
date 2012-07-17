@@ -94,6 +94,10 @@ boost::numeric::ublas::matrix<double> Model::run() {
     return result;
 }
 
+boost::numeric::ublas::matrix<double> Model::getVoltageProtocol() {
+    return voltage_protocol.getVoltageProtocol();
+}
+
 void Model::setVstep(std::vector<double> voltages) {
     voltage_protocol.setVstep(voltages);
 }

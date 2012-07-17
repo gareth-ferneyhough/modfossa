@@ -21,7 +21,7 @@ public:
 
     double getVoltageAtTime(double time);
 
-private:
+//private:
     VoltageEvent v_start;
     VoltageEvent v_step;
     VoltageEvent v_finish;

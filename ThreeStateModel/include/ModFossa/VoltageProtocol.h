@@ -8,7 +8,8 @@
 #ifndef VOLTAGEPROTOCOL_H_
 #define VOLTAGEPROTOCOL_H_
 
-#include <vector>
+#include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/io.hpp>
 
 #include <ModFossa/VoltageClamp.h>
 
@@ -22,6 +23,8 @@ public:
 
     void generateVoltageProtocol();
     std::vector<VoltageClamp> voltage_clamps;
+
+    boost::numeric::ublas::matrix<double> getVoltageProtocol();
 
 private:
 

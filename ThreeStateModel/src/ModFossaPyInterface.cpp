@@ -60,6 +60,11 @@ pyublas::numpy_matrix<double> run() {
     return Model::getInstance()->run();
 }
 
+pyublas::numpy_matrix<double> getVoltageProtocol() {
+    return Model::getInstance()->getVoltageProtocol();
+}
+
+
 BOOST_PYTHON_MODULE(libModFossa)
 {
     using namespace boost::python;
@@ -73,4 +78,5 @@ BOOST_PYTHON_MODULE(libModFossa)
     def("setVholdFinish", setVholdFinish);
     def("setEventTimes", setEventTimes);
     def("run", run);
+    def("getVoltageProtocol", getVoltageProtocol);
 }

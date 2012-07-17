@@ -47,3 +47,25 @@ void VoltageProtocol::generateVoltageProtocol() {
     }
 }
 
+boost::numeric::ublas::matrix<double> VoltageProtocol::getVoltageProtocol() {
+    double time_resolution = 0.001; // seconds
+    double time_beginning = voltage_clamps[0].v_start.getTimeInstant();
+    double time_end = voltage_clamps[0].end.getTimeInstant();
+
+    int num_time_steps = (time_end - time_beginning) / time_resolution;
+
+    boost::numeric::ublas::matrix<double> result;
+    result.resize(voltage_clamps.size(), num_time_steps);
+
+    for (int v_index = 0; v_index < voltage_clamps.size(); ++v_index) {
+        double time = time_beginning;
+        for (int time_index = 0; time_index < num_time_steps; time_index++) {
+            result(v_index, time_index) =
+                    voltage_clamps[v_index].getVoltageAtTime(time);
+            time += time_resolution;
+        }
+    }
+
+    return result;
+}
+

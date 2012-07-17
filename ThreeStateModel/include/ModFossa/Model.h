@@ -35,6 +35,7 @@ public:
     void setEventTimes(double start, double step, double finish, double end);
 
     boost::numeric::ublas::matrix<double> run();
+    boost::numeric::ublas::matrix<double> getVoltageProtocol();
 
     int numStates() const;
     void setState(const N_Vector& state);
