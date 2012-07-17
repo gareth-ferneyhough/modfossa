@@ -12,12 +12,17 @@ setConducting('O')
 kon1 = 1
 koff1 = 100
 kon2 = 1
-koff2 = 100
 
-connect('C1', 'C2', kon1)
-connect('C2', 'C1', koff1)
-connect('C2', 'O', kon2)
-connect('O', 'C2', koff2)
+addRateConstant('sigmoidal', 70, 60, -40, 'beta1')
+addRateConstant('constant', 1, 0, 0, 'kon1')
+addRateConstant('constant', 100, 0, 0, 'koff1')
+addRateConstant('constant', 1, 0, 0, 'kon2')
+addRateConstant('constant', 100, 0, 0, 'koff2')
+
+connect('C1', 'C2', 'kon1')
+connect('C2', 'C1', 'koff1')
+connect('C2', 'O', 'kon2')
+connect('O', 'C2', 'beta1')
 
 setInitialState('O')
 setIntegrationWindow(0, 0.001, 0.1);

@@ -28,8 +28,8 @@ void setConducting(std::string name) {
     Model::getInstance()->setConducting(name);
 }
 
-void connect(std::string in, std::string out, double rate) {
-    Model::getInstance()->connect(in, out, rate);
+void connect(std::string in, std::string out, std::string rate_constant) {
+    Model::getInstance()->connect(in, out, rate_constant);
 }
 
 void setInitialState(std::string name) {
@@ -64,6 +64,19 @@ pyublas::numpy_matrix<double> getVoltageProtocol() {
     return Model::getInstance()->getVoltageProtocol();
 }
 
+void addRateConstant(std::string type, double k, double a, double v_half,
+        std::string name) {
+    Model::getInstance()->addRateConstant(type, a, v_half, k, name);
+}
+
+//void addRateConstant(std::string type, double k, std::string name) {
+//    if(type != "constant") {
+//        std::cout << "Error adding rate constant. Only constant rate constants can have one parameter.\n";
+//    }
+//    else {
+//        Model::getInstance()->addRateConstant(type, k, name);
+//    }
+//}
 
 BOOST_PYTHON_MODULE(libModFossa)
 {
@@ -79,4 +92,5 @@ BOOST_PYTHON_MODULE(libModFossa)
     def("setEventTimes", setEventTimes);
     def("run", run);
     def("getVoltageProtocol", getVoltageProtocol);
+    def("addRateConstant", addRateConstant);
 }

@@ -6,11 +6,16 @@
  */
 
 #include <string>
+#include <ModFossa/RateConstant.h>
 
 typedef std::string StateName;
 
 class Transition {
 public:
+    Transition() :
+            rate(NULL) {
+    }
+
     StateName source;
-    double rate;
+    RateConstant* rate;
 };

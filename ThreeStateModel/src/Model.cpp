@@ -11,7 +11,8 @@
 
 namespace ModFossa {
 
-Model::Model() {
+Model::Model() :
+        membrane_voltage(-50) {
 }
 
 Model::~Model() {
@@ -35,17 +36,17 @@ void Model::setConducting(StateName name) {
     state->is_conducting = true;
 }
 
-void Model::connect(StateName from, StateName to, double rate) {
+void Model::connect(StateName from, StateName to, std::string rate_constant) {
     State* from_state = getStateByName(from);
     State* to_state = getStateByName(to);
 
     Transition outgoing;
-    outgoing.rate = rate;
+    outgoing.rate = getRateConstantByName(rate_constant);
     outgoing.source = from; // this shouldn't be used anywhere for outgoing transitions
     from_state->out_transitions.push_back(outgoing);
 
     Transition incoming;
-    incoming.rate = rate;
+    incoming.rate = getRateConstantByName(rate_constant);
     incoming.source = from; // this IS used for calculating incoming transitions
     to_state->in_transitions.push_back(incoming);
 }
@@ -59,23 +60,30 @@ void Model::setIntegrationWindow(std::vector<double> times) {
     this->times = times;
 }
 
+void Model::addRateConstant(std::string type, double a, double v_half, double k,
+        std::string name) {
+    RateConstant rc;
+    rc.setA(a);
+    rc.setVHalf(v_half);
+    rc.setK(k);
+    rc.setType(type);
+    rc.setName(name);
+
+    rate_constants.push_back(rc);
+}
+
+//void Model::addRateConstant(std::string type, double k, std::string name) {
+//    RateConstant rc;
+//    rc.setK(k);
+//    rc.setType(type);
+//    rc.setName(name);
+//
+//    rate_constants.push_back(rc);
+//}
+
 boost::numeric::ublas::matrix<double> Model::run() {
     // Create voltage protocol. The values must be set already.
     voltage_protocol.generateVoltageProtocol();
-
-    // Test voltage protocol
-    std::vector<VoltageClamp>::iterator it;
-    for (it = voltage_protocol.voltage_clamps.begin();
-            it != voltage_protocol.voltage_clamps.end(); ++it) {
-        std::cout << it->getVoltageAtTime(0) << " ";
-        std::cout << it->getVoltageAtTime(0.01) << " ";
-        std::cout << it->getVoltageAtTime(0.1) << " ";
-        std::cout << it->getVoltageAtTime(0.101) << " ";
-        std::cout << it->getVoltageAtTime(1.1) << " ";
-        std::cout << it->getVoltageAtTime(1.11) << " ";
-        std::cout << it->getVoltageAtTime(2.1) << " ";
-        std::cout << it->getVoltageAtTime(2.2) << "\n";
-    }
 
     boost::numeric::ublas::matrix<double> result;
     std::vector<double> initial_conditions;
@@ -131,7 +139,8 @@ double Model::inProb(int index) {
 
     for (unsigned int i = 0; i < state.in_transitions.size(); ++i) {
         Transition incoming_transition = state.in_transitions[i];
-        double incoming_rate = incoming_transition.rate;
+        double incoming_rate = incoming_transition.rate->getRate(
+                membrane_voltage);
         State* incoming_state = getStateByName(incoming_transition.source);
 
         in_prob += incoming_rate * incoming_state->current_probability;
@@ -146,7 +155,8 @@ double Model::outProb(int index) {
 
     for (unsigned int i = 0; i < state.out_transitions.size(); ++i) {
         Transition outgoing_transition = state.out_transitions[i];
-        double outgoing_rate = outgoing_transition.rate;
+        double outgoing_rate = outgoing_transition.rate->getRate(
+                membrane_voltage);
         out_prob += outgoing_rate * state.current_probability;
     }
 
@@ -157,6 +167,15 @@ State* Model::getStateByName(StateName name) {
     for (unsigned int i = 0; i < states.size(); ++i) {
         if (states[i].name == name) {
             return &(states[i]);
+        }
+    }
+    return NULL;
+}
+
+RateConstant* Model::getRateConstantByName(std::string name) {
+    for (unsigned int i = 0; i < rate_constants.size(); ++i) {
+        if ((rate_constants[i]).getName() == name) {
+            return &(rate_constants[i]);
         }
     }
     return NULL;
