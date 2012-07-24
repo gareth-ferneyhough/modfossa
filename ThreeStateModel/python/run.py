@@ -8,11 +8,7 @@ addState('C2')
 addState('O') 
 setConducting('O')
 
-
-kon1 = 1
-koff1 = 100
-kon2 = 1
-
+#addRateConstant(type, k, a, vhalf, name)
 addRateConstant('sigmoidal', 70, 60, -40, 'beta1')
 addRateConstant('constant', 1, 0, 0, 'kon1')
 addRateConstant('constant', 100, 0, 0, 'koff1')
@@ -48,7 +44,6 @@ ax.set_xlabel('Time (ms)')
 ax.set_ylabel('Probability')
 ax.set_title('Channel Probability')
 
-#plt.show()
 
 ## Plot voltage protocol ##
 fig = plt.figure(2)
