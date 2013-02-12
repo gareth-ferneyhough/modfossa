@@ -3,6 +3,8 @@
 
 #include <string>
 
+using std::string;
+
 class StateOfTheWorld;
 
 /** Abstract base class for RateConstants. 
@@ -15,5 +17,7 @@ public:
 	RateConstantBase();
 	virtual ~RateConstantBase();
 	virtual double GetRate(StateOfTheWorld* stateOfTheWorld) = 0; 
+        virtual string GetName() const = 0;
+        virtual void SetName(string name) = 0;
 };
 #endif

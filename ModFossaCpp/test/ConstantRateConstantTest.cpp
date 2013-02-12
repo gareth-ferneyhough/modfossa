@@ -1,5 +1,5 @@
-#include "gtest/gtest.h"
-#include "../src/ConstantRateConstant.h"
+#include <gtest/gtest.h>
+#include <ConstantRateConstant.h>
 
 
 /**
@@ -18,17 +18,26 @@ protected:
   }
 
   ConstantRateConstant* rateConstant;
-  StateOfTheWorld* stateOfTheWorld;  
+  //StateOfTheWorld* stateOfTheWorld;  
 };
   
+
+/**
+ * Test default constructor
+ */
+TEST_F(ConstantRateConstantTest, DefaultConstructor) {
+  rateConstant = new ConstantRateConstant();
+  ASSERT_TRUE(rateConstant != NULL);
+  delete rateConstant;
+}
 
 /**
  * Test the parameterized constructor for
  * valid input.
  */
-TEST_F(ConstantRateConstantTest, ConstructorValid) {
+TEST_F(ConstantRateConstantTest, ParameterisedConstructor) {
   rateConstant = new ConstantRateConstant("rc1", 0.0);
-  ASSERT_TRUE(rateConstant != null);  
+  ASSERT_TRUE(rateConstant != NULL);  
   delete rateConstant;
 }
 
@@ -44,17 +53,17 @@ TEST_F(ConstantRateConstantTest, ConstructorInvalidName) {
 /**
  * Test the GetRate() method with valid StateOfTheWorld().
  */
-TEST_F(ConstantRateConstantTest, ConstructorInvalidName) {
+TEST_F(ConstantRateConstantTest, GetRate) {
   rateConstant = new ConstantRateConstant("rc1", 0.0);
-  stateOfTheWorld = new StateOfTheWorld();
-  stateOfTheWorld.AddConcentration("Ca", 3.2);
+  //stateOfTheWorld = new StateOfTheWorld();
+  //  stateOfTheWorld.AddConcentration("Ca", 3.2);
 
-  double actual = rateConstant.GetRate(stateOfTheWorld);
+  double actual = 0;//rateConstant.GetRate(stateOfTheWorld);
   double expected = 1.23;
   ASSERT_EQ(expected, actual);
 
   delete rateConstant;
-  delete stateOfTheWorld;
+  //  delete stateOfTheWorld;
 }
 
 

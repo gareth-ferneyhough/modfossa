@@ -1,4 +1,4 @@
-#include "RateConstantBase.h"
+#include <RateConstantBase.h>
 
 
 RateConstantBase::RateConstantBase(void)
