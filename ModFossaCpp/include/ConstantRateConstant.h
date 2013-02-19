@@ -1,23 +1,25 @@
-#ifndef _CONSTANTRATECONSTANT_H
-#define _CONSTANTRATECONSTANT_H
+#ifndef CONSTANTRATECONSTANT_H_
+#define CONSTANTRATECONSTANT_H_
+
+#include <string>
 
 #include <RateConstantBase.h>
-#include <string>
 
 using std::string;
 
-class ConstantRateConstant : public RateConstantBase
-{
- public:
-  ConstantRateConstant();
-  ConstantRateConstant(string name, double k);
-  virtual ~ConstantRateConstant();
-  virtual double GetRate(StateOfTheWorld* stateOfTheWorld);
-  string GetName() const;
-  void SetName(string name);
- 
- private:
-  string name;
-  double k;
+class ConstantRateConstant : public RateConstantBase {
+public:
+    ConstantRateConstant();
+    ConstantRateConstant(string name, double k);
+    virtual ~ConstantRateConstant();
+    virtual double getRate(StateOfTheWorld* stateOfTheWorld);
+    string getName() const;
+    void setName(string name);
+    double getK() const;
+    void setK(double k);
+
+private:
+    string name;
+    double k;
 };
 #endif

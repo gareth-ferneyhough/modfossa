@@ -1,5 +1,5 @@
-#ifndef _RATECONSTANTBASE_H
-#define _RATECONSTANTBASE_H
+#ifndef RATECONSTANTBASE_H_
+#define RATECONSTANTBASE_H_
 
 #include <string>
 
@@ -10,14 +10,13 @@ class StateOfTheWorld;
 /** Abstract base class for RateConstants. 
  *
  */
-	
-class RateConstantBase
-{
+
+class RateConstantBase {
 public:
-	RateConstantBase();
-	virtual ~RateConstantBase();
-	virtual double GetRate(StateOfTheWorld* stateOfTheWorld) = 0; 
-        virtual string GetName() const = 0;
-        virtual void SetName(string name) = 0;
+    RateConstantBase();
+    virtual ~RateConstantBase();
+    virtual double getRate(StateOfTheWorld* stateOfTheWorld) = 0;
+    virtual string getName() const = 0;
+    virtual void setName(string name) = 0;
 };
 #endif

@@ -1,32 +1,42 @@
 #include <ConstantRateConstant.h>
 
+#include <stdexcept>
+
 ConstantRateConstant::ConstantRateConstant() :
-  RateConstantBase()
-{
+RateConstantBase() {
 }
 
 ConstantRateConstant::ConstantRateConstant(string name, double k) :
-  RateConstantBase(),
-  name(name),
-  k(k)
-{
+RateConstantBase() {
+    if (name.empty()) {
+        throw std::runtime_error("Error in setName: name is empty string");
+    }
+    this->name = name;
+    this->k = k;
 }
 
-ConstantRateConstant::~ConstantRateConstant()
-{
+ConstantRateConstant::~ConstantRateConstant() {
 }
 
-double ConstantRateConstant::GetRate(StateOfTheWorld* stateOfTheWorld)
-{
-  return k;
+double ConstantRateConstant::getRate(StateOfTheWorld* stateOfTheWorld) {
+    return k;
 }
 
-string ConstantRateConstant::GetName() const
-{
-  return name;
+string ConstantRateConstant::getName() const {
+    return name;
 }
 
-void ConstantRateConstant::SetName(string name)
-{
-  this-> name = name;
+void ConstantRateConstant::setName(string name) {
+    if (name.empty()) {
+        throw std::runtime_error("Error in setName: name is empty string");
+    }
+    this-> name = name;
+}
+
+double ConstantRateConstant::getK() const {
+    return k;
+}
+
+void ConstantRateConstant::setK(double k) {
+    this->k = k;
 }

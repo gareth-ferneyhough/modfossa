@@ -1,69 +1,80 @@
 #include <gtest/gtest.h>
 #include <ConstantRateConstant.h>
-
+#include <StateOfTheWorld.h>
 
 /**
  * TestCase for ConstantRateContant. We test the
  * constructor, and the GetRate() method under both
- * normal and unnormal parameters.
+ * normal and un-normal parameters.
  */
 class ConstantRateConstantTest : public testing::Test {
 protected:
-  virtual void SetUp() {
 
-  }
+    virtual void SetUp() {
 
-  virtual void TearDown() {
+    }
 
-  }
+    virtual void TearDown() {
 
-  ConstantRateConstant* rateConstant;
-  //StateOfTheWorld* stateOfTheWorld;  
+    }
+
+    ConstantRateConstant* rate_constant;
+    StateOfTheWorld* state_of_the_world;
 };
-  
 
 /**
  * Test default constructor
  */
-TEST_F(ConstantRateConstantTest, DefaultConstructor) {
-  rateConstant = new ConstantRateConstant();
-  ASSERT_TRUE(rateConstant != NULL);
-  delete rateConstant;
+TEST_F(ConstantRateConstantTest, defaultConstructor) {
+    rate_constant = new ConstantRateConstant();
+    ASSERT_TRUE(rate_constant != NULL);
+    delete rate_constant;
 }
 
 /**
  * Test the parameterized constructor for
  * valid input.
  */
-TEST_F(ConstantRateConstantTest, ParameterisedConstructor) {
-  rateConstant = new ConstantRateConstant("rc1", 0.0);
-  ASSERT_TRUE(rateConstant != NULL);  
-  delete rateConstant;
+TEST_F(ConstantRateConstantTest, parameterisedConstructor) {
+    rate_constant = new ConstantRateConstant("rc1", 1.1);
+    ASSERT_TRUE(rate_constant->getName() == "rc1");
+    ASSERT_TRUE(rate_constant->getK() == 1.1);
+
+    delete rate_constant;
 }
 
 /**
- * Test the parameterized constructor for invlaid name parameters.
+ * Test the parameterized constructor for invalid name parameter.
  */
-TEST_F(ConstantRateConstantTest, ConstructorInvalidName) {
-  rateConstant = new ConstantRateConstant("", 0.0);
-  //ASSERT_TRUE(rateConstant != null); need to check exception here
-  delete rateConstant;
+TEST_F(ConstantRateConstantTest, constructorInvalidName) {
+    ASSERT_THROW(rate_constant = new ConstantRateConstant("", 0.0),
+            std::runtime_error);
 }
 
 /**
- * Test the GetRate() method with valid StateOfTheWorld().
+ * Test the setName() method for invalid name parameter.
  */
-TEST_F(ConstantRateConstantTest, GetRate) {
-  rateConstant = new ConstantRateConstant("rc1", 0.0);
-  //stateOfTheWorld = new StateOfTheWorld();
-  //  stateOfTheWorld.AddConcentration("Ca", 3.2);
+TEST_F(ConstantRateConstantTest, setInvalidName) {
+    rate_constant = new ConstantRateConstant();
+    ASSERT_THROW(rate_constant->setName(""),
+            std::runtime_error);
+}
 
-  double actual = 0;//rateConstant.GetRate(stateOfTheWorld);
-  double expected = 1.23;
-  ASSERT_EQ(expected, actual);
+/**
+ * Test the getRate() method with valid StateOfTheWorld().
+ */
+TEST_F(ConstantRateConstantTest, getRate) {
+    double k = 1.23;
+    rate_constant = new ConstantRateConstant("rc1", k);
+    state_of_the_world = new StateOfTheWorld();
+    state_of_the_world->addConcentration("Ca", 3.2);
 
-  delete rateConstant;
-  //  delete stateOfTheWorld;
+    double actual = rate_constant->getRate(state_of_the_world);
+    double expected = k;
+    ASSERT_EQ(expected, actual);
+
+    delete rate_constant;
+    delete state_of_the_world;
 }
 
 
