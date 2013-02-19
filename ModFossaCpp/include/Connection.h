@@ -1,26 +1,18 @@
-#ifndef _CONNECTION_H
-#define _CONNECTION_H
+#ifndef CONNECTION_H_
+#define CONNECTION_H_
 
 #include <string>
 using std::string;
 
-class Connection {
- public:
-  Connection();
-  Connection(string start, string end, string rate);
-  ~Connection();
-  
-  string GetStart() const;
-  void SetStart(string);
-  string GetEnd() const;
-  void SetEnd(string);
-  string GetRate() const;
-  void SetRate();
+struct Connection {
+    Connection(string from_state, string to_state, string rate_name) :
+    from_state(from_state),
+    to_state(to_state),
+    rate_name(rate_name) {
+    }
 
- private:
-  string start;
-  string end;
-  string rate;
+    string from_state;
+    string to_state;
+    string rate_name;
 };
-
 #endif

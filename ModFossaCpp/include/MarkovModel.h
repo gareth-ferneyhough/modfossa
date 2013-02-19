@@ -1,15 +1,21 @@
-#ifndef _MARKOVMODEL_H
-#define _MARKOVMODEL_H
+#ifndef MARKOVMODEL_H_
+#define MARKOVMODEL_H_
 
+#include <State.h>
+#include <Connection.h>
+
+#include <vector>
 #include <map>
 #include <string>
 
 using std::string;
 using std::map;
+using std::vector;
+
 
 class State;
+class Connection;
 class RateConstantBase;
-class ModelDescription;
 class ConnectionManager;
 
 /**
@@ -22,32 +28,27 @@ class ConnectionManager;
  */
 class MarkovModel {
 public:
-	MarkovModel();
-	~MarkovModel();
+    MarkovModel();
+    ~MarkovModel();
 
-	void AddState(string name, bool conducting, bool initial=false);
-
-	void AddConstantRateConstant(string name, double k);
-
-	void AddSigmoidalRateConstant(string name, double a, double vHalf,
-			double k);
-
-	void AddLigandDependentRateConstant(string name, double k,
-			double ligandPower, string ligandAbbreviation);
-
-	void AddExponentialRateConstant(string name, double a, double k);
-
-	void AddBolztmannRateConstant(string name, double a, double a2,
-			double vHalf, double k);
-
-        void BuildConnections();
+    void addState(string name, bool conducting, bool initial = false);
+    void addRateConstant(const RateConstantBase& rate_constant);
+    void addConnection(string from_state, string to_state,
+            string rate_constant);
+    void setInitialState(string initial_state);
+    void validate();
 
 private:
-	map<string, RateConstantBase*> mapOfRates;
-	map<string, State*> mapOfStates;
+    bool stateAlreadyExists(string name);
+    bool rateConstantAlreadyExists(string name);
+    
+    map<string, const RateConstantBase*>* map_of_rates;
+    map<string, State*>* map_of_states;
+    vector<const Connection*>* connections;    
+    
+    string initial_state;
 
-	ModelDescription* modelDescription;
-	ConnectionManager* connectionManager;
+    ConnectionManager* connectionManager;
 };
 
 #endif

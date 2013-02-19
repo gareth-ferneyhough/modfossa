@@ -1,31 +1,22 @@
-#ifndef _STATE_H
-#define _STATE_H
+#ifndef STATE_H_
+#define STATE_H_
 
 #include <string>
 
-class State
-{
-public:
-	State();
-	~State();
+using std::string;
 
-	std::string GetName() const;
-	void SetName(std::string name);
-	
-	int GetIndex() const;
-	void SetIndex(int index);
-	
-	bool GetIsInitialState() const;
-	void SetIsInitialState(bool isInitialState);
-	
-	bool GetIsConducting() const;
-	void SetIsConducting(bool isConducting);
+struct State {
+    State(string name, int index, bool is_conducting, bool is_initial_state) :
+    name(name),
+    index(index),
+    is_initial_state(is_initial_state),
+    is_conducting(is_conducting) {
+    }
 
-private:
-	std::string name;
-	int index;
-	bool isInitialState;
-	bool isConducting;
+    string name;
+    int index;
+    bool is_initial_state;
+    bool is_conducting;
 };
 
 #endif
