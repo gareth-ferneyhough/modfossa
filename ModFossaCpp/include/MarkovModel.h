@@ -43,8 +43,8 @@ public:
         void BuildConnections();
 
 private:
-	map<string, RateConstantBase> mapOfRates;
-	map<string, State> mapOfStates;
+	map<string, RateConstantBase*> mapOfRates;
+	map<string, State*> mapOfStates;
 
 	ModelDescription* modelDescription;
 	ConnectionManager* connectionManager;

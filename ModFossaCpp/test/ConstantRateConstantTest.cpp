@@ -73,6 +73,13 @@ TEST_F(ConstantRateConstantTest, getRate) {
     double expected = k;
     ASSERT_EQ(expected, actual);
 
+    k = 4.56;
+    rate_constant->setK(k);
+    actual = rate_constant->getRate(state_of_the_world);
+    expected = k;
+    ASSERT_EQ(expected, actual);
+
+
     delete rate_constant;
     delete state_of_the_world;
 }

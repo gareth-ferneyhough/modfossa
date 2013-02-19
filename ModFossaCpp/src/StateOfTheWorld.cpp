@@ -3,17 +3,21 @@
 #include <iostream>
 
 StateOfTheWorld::StateOfTheWorld() :
-voltage(-999),
+voltage_initialized(false),
 concentrations() {
 }
 
 StateOfTheWorld::~StateOfTheWorld() {
-    //if (concentrations != NULL) {
-      //  delete concentrations;
-    //}
+    if (concentrations != NULL) {
+        delete concentrations;
+    }
 }
 
 double StateOfTheWorld::getVoltage() const {
+    if (!voltage_initialized) {
+        throw std::runtime_error("voltage not initialized");
+    }
+
     return voltage;
 }
 
@@ -32,17 +36,18 @@ double StateOfTheWorld::getConcentration(string ligand_name) const {
     return (it->second->concentration_value);
 }
 
-void StateOfTheWorld::addConcentration(string ligand_name, 
+void StateOfTheWorld::addConcentration(string ligand_name,
         double concentration_value) {
     if (concentrations == NULL) {
         concentrations = new map<string, Concentration*>();
     }
 
-    (*concentrations)[ligand_name] = new Concentration(ligand_name, 
+    (*concentrations)[ligand_name] = new Concentration(ligand_name,
             concentration_value);
 }
 
 void StateOfTheWorld::setVoltage(double voltage) {
+    voltage_initialized = true;
     this->voltage = voltage;
 }
 

@@ -26,5 +26,7 @@ public:
 private:
     double voltage;
     map<string, Concentration*>* concentrations;
+    
+    bool voltage_initialized;
 };
 #endif

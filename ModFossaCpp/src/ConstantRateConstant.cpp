@@ -9,7 +9,7 @@ RateConstantBase() {
 ConstantRateConstant::ConstantRateConstant(string name, double k) :
 RateConstantBase() {
     if (name.empty()) {
-        throw std::runtime_error("Error in setName: name is empty string");
+        throw std::runtime_error("Error: name cannot be empty string");
     }
     this->name = name;
     this->k = k;
@@ -18,7 +18,7 @@ RateConstantBase() {
 ConstantRateConstant::~ConstantRateConstant() {
 }
 
-double ConstantRateConstant::getRate(StateOfTheWorld* stateOfTheWorld) {
+double ConstantRateConstant::getRate(StateOfTheWorld* state_of_the_world) {
     return k;
 }
 
@@ -28,7 +28,8 @@ string ConstantRateConstant::getName() const {
 
 void ConstantRateConstant::setName(string name) {
     if (name.empty()) {
-        throw std::runtime_error("Error in setName: name is empty string");
+        throw std::runtime_error
+                ("Error in setName: name cannot be empty string");
     }
     this-> name = name;
 }
