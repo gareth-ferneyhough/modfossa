@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
-#include <SigmoidalRateConstant.h>
-#include <StateOfTheWorld.h>
+#include <ModelDefinition/SigmoidalRateConstant.h>
+#include <ModelDefinition/StateOfTheWorld.h>
 
+using namespace ModelDefinition;
 class SigmoidalRateConstantTest : public testing::Test {
 protected:
 

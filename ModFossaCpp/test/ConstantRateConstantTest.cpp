@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
-#include <ConstantRateConstant.h>
-#include <StateOfTheWorld.h>
+#include <ModelDefinition/ConstantRateConstant.h>
+#include <ModelDefinition/StateOfTheWorld.h>
 
+using namespace ModelDefinition;
 /**
  * TestCase for ConstantRateContant. We test the
  * constructor, and the GetRate() method under both

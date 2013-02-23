@@ -1,7 +1,13 @@
 #include <gtest/gtest.h>
-#include <StateOfTheWorld.h>
-#include <MarkovModel.h>
-#include <ConstantRateConstant.h>
+#include <ModelDefinition/StateOfTheWorld.h>
+#include <ModelDefinition/MarkovModel.h>
+#include <ModelDefinition/ConstantRateConstant.h>
+
+#include <algorithm>
+
+using ModelDefinition::MarkovModel;
+using ModelDefinition::StateOfTheWorld;
+using ModelDefinition::ConstantRateConstant;
 
 class MarkovModelTest : public testing::Test {
 protected:
@@ -97,5 +103,26 @@ TEST_F(MarkovModelTest, addDuplicateRateConstant) {
 TEST_F(MarkovModelTest, addConnection) {
     markov_model = new MarkovModel();
     markov_model->addConnection("start", "end", "rc1");
+    delete markov_model;
+}
+
+/**
+ * Test validate with initial_state not set
+ * Use Case: 1.8 
+ */
+TEST_F(MarkovModelTest, validateInitialStateNotSet) {
+    using namespace ModelDefinition::Validation;
+    
+    markov_model = new MarkovModel();
+    
+    ValidationResults results = markov_model->validate();
+    
+    ASSERT_TRUE(results.overall_result == ERRORS);
+            
+    typedef std::pair<ErrorType, string> pair_type;
+        std::find_if(results.errors.begin(), results.errors.end(), 
+        [](pair_type const& pair)
+        { return pair.first == INITIAL_STATE_NOT_DEFINED; });
+    
     delete markov_model;
 }

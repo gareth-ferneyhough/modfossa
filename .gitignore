@@ -3,3 +3,5 @@
 *.so
 *.lib
 *.a
+/ModFossaCpp/project/ModFossaCpp/
+/ModFossaCpp/build

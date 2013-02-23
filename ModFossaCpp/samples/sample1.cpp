@@ -3,7 +3,7 @@
 int main()
 {
   ModFossa::Experiment experiment;
-  ModFossa::MarkovModel* mm = experiment.GetMarkovModel();
+  ModFossa::ModelDefinition* mm = experiment.GetMarkovModel();
   ModFossa::ModelDescription* modelDesc = mm.GetModelDescription();
 
   mm->AddState("s1", true);
@@ -27,7 +27,7 @@ int main()
   experiment.AddIonicConcentration("Ca");
 
 
-  // experiment.Sweep() will first validate the MarkovModel
+  // experiment.Sweep() will first validate the ModelDefinition
   // by calling BuildConnections(), which creates the 3d 
   // transition matrix. If an error is discovered in the string 
   // logic from the user defining connections, ligands, etc, an

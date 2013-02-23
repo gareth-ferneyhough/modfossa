@@ -1,7 +1,8 @@
-#include <ConstantRateConstant.h>
+#include <ModelDefinition/ConstantRateConstant.h>
 
 #include <stdexcept>
 
+namespace ModelDefinition{
 ConstantRateConstant::ConstantRateConstant() :
 RateConstantBase() {
 }
@@ -40,4 +41,5 @@ double ConstantRateConstant::getK() const {
 
 void ConstantRateConstant::setK(double k) {
     this->k = k;
+}
 }
