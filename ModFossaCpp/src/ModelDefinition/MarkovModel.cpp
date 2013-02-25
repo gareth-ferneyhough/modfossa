@@ -10,7 +10,7 @@ namespace ModelDefinition {
     MarkovModel::MarkovModel() {
         map_of_rates = new map<string, const RateConstantBase*>();
         map_of_states = new map<string, const State*>();
-        connections = new vector<const Connection*>();
+        connections = new vector<Connection*>();
     }
 
     MarkovModel::~MarkovModel() {
@@ -24,7 +24,7 @@ namespace ModelDefinition {
             throw std::runtime_error("name cannot be empty");
         }
 
-        if (stateAlreadyExists(name)) {
+        if (stateExists(name)) {
             throw std::runtime_error(
                     "state with same name already exists");
         }
@@ -35,7 +35,7 @@ namespace ModelDefinition {
 
     void MarkovModel::addRateConstant(const RateConstantBase& rate_constant) {
         string name = rate_constant.getName();
-        if (rateConstantAlreadyExists(name)) {
+        if (rateConstantExists(name)) {
             throw std::runtime_error(
                     "RateConstant with same name already exists");
         }
@@ -48,7 +48,7 @@ namespace ModelDefinition {
         connections->push_back(new Connection(from_state, to_state, rate_name));
     }
 
-    bool MarkovModel::stateAlreadyExists(string name) {
+    bool MarkovModel::stateExists(string name) {
         map<string, const State*>::const_iterator it;
         it = map_of_states->find(name);
 
@@ -58,7 +58,7 @@ namespace ModelDefinition {
         return false;
     }
 
-    bool MarkovModel::rateConstantAlreadyExists(string name) {
+    bool MarkovModel::rateConstantExists(string name) {
         map<string, const RateConstantBase*>::const_iterator it;
         it = map_of_rates->find(name);
 
@@ -76,21 +76,63 @@ namespace ModelDefinition {
     }
 
     Validation::ValidationResults MarkovModel::validate() {
-        //using Validation::ErrorLevel;
-        //using Validation::ErrorType;
-        //using Validation::ValidationResults;
-        using namespace Validation;
-        
+        using namespace Validation; // this stinks
+
         vector< std::pair<ErrorType, string > > errors;
-        ErrorLevel error_level;
-        
-        if(initial_state.empty()) {
+        ErrorLevel error_level = NO_WARNINGS;
+
+        // initial_state has been defined?
+        if (initial_state.empty()) {
             errors.push_back(std::make_pair(
-            INITIAL_STATE_NOT_DEFINED, "Initial state not defined"));
-            
+                    INITIAL_STATE_NOT_DEFINED, "Initial state not defined"));
+
             error_level = ERRORS;
         }
+
+        // at least one connection?
+        if (connections->size() == 0) {
+            errors.push_back(std::make_pair(
+                    NO_CONNECTIONS, "No connections defined"));
+
+            error_level = ERRORS;
+        }
+
+        // check connections that rate_constants and states exist
+        for (int i = 0; i < connections->size(); ++i) {
+
+            Connection *connection = (*connections)[i];
+            string from_state = connection->from_state;
+            string to_state = connection->to_state;
+            string rate_name = connection->rate_name;
+
+            if (!stateExists(from_state)) {
+                errors.push_back(std::make_pair(
+                        STATE_NOT_DEFINED,
+                        "State not defined: " + from_state));
+
+                error_level = ERRORS;
+            }
+
+            if (!stateExists(to_state)) {
+                errors.push_back(std::make_pair(
+                        STATE_NOT_DEFINED,
+                        "State not defined: " + to_state));
+
+                error_level = ERRORS;
+            }
+
+            if (!rateConstantExists(rate_name)) {
+                errors.push_back(std::make_pair(
+                        RATE_CONSTANT_NOT_DEFINED,
+                        "Rate constant not defined: " + rate_name));
+
+                error_level = ERRORS;
+            }
+        }
         
+        // TODO: Check that each LigandGated rate constant has its ligand defined in 
+        // state of the world
+
         ValidationResults results(error_level, errors);
         return results;
     }

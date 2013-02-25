@@ -112,17 +112,133 @@ TEST_F(MarkovModelTest, addConnection) {
  */
 TEST_F(MarkovModelTest, validateInitialStateNotSet) {
     using namespace ModelDefinition::Validation;
-    
+
     markov_model = new MarkovModel();
-    
+
     ValidationResults results = markov_model->validate();
-    
+
     ASSERT_TRUE(results.overall_result == ERRORS);
-            
-    typedef std::pair<ErrorType, string> pair_type;
-        std::find_if(results.errors.begin(), results.errors.end(), 
-        [](pair_type const& pair)
-        { return pair.first == INITIAL_STATE_NOT_DEFINED; });
+
+    bool initial_state_not_defined_error_exists = false;
+    int i = 0;
+    while (i < results.errors.size() && 
+            !initial_state_not_defined_error_exists) {
+        if (results.errors[i].first == INITIAL_STATE_NOT_DEFINED) {
+            initial_state_not_defined_error_exists = true;
+        }
+        ++i;
+    }
+
+    ASSERT_TRUE(initial_state_not_defined_error_exists);
+
+    delete markov_model;
+}
+
+/**
+ * Test validate with no connections defined
+ * Use Case: 1.8 
+ */
+TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
+    using namespace ModelDefinition::Validation;
+
+    markov_model = new MarkovModel();
+
+    ValidationResults results = markov_model->validate();
+
+    ASSERT_TRUE(results.overall_result == ERRORS);
+
+    bool no_connections_error_exists = false;
+    int i = 0;
+    while (i < results.errors.size() && 
+            !no_connections_error_exists) {
+        if (results.errors[i].first == NO_CONNECTIONS) {
+            no_connections_error_exists = true;
+        }
+        ++i;
+    }
+
+    ASSERT_TRUE(no_connections_error_exists);
+
+    delete markov_model;
+}
+
+/**
+ * Test validate with state undefined
+ * Use Case: 1.8 
+ */
+TEST_F(MarkovModelTest, validateStateUndefined) {
+    using namespace ModelDefinition::Validation;
+
+    markov_model = new MarkovModel();
+    markov_model->addConnection("from", "to", "rate");    
+
+    ValidationResults results = markov_model->validate();
+
+    ASSERT_TRUE(results.overall_result == ERRORS);
+
+    bool state_undefined_error_exists = false;
+    int i = 0;
+    while (i < results.errors.size() && 
+            !state_undefined_error_exists) {
+        if (results.errors[i].first == STATE_NOT_DEFINED) {
+            state_undefined_error_exists = true;
+        }
+        ++i;
+    }
+
+    ASSERT_TRUE(state_undefined_error_exists);
+
+    delete markov_model;
+}
+
+/**
+ * Test validate with rate undefined
+ * Use Case: 1.8 
+ */
+TEST_F(MarkovModelTest, validateRateUndefined) {
+    using namespace ModelDefinition::Validation;
+
+    markov_model = new MarkovModel();
+    markov_model->addConnection("from", "to", "rate");    
+
+    ValidationResults results = markov_model->validate();
+
+    ASSERT_TRUE(results.overall_result == ERRORS);
+
+    bool rate_constant_undefined_error_exists = false;
+    int i = 0;
+    while (i < results.errors.size() && 
+            !rate_constant_undefined_error_exists) {
+        if (results.errors[i].first == RATE_CONSTANT_NOT_DEFINED) {
+            rate_constant_undefined_error_exists = true;
+        }
+        ++i;
+    }
+
+    ASSERT_TRUE(rate_constant_undefined_error_exists);
+
+    delete markov_model;
+}
+
+/**
+ * Test validate with valid model
+ * Use Case: 1.8 
+ */
+TEST_F(MarkovModelTest, validateValidModel) {
+    using namespace ModelDefinition::Validation;
+
+    markov_model = new MarkovModel();
+    markov_model->addConnection("from", "to", "rate");    
+    markov_model->addState("from", true, true);
+    markov_model->addState("to", false, false);
+    markov_model->setInitialState("from");
     
+    ConstantRateConstant* rc1 = new ConstantRateConstant("rate", 1.23);
+    markov_model->addRateConstant(*rc1);
+    
+
+    ValidationResults results = markov_model->validate();
+    ASSERT_TRUE(results.overall_result == NO_WARNINGS);
+
     delete markov_model;
 }

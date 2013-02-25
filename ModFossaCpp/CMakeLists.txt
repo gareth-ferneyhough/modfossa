@@ -13,7 +13,7 @@ else()
 endif()
 
 
-find_package(Boost 1.49.0)
+find_package(Boost 1.48.0)
 if(Boost_FOUND)
     include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.6")
     set(Boost_USE_STATIC_LIBS OFF)

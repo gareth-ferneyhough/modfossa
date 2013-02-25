@@ -42,12 +42,12 @@ class ConnectionManager;
         Validation::ValidationResults validate();
 
     private:
-        bool stateAlreadyExists(string name);
-        bool rateConstantAlreadyExists(string name);
+        bool stateExists(string name);
+        bool rateConstantExists(string name);
 
         map<string, const RateConstantBase*>* map_of_rates;
         map<string, const State*>* map_of_states;
-        vector<const Connection*>* connections;
+        vector<Connection*>* connections;
 
         string initial_state;
 
