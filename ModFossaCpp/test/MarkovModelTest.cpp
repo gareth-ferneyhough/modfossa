@@ -1,9 +1,13 @@
 #include <gtest/gtest.h>
+#include <ModelDefinition/State.h>
 #include <ModelDefinition/StateOfTheWorld.h>
 #include <ModelDefinition/MarkovModel.h>
 #include <ModelDefinition/ConstantRateConstant.h>
 
 #include <algorithm>
+#include <memory>
+
+using std::shared_ptr;
 
 using ModelDefinition::MarkovModel;
 using ModelDefinition::StateOfTheWorld;
@@ -73,11 +77,11 @@ TEST_F(MarkovModelTest, addStateEmptyName) {
  */
 TEST_F(MarkovModelTest, addRateConstant) {
     markov_model = new MarkovModel();
-    ConstantRateConstant * rc = new ConstantRateConstant("rc1", 1.1);
-    ConstantRateConstant * rc2 = new ConstantRateConstant("rc2", 2.2);
+    shared_ptr<const ConstantRateConstant> rc (new ConstantRateConstant("rc1", 1.1));
+    shared_ptr<const ConstantRateConstant> rc2 (new ConstantRateConstant("rc2", 2.2));
 
-    markov_model->addRateConstant(*rc);
-    markov_model->addRateConstant(*rc2);
+    markov_model->addRateConstant(rc);
+    markov_model->addRateConstant(rc2);
 
     delete markov_model;
 }
@@ -87,11 +91,11 @@ TEST_F(MarkovModelTest, addRateConstant) {
  */
 TEST_F(MarkovModelTest, addDuplicateRateConstant) {
     markov_model = new MarkovModel();
-    ConstantRateConstant * rc = new ConstantRateConstant("rc1", 1.1);
-    ConstantRateConstant * rc2 = new ConstantRateConstant("rc1", 2.2);
+    shared_ptr<const ConstantRateConstant> rc (new ConstantRateConstant("rc1", 1.1));
+    shared_ptr<const ConstantRateConstant> rc2 (new ConstantRateConstant("rc1", 2.2));
 
-    markov_model->addRateConstant(*rc);
-    ASSERT_THROW(markov_model->addRateConstant(*rc2),
+    markov_model->addRateConstant(rc);
+    ASSERT_THROW(markov_model->addRateConstant(rc2),
             std::runtime_error);
 
     delete markov_model;
@@ -233,8 +237,8 @@ TEST_F(MarkovModelTest, validateValidModel) {
     markov_model->addState("to", false, false);
     markov_model->setInitialState("from");
     
-    ConstantRateConstant* rc1 = new ConstantRateConstant("rate", 1.23);
-    markov_model->addRateConstant(*rc1);
+    shared_ptr<const ConstantRateConstant> rc1 (new ConstantRateConstant("rate", 1.1));
+    markov_model->addRateConstant(rc1);
     
 
     ValidationResults results = markov_model->validate();

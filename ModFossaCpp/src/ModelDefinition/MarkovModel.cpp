@@ -2,26 +2,25 @@
 #include <ModelDefinition/RateConstantBase.h>
 #include <ModelDefinition/Validation/ValidationResults.h>
 
-#include <boost/log/trivial.hpp>
 #include <stdexcept>
 
 namespace ModelDefinition {
 
     MarkovModel::MarkovModel() {
-        map_of_rates = new map<string, const RateConstantBase*>();
-        map_of_states = new map<string, const State*>();
-        connections = new vector<Connection*>();
+        //map_of_rates = shared_ptr(new map<string, const RateConstantBase*>();
+        //map_of_states = new map<string, const State*>();
+        //connections = new vector<Connection*>();
     }
 
     MarkovModel::~MarkovModel() {
-        delete map_of_rates;
-        delete map_of_states;
-        delete connections;
+        //delete map_of_rates;
+        //delete map_of_states;
+        //delete connections;
     }
 
     void MarkovModel::addState(string name, bool conducting, bool initial) {
         if (name.empty()) {
-            throw std::runtime_error("name cannot be empty");
+			throw std::runtime_error("name cannot be empty");
         }
 
         if (stateExists(name)) {
@@ -30,39 +29,40 @@ namespace ModelDefinition {
         }
 
         int index = -1;
-        (*map_of_states)[name] = new State(name, index, conducting, initial);
+        map_of_states[name] = shared_ptr<State>(new State(name, index, conducting, initial));
     }
 
-    void MarkovModel::addRateConstant(const RateConstantBase& rate_constant) {
-        string name = rate_constant.getName();
+    void MarkovModel::addRateConstant(const shared_ptr<const RateConstantBase>rate_constant) {
+        string name = rate_constant->getName();
         if (rateConstantExists(name)) {
             throw std::runtime_error(
                     "RateConstant with same name already exists");
         }
 
-        (*map_of_rates)[name] = &rate_constant;
+        map_of_rates[name] = rate_constant;
     }
 
     void MarkovModel::addConnection(string from_state, string to_state,
             string rate_name) {
-        connections->push_back(new Connection(from_state, to_state, rate_name));
+        connections.push_back(shared_ptr<Connection>(
+			new Connection(from_state, to_state, rate_name)));
     }
 
     bool MarkovModel::stateExists(string name) {
-        map<string, const State*>::const_iterator it;
-        it = map_of_states->find(name);
+        map<const string, shared_ptr<const State>>::const_iterator it;
+        it = map_of_states.find(name);
 
-        if (it != map_of_states->end()) {
+        if (it != map_of_states.end()) {
             return true;
         }
         return false;
     }
 
     bool MarkovModel::rateConstantExists(string name) {
-        map<string, const RateConstantBase*>::const_iterator it;
-        it = map_of_rates->find(name);
+        map<const string, shared_ptr<const RateConstantBase>>::const_iterator it;
+        it = map_of_rates.find(name);
 
-        if (it != map_of_rates->end()) {
+        if (it != map_of_rates.end()) {
             return true;
         }
         return false;
@@ -90,7 +90,7 @@ namespace ModelDefinition {
         }
 
         // at least one connection?
-        if (connections->size() == 0) {
+        if (connections.size() == 0) {
             errors.push_back(std::make_pair(
                     NO_CONNECTIONS, "No connections defined"));
 
@@ -98,12 +98,11 @@ namespace ModelDefinition {
         }
 
         // check connections that rate_constants and states exist
-        for (int i = 0; i < connections->size(); ++i) {
+        for (int i = 0; i < connections.size(); ++i) {
 
-            Connection *connection = (*connections)[i];
-            string from_state = connection->from_state;
-            string to_state = connection->to_state;
-            string rate_name = connection->rate_name;
+            string from_state = connections[i]->from_state;
+            string to_state = connections[i]->to_state;
+            string rate_name = connections[i]->rate_name;
 
             if (!stateExists(from_state)) {
                 errors.push_back(std::make_pair(

@@ -13,16 +13,16 @@ else()
 endif()
 
 
-find_package(Boost 1.48.0)
-if(Boost_FOUND)
-    include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.6")
-    set(Boost_USE_STATIC_LIBS OFF)
-    set(Boost_USE_MULTITHREADED ON)
-    set(Boost_USE_STATIC_RUNTIME OFF)
-    find_package(Boost 1.49.0 COMPONENTS log)
-elseif(NOT Boost_FOUND)
-    message(FATAL_ERROR "Unable to find correct Boost version. Did you set BOOST_ROOT?")
-endif()
+#find_package(Boost 1.48.0)
+#if(Boost_FOUND)
+#    include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.6")
+#    set(Boost_USE_STATIC_LIBS OFF)
+#    set(Boost_USE_MULTITHREADED ON)
+#    set(Boost_USE_STATIC_RUNTIME OFF)
+#    find_package(Boost 1.49.0 COMPONENTS log)
+#elseif(NOT Boost_FOUND)
+#    message(FATAL_ERROR "Unable to find correct Boost version. Did you set BOOST_ROOT?")
+#endif()
 
 
 set(EXTRA_LIBS ${EXTRA_LIBS} )
@@ -38,7 +38,7 @@ include_directories(${INC_DIR})
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
 
 add_library(ModFossa SHARED ${SRC_FILES})
-target_link_libraries (ModFossa ${EXTRA_LIBS} ${Boost_LIBRARIES})
+target_link_libraries (ModFossa ${EXTRA_LIBS} )#${Boost_LIBRARIES})
 
 ################################
 # GTest

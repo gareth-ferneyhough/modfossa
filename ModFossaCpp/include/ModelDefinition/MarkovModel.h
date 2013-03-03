@@ -8,10 +8,12 @@
 #include <vector>
 #include <map>
 #include <string>
+#include <memory>
 
 using std::string;
 using std::map;
 using std::vector;
+using std::shared_ptr;
 
 namespace ModelDefinition {
     
@@ -35,7 +37,7 @@ class ConnectionManager;
         ~MarkovModel();
 
         void addState(string name, bool conducting, bool initial = false);
-        void addRateConstant(const RateConstantBase& rate_constant);
+        void addRateConstant(const shared_ptr<const RateConstantBase> rate_constant);
         void addConnection(string from_state, string to_state,
                 string rate_constant);
         void setInitialState(string initial_state);
@@ -45,13 +47,13 @@ class ConnectionManager;
         bool stateExists(string name);
         bool rateConstantExists(string name);
 
-        map<string, const RateConstantBase*>* map_of_rates;
-        map<string, const State*>* map_of_states;
-        vector<Connection*>* connections;
+        map<const string, shared_ptr<const RateConstantBase>> map_of_rates;
+        map<const string, shared_ptr<const State>> map_of_states;
+        vector<shared_ptr<const Connection>> connections;
 
         string initial_state;
 
-        ConnectionManager* connectionManager;
+        //shared_ptr<ConnectionManager> connectionManager;
     };
 }
 
