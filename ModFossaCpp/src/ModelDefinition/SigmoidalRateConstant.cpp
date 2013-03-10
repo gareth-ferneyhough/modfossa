@@ -40,7 +40,7 @@ namespace ModelDefinition {
     SigmoidalRateConstant::~SigmoidalRateConstant() {
     }
 
-    double SigmoidalRateConstant::getRate(StateOfTheWorld* state_of_the_world) {
+    double SigmoidalRateConstant::getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const {
         if (!name_initialized) {
             throw std::runtime_error("name is not initialized");
         }

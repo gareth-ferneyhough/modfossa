@@ -19,7 +19,7 @@ namespace ModelDefinition {
         SigmoidalRateConstant();
         SigmoidalRateConstant(string name, double a, double v_half, double k);
         virtual ~SigmoidalRateConstant();
-        virtual double getRate(StateOfTheWorld* stateOfTheWorld);
+        virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const;
 
         string getName() const;
         void setName(string name);

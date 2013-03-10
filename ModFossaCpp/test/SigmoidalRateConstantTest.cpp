@@ -8,7 +8,7 @@ protected:
 
     virtual void SetUp() {
         rate_constant = NULL;
-        state_of_the_world = NULL;
+        state_of_the_world = shared_ptr<StateOfTheWorld>(new StateOfTheWorld());
     }
 
     virtual void TearDown() {
@@ -16,7 +16,8 @@ protected:
     }
 
     SigmoidalRateConstant* rate_constant;
-    StateOfTheWorld* state_of_the_world;
+    //StateOfTheWorld* state_of_the_world;
+	shared_ptr<StateOfTheWorld> state_of_the_world;
 };
 
 /**
@@ -70,7 +71,6 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
     double voltage = -30;
     rate_constant = new SigmoidalRateConstant("rc1", a, v_half, k);
 
-    state_of_the_world = new StateOfTheWorld();
     state_of_the_world->setVoltage(voltage);
     state_of_the_world->addConcentration("Ca", 3.2);
 
@@ -82,7 +82,6 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
     ASSERT_LT(error, error_allowed);
 
     delete rate_constant;
-    delete state_of_the_world;
 }
 
 /**
@@ -97,8 +96,6 @@ TEST_F(SigmoidalRateConstantTest, getRateUnsetK) {
     rate_constant->setName("rc1");
     rate_constant->setA(a);
     rate_constant->setVHalf(v_half);
-
-    state_of_the_world = new StateOfTheWorld();
     
     ASSERT_THROW(rate_constant->getRate(state_of_the_world),
             std::runtime_error);

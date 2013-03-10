@@ -77,13 +77,19 @@ namespace ModelDefinition {
 	}
 
 	void MarkovModel::setInitialState(string initial_state) {
+		if(!this->initial_state.empty()) {
+			throw std::runtime_error("initial_state already set to " + this->initial_state);
+		}
+
 		if (initial_state.empty()) {
 			throw std::runtime_error("initial_state name cannot be empty");
 		}
+		
 		this->initial_state = initial_state;
 	}
 
-	Validation::ValidationResults MarkovModel::validate() {
+
+	Validation::ValidationResults MarkovModel::validate(const shared_ptr<const StateOfTheWorld> state_of_the_world) {
 		using namespace Validation; // this stinks
 
 		vector< std::pair<ErrorType, string >> errors;
@@ -137,8 +143,31 @@ namespace ModelDefinition {
 			}
 		}
 
-		// TODO: Check that each LigandGated rate constant has its ligand defined in 
-		// state of the world
+		if(state_of_the_world == NULL) {
+			errors.push_back(std::make_pair(
+				STATE_OF_THE_WORLD_IS_NULL,
+				"state_of_the_world cannot be NULL"));
+
+			error_level = ERRORS;
+		}
+
+		if(state_of_the_world != NULL) {
+			// Check that each LigandGated rate constant has its ligand defined in 
+			// state_of_the_world
+			map<const string, shared_ptr<const RateConstantBase> >::const_iterator it;
+			for(it = map_of_rates.begin(); it != map_of_rates.end(); ++ it) {
+				try {
+					it->second->getRate(state_of_the_world);
+				}
+				catch(std::runtime_error& e) {
+					errors.push_back(std::make_pair(
+						LIGAND_NOT_DEFINED,
+						"Ligand not defined: " + string(e.what()))); // This is a bad and ugly message!
+
+					error_level = ERRORS;
+				}
+			}		
+		}
 
 		ValidationResults results(error_level, errors);
 		return results;

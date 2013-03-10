@@ -18,6 +18,7 @@ namespace ModelDefinition {
         ~StateOfTheWorld();
 
         double getVoltage() const;
+		bool concentrationExists(string ligand_name) const;
         double getConcentration(string ligand_name) const;
 
         void addConcentration(string ligand_name, double concentration_value);

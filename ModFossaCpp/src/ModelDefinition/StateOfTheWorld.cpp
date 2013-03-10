@@ -24,19 +24,30 @@ namespace ModelDefinition {
     }
 
     double StateOfTheWorld::getConcentration(string ligand_name) const {
-        if (concentrations == NULL) {
+        // I dont like this:
+		if (concentrations == NULL) {
             throw std::runtime_error("map of Concentrations not set");
         }
 
-        map<string, Concentration*>::const_iterator it;
-        it = concentrations->find(ligand_name);
-        if (it == concentrations->end()) {
-            throw std::runtime_error(
-                    "Error in getConcentration: ligand does not exist");
-        }
+		map<string, Concentration*>::const_iterator it;
+		it = concentrations->find(ligand_name);
+		if (it == concentrations->end()) {
+			throw std::runtime_error("no concentration defined for " + ligand_name);
+        }	
 
         return (it->second->concentration_value);
     }
+
+	bool StateOfTheWorld::concentrationExists(string ligand_name) const {
+		map<string, Concentration*>::const_iterator it;
+        it = concentrations->find(ligand_name);
+        if (it == concentrations->end()) {
+			return false;
+        }
+		else {
+			return true;
+		}
+	}
 
     void StateOfTheWorld::addConcentration(string ligand_name,
             double concentration_value) {

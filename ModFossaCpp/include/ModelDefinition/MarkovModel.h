@@ -18,11 +18,6 @@ using std::shared_ptr;
 
 namespace ModelDefinition {
 
-	class State;
-	class Connection;
-	class RateConstantBase;
-	class ConnectionManager;
-
 	class MarkovModel {
 	public:
 		MarkovModel();
@@ -32,7 +27,7 @@ namespace ModelDefinition {
 		void addRateConstant(const shared_ptr<const RateConstantBase> rate_constant);
 		void addConnection(const shared_ptr<const Connection> connection);
 		void setInitialState(string initial_state);
-		Validation::ValidationResults validate();
+		Validation::ValidationResults validate(const shared_ptr<const StateOfTheWorld> state_of_the_world);
 
 	private:
 		bool stateExists(string name) const;

@@ -3,30 +3,25 @@
 
 #include <string>
 #include <stdexcept>
+#include <memory>
 
 using std::string;
 
 namespace ModelDefinition {
 
-    struct State {
+    class State {
+	public:
+		State(string name, bool is_conducting);
+		string getName() const;
+		bool getIsConducting() const;
 
-        State(string name, bool is_conducting) :
-        name(name),
-        is_conducting(is_conducting),
-		index(-1),
-		is_initial_state(false) {
-			if(name.empty()) {
-				throw std::runtime_error("State name cannot be empty");
-			}
-        }
+	private:
+		friend class MarkovModel;
 
-        string name;
-		bool is_conducting;
-        
-	protected:
+		const string name;
+		const bool is_conducting;
 		int index;
         bool is_initial_state;
     };
 }
-
 #endif

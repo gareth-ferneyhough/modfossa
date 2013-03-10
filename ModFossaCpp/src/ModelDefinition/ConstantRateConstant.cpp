@@ -3,23 +3,20 @@
 #include <stdexcept>
 
 namespace ModelDefinition{
-ConstantRateConstant::ConstantRateConstant() :
-RateConstantBase() {
-}
 
 ConstantRateConstant::ConstantRateConstant(string name, double k) :
-RateConstantBase() {
+RateConstantBase(),
+name(name),
+k(k) {
     if (name.empty()) {
         throw std::runtime_error("Error: name cannot be empty string");
     }
-    this->name = name;
-    this->k = k;
 }
 
 ConstantRateConstant::~ConstantRateConstant() {
 }
 
-double ConstantRateConstant::getRate(StateOfTheWorld* state_of_the_world) {
+double ConstantRateConstant::getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const {
     return k;
 }
 
@@ -27,19 +24,7 @@ string ConstantRateConstant::getName() const {
     return name;
 }
 
-void ConstantRateConstant::setName(string name) {
-    if (name.empty()) {
-        throw std::runtime_error
-                ("Error in setName: name cannot be empty string");
-    }
-    this-> name = name;
-}
-
 double ConstantRateConstant::getK() const {
     return k;
-}
-
-void ConstantRateConstant::setK(double k) {
-    this->k = k;
 }
 }
