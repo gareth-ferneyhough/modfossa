@@ -2,6 +2,7 @@
 #include <ModelDefinition/StateOfTheWorld.h>
 
 using namespace ModelDefinition;
+
 /**
  * TestCase for ConstantRateContant. We test the
  * constructor, and the getRate() method under both
@@ -50,9 +51,9 @@ TEST_F(StateOfTheWorldTest, getConcentration) {
  */
 TEST_F(StateOfTheWorldTest, getUndeclaredConcentration) {
     state_of_the_world = new StateOfTheWorld();
-    
+
     state_of_the_world->addConcentration("Ca", 1.1);
-    
+
 
     ASSERT_THROW(state_of_the_world->getConcentration("Na"),
             std::runtime_error);

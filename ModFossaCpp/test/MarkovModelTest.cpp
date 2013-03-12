@@ -38,8 +38,8 @@ protected:
  */
 TEST_F(MarkovModelTest, addRateConstant) {
     markov_model = new MarkovModel();
-    shared_ptr<const ConstantRateConstant> rc (new ConstantRateConstant("rc1", 1.1));
-    shared_ptr<const ConstantRateConstant> rc2 (new ConstantRateConstant("rc2", 2.2));
+    shared_ptr<const ConstantRateConstant> rc(new ConstantRateConstant("rc1", 1.1));
+    shared_ptr<const ConstantRateConstant> rc2(new ConstantRateConstant("rc2", 2.2));
 
     markov_model->addRateConstant(rc);
     markov_model->addRateConstant(rc2);
@@ -53,8 +53,8 @@ TEST_F(MarkovModelTest, addRateConstant) {
  */
 TEST_F(MarkovModelTest, addDuplicateRateConstant) {
     markov_model = new MarkovModel();
-    shared_ptr<const ConstantRateConstant> rc (new ConstantRateConstant("rc1", 1.1));
-    shared_ptr<const ConstantRateConstant> rc2 (new ConstantRateConstant("rc1", 2.2));
+    shared_ptr<const ConstantRateConstant> rc(new ConstantRateConstant("rc1", 1.1));
+    shared_ptr<const ConstantRateConstant> rc2(new ConstantRateConstant("rc1", 2.2));
 
     markov_model->addRateConstant(rc);
     ASSERT_THROW(markov_model->addRateConstant(rc2),
@@ -69,7 +69,7 @@ TEST_F(MarkovModelTest, addDuplicateRateConstant) {
  */
 TEST_F(MarkovModelTest, addState) {
     markov_model = new MarkovModel();
-	shared_ptr<const State> state(new State("state1", false));
+    shared_ptr<const State> state(new State("state1", false));
     markov_model->addState(state);
     delete markov_model;
 }
@@ -80,8 +80,8 @@ TEST_F(MarkovModelTest, addState) {
  */
 TEST_F(MarkovModelTest, addStateAlreadyExists) {
     markov_model = new MarkovModel();
-	shared_ptr<const State> state1(new State("state1", false));
-	shared_ptr<const State> state2(new State("state1", false));
+    shared_ptr<const State> state1(new State("state1", false));
+    shared_ptr<const State> state2(new State("state1", false));
 
     markov_model->addState(state1);
 
@@ -97,7 +97,7 @@ TEST_F(MarkovModelTest, addStateAlreadyExists) {
  */
 TEST_F(MarkovModelTest, addConnection) {
     markov_model = new MarkovModel();
-	shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
     delete markov_model;
 }
@@ -108,12 +108,12 @@ TEST_F(MarkovModelTest, addConnection) {
  */
 TEST_F(MarkovModelTest, addDuplicateConnection) {
     markov_model = new MarkovModel();
-	shared_ptr<const Connection> connection1(new Connection("from", "to", "rate"));
-	shared_ptr<const Connection> connection2(new Connection("from", "to", "rate2"));
-    
-	markov_model->addConnection(connection1);
-	ASSERT_THROW(markov_model->addConnection(connection1),
-        std::runtime_error);
+    shared_ptr<const Connection> connection1(new Connection("from", "to", "rate"));
+    shared_ptr<const Connection> connection2(new Connection("from", "to", "rate2"));
+
+    markov_model->addConnection(connection1);
+    ASSERT_THROW(markov_model->addConnection(connection1),
+            std::runtime_error);
 
     delete markov_model;
 }
@@ -124,7 +124,7 @@ TEST_F(MarkovModelTest, addDuplicateConnection) {
  */
 TEST_F(MarkovModelTest, setInitialState) {
     markov_model = new MarkovModel();
-	markov_model->setInitialState("s1");
+    markov_model->setInitialState("s1");
     delete markov_model;
 }
 
@@ -134,10 +134,10 @@ TEST_F(MarkovModelTest, setInitialState) {
  */
 TEST_F(MarkovModelTest, setInitialStateDuplicate) {
     markov_model = new MarkovModel();
-	markov_model->setInitialState("s1");
+    markov_model->setInitialState("s1");
 
-	ASSERT_THROW(markov_model->setInitialState("s1"),
-		std::runtime_error);
+    ASSERT_THROW(markov_model->setInitialState("s1"),
+            std::runtime_error);
     delete markov_model;
 }
 
@@ -150,20 +150,20 @@ TEST_F(MarkovModelTest, validateSuccess) {
 
     markov_model = new MarkovModel();
     shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
-    markov_model->addConnection(connection);   
-    
-	shared_ptr<const State> state1(new State("from", false));
-	shared_ptr<const State> state2(new State("to", false));
+    markov_model->addConnection(connection);
 
-	markov_model->addState(state1);
+    shared_ptr<const State> state1(new State("from", false));
+    shared_ptr<const State> state2(new State("to", false));
+
+    markov_model->addState(state1);
     markov_model->addState(state2);
-    
-	markov_model->setInitialState("from");
-    
-    shared_ptr<const ConstantRateConstant> rc1 (new ConstantRateConstant("rate", 1.1));
+
+    markov_model->setInitialState("from");
+
+    shared_ptr<const ConstantRateConstant> rc1(new ConstantRateConstant("rate", 1.1));
     markov_model->addRateConstant(rc1);
-    
-	std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
+
+    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
     ValidationResults results = markov_model->validate(state_of_the_world);
     ASSERT_TRUE(results.overall_result == NO_WARNINGS);
 
@@ -178,28 +178,28 @@ TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
     using namespace ModelDefinition::Validation;
 
     string ligand_name = "Ca";
-	double ligand_power = 2.0;
-	double ligand_concentration = 3.0;
+    double ligand_power = 2.0;
+    double ligand_concentration = 3.0;
 
-	std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
-		"rate1", ligand_name, ligand_power)); 
-	
-	std::shared_ptr<State> state_1(new State("state1", true));
-	std::shared_ptr<State> state_2(new State("state2", false));
-	std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+            "rate1", ligand_name, ligand_power));
 
-	std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
-	state_of_the_world->addConcentration(ligand_name, ligand_concentration);
-	
-	markov_model = new MarkovModel();
-	markov_model->addState(state_1);
-	markov_model->addState(state_2);
-	markov_model->addRateConstant(rate1);
-	markov_model->addConnection(connection);
-	markov_model->setInitialState("state1");
+    std::shared_ptr<State> state_1(new State("state1", true));
+    std::shared_ptr<State> state_2(new State("state2", false));
+    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+
+    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
+    state_of_the_world->addConcentration(ligand_name, ligand_concentration);
+
+    markov_model = new MarkovModel();
+    markov_model->addState(state_1);
+    markov_model->addState(state_2);
+    markov_model->addRateConstant(rate1);
+    markov_model->addConnection(connection);
+    markov_model->setInitialState("state1");
 
     ValidationResults results = markov_model->validate(state_of_the_world);
-	ASSERT_TRUE(results.overall_result == NO_WARNINGS);
+    ASSERT_TRUE(results.overall_result == NO_WARNINGS);
 
     delete markov_model;
 }
@@ -219,7 +219,7 @@ TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
 
     bool no_connections_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !no_connections_error_exists) {
         if (results.errors[i].first == NO_CONNECTIONS) {
             no_connections_error_exists = true;
@@ -240,7 +240,7 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
     using namespace ModelDefinition::Validation;
 
     markov_model = new MarkovModel();
-	shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
     ValidationResults results = markov_model->validate(NULL);
@@ -249,7 +249,7 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
 
     bool state_undefined_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !state_undefined_error_exists) {
         if (results.errors[i].first == STATE_NOT_DEFINED) {
             state_undefined_error_exists = true;
@@ -271,7 +271,7 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
 
     markov_model = new MarkovModel();
     shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
-    markov_model->addConnection(connection);  
+    markov_model->addConnection(connection);
 
     ValidationResults results = markov_model->validate(NULL);
 
@@ -279,7 +279,7 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
 
     bool rate_constant_undefined_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !rate_constant_undefined_error_exists) {
         if (results.errors[i].first == RATE_CONSTANT_NOT_DEFINED) {
             rate_constant_undefined_error_exists = true;
@@ -307,7 +307,7 @@ TEST_F(MarkovModelTest, validateInitialStateNotSet) {
 
     bool initial_state_not_defined_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !initial_state_not_defined_error_exists) {
         if (results.errors[i].first == INITIAL_STATE_NOT_DEFINED) {
             initial_state_not_defined_error_exists = true;
@@ -328,25 +328,25 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
     using namespace ModelDefinition::Validation;
 
     string ligand_name = "Ca";
-	double ligand_power = 2.0;
-	double ligand_concentration = 3.0;
+    double ligand_power = 2.0;
+    double ligand_concentration = 3.0;
 
-	std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
-		"rate1", "Na", 4.0)); 
-	
-	std::shared_ptr<State> state_1(new State("state1", true));
-	std::shared_ptr<State> state_2(new State("state2", false));
-	std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+            "rate1", "Na", 4.0));
 
-	std::shared_ptr<StateOfTheWorld> state_of_the_world = NULL;
+    std::shared_ptr<State> state_1(new State("state1", true));
+    std::shared_ptr<State> state_2(new State("state2", false));
+    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
 
-	
-	markov_model = new MarkovModel();
-	markov_model->addState(state_1);
-	markov_model->addState(state_2);
-	markov_model->addRateConstant(rate1);
-	markov_model->addConnection(connection);
-	markov_model->setInitialState("state1");
+    std::shared_ptr<StateOfTheWorld> state_of_the_world = NULL;
+
+
+    markov_model = new MarkovModel();
+    markov_model->addState(state_1);
+    markov_model->addState(state_2);
+    markov_model->addRateConstant(rate1);
+    markov_model->addConnection(connection);
+    markov_model->setInitialState("state1");
 
     ValidationResults results = markov_model->validate(state_of_the_world);
 
@@ -354,7 +354,7 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
 
     bool state_of_world_null_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !state_of_world_null_error_exists) {
         if (results.errors[i].first == STATE_OF_THE_WORLD_IS_NULL) {
             state_of_world_null_error_exists = true;
@@ -375,25 +375,25 @@ TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
     using namespace ModelDefinition::Validation;
 
     string ligand_name = "Ca";
-	double ligand_power = 2.0;
-	double ligand_concentration = 3.0;
+    double ligand_power = 2.0;
+    double ligand_concentration = 3.0;
 
-	std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
-		"rate1", "Na", 4.0)); 
-	
-	std::shared_ptr<State> state_1(new State("state1", true));
-	std::shared_ptr<State> state_2(new State("state2", false));
-	std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+            "rate1", "Na", 4.0));
 
-	std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
-	state_of_the_world->addConcentration(ligand_name, ligand_concentration);
-	
-	markov_model = new MarkovModel();
-	markov_model->addState(state_1);
-	markov_model->addState(state_2);
-	markov_model->addRateConstant(rate1);
-	markov_model->addConnection(connection);
-	markov_model->setInitialState("state1");
+    std::shared_ptr<State> state_1(new State("state1", true));
+    std::shared_ptr<State> state_2(new State("state2", false));
+    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+
+    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
+    state_of_the_world->addConcentration(ligand_name, ligand_concentration);
+
+    markov_model = new MarkovModel();
+    markov_model->addState(state_1);
+    markov_model->addState(state_2);
+    markov_model->addRateConstant(rate1);
+    markov_model->addConnection(connection);
+    markov_model->setInitialState("state1");
 
     ValidationResults results = markov_model->validate(state_of_the_world);
 
@@ -401,7 +401,7 @@ TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
 
     bool concentration_not_defined_error_exists = false;
     int i = 0;
-    while (i < results.errors.size() && 
+    while (i < results.errors.size() &&
             !concentration_not_defined_error_exists) {
         if (results.errors[i].first == LIGAND_NOT_DEFINED) {
             concentration_not_defined_error_exists = true;

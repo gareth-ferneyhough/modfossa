@@ -21,13 +21,13 @@ namespace ModelDefinition {
         virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const;
 
         virtual string getName() const;
-		string getLigandName() const;
-		double getLigandPower() const;
+        string getLigandName() const;
+        double getLigandPower() const;
 
     private:
         const string name;
-		const string ligand_name;
-		const double ligand_power;
+        const string ligand_name;
+        const double ligand_power;
     };
 }
 #endif	/* LIGANDGATEDRATECONSTANT_H_ */

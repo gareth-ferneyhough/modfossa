@@ -3,6 +3,7 @@
 #include <ModelDefinition/StateOfTheWorld.h>
 
 using namespace ModelDefinition;
+
 class SigmoidalRateConstantTest : public testing::Test {
 protected:
 
@@ -17,7 +18,7 @@ protected:
 
     SigmoidalRateConstant* rate_constant;
     //StateOfTheWorld* state_of_the_world;
-	shared_ptr<StateOfTheWorld> state_of_the_world;
+    shared_ptr<StateOfTheWorld> state_of_the_world;
 };
 
 /**
@@ -96,7 +97,7 @@ TEST_F(SigmoidalRateConstantTest, getRateUnsetK) {
     rate_constant->setName("rc1");
     rate_constant->setA(a);
     rate_constant->setVHalf(v_half);
-    
+
     ASSERT_THROW(rate_constant->getRate(state_of_the_world),
             std::runtime_error);
 
@@ -112,7 +113,7 @@ TEST_F(SigmoidalRateConstantTest, getRateStateOfWorldNull) {
     double k = 3.3;
     double voltage = -30;
     rate_constant = new SigmoidalRateConstant("rc1", a, v_half, k);
-        
+
     ASSERT_THROW(rate_constant->getRate(state_of_the_world),
             std::runtime_error);
 

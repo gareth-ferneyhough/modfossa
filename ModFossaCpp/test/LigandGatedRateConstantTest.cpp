@@ -27,7 +27,7 @@ TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstant) {
     rate_constant = new LigandGatedRateConstant("rc1", "Ca", 2.0);
     ASSERT_TRUE(rate_constant->getName() == "rc1");
     ASSERT_TRUE(rate_constant->getLigandName() == "Ca");
-	ASSERT_TRUE(rate_constant->getLigandPower() == 2.0);
+    ASSERT_TRUE(rate_constant->getLigandPower() == 2.0);
 
     delete rate_constant;
 }
@@ -56,19 +56,19 @@ TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstantEmptyLigandName
  */
 TEST_F(LigandGatedRateConstantTest, getRate) {
     string ligand_name = "Ca";
-	double ligand_concentration = 2.0;
-	double ligand_power = 3.0;
+    double ligand_concentration = 2.0;
+    double ligand_power = 3.0;
 
     shared_ptr<StateOfTheWorld>state_of_the_world(new StateOfTheWorld());
     state_of_the_world->addConcentration(ligand_name, ligand_concentration);
 
-	rate_constant = new LigandGatedRateConstant("rc1", ligand_name, ligand_power);
+    rate_constant = new LigandGatedRateConstant("rc1", ligand_name, ligand_power);
     double actual = rate_constant->getRate(state_of_the_world);
     double expected = pow(ligand_concentration, ligand_power);
 
     ASSERT_EQ(expected, actual);
 
-	delete rate_constant;
+    delete rate_constant;
 }
 
 /**
@@ -78,12 +78,12 @@ TEST_F(LigandGatedRateConstantTest, getRate) {
 TEST_F(LigandGatedRateConstantTest, getRateStateOfWorldNull) {
     shared_ptr<StateOfTheWorld>state_of_the_world = NULL;
 
-	rate_constant = new LigandGatedRateConstant("rc1", "Na", 2.0);
-    
-	ASSERT_THROW(double actual = rate_constant->getRate(state_of_the_world),
-		std::runtime_error);
+    rate_constant = new LigandGatedRateConstant("rc1", "Na", 2.0);
 
-	delete rate_constant;
+    ASSERT_THROW(double actual = rate_constant->getRate(state_of_the_world),
+            std::runtime_error);
+
+    delete rate_constant;
 }
 
 /**
@@ -92,17 +92,17 @@ TEST_F(LigandGatedRateConstantTest, getRateStateOfWorldNull) {
  */
 TEST_F(LigandGatedRateConstantTest, getRateConcentrationNotDeclared) {
     string ligand_name = "Ca";
-	double ligand_concentration = 2.0;
-	double ligand_power = 3.0;
+    double ligand_concentration = 2.0;
+    double ligand_power = 3.0;
 
     shared_ptr<StateOfTheWorld>state_of_the_world(new StateOfTheWorld());
     state_of_the_world->addConcentration(ligand_name, ligand_concentration);
 
-	rate_constant = new LigandGatedRateConstant("rc1", "Na", 2.0);
-    
-	ASSERT_THROW(double actual = rate_constant->getRate(state_of_the_world),
-		std::runtime_error);
+    rate_constant = new LigandGatedRateConstant("rc1", "Na", 2.0);
 
-	delete rate_constant;
+    ASSERT_THROW(double actual = rate_constant->getRate(state_of_the_world),
+            std::runtime_error);
+
+    delete rate_constant;
 }
 

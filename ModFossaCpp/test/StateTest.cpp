@@ -2,6 +2,7 @@
 #include <ModelDefinition/State.h>
 
 using namespace ModelDefinition;
+
 /**
  * TestCase for ConstantRateContant. We test the
  * constructor, and the GetRate() method under both
@@ -17,7 +18,7 @@ protected:
     virtual void TearDown() {
 
     }
-	State* state;
+    State* state;
 };
 
 /**
@@ -26,8 +27,8 @@ protected:
  */
 TEST_F(StateTest, createState) {
     state = new State("state1", false);
-	ASSERT_TRUE(state->getName() == "state1");
-	ASSERT_TRUE(state->getIsConducting() == false);
+    ASSERT_TRUE(state->getName() == "state1");
+    ASSERT_TRUE(state->getIsConducting() == false);
 
     delete state;
 }
@@ -38,7 +39,7 @@ TEST_F(StateTest, createState) {
  */
 TEST_F(StateTest, createStateEmptyName) {
     ASSERT_THROW(state = new State("", false),
-		std::runtime_error);
+            std::runtime_error);
 }
 
 
