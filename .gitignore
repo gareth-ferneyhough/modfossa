@@ -5,3 +5,5 @@
 *.a
 /ModFossaCpp/project/ModFossaCpp/
 /ModFossaCpp/build
+/ModFossaCpp/doc/html
+/ModFossaCpp/doc/latex

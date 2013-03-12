@@ -1,4 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node2" href="$classStateOfTheWorld.html" title="{StateOfTheWorld\n||+ StateOfTheWorld()\l+ ~StateOfTheWorld()\l}" alt="" coords="5,175,168,278"/>
-<area shape="rect" id="node4" href="$classConstantRateConstant.html" title="{ConstantRateConstant\n|&#45; name\l&#45; k\l|+ ConstantRateConstant()\l+ ~ConstantRateConstant()\l+ GetRate()\l}" alt="" coords="192,158,395,295"/>
-</map>
