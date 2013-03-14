@@ -7,7 +7,7 @@
 namespace ModelDefinition {
 
     MarkovModel::MarkovModel() :
-    model_has_beed_validated(false) {
+    is_valid(false) {
     }
 
     MarkovModel::~MarkovModel() {
@@ -21,7 +21,7 @@ namespace ModelDefinition {
         }
 
         map_of_states[name] = state;
-        model_has_beed_validated = false;
+        is_valid = false;
     }
 
     void MarkovModel::addRateConstant(const RateConstantBase::SharedPointer
@@ -33,7 +33,7 @@ namespace ModelDefinition {
         }
 
         map_of_rates[name] = rate_constant;
-        model_has_beed_validated = false;
+        is_valid = false;
     }
 
     void MarkovModel::addConnection(const Connection::SharedPointer connection) {
@@ -44,7 +44,7 @@ namespace ModelDefinition {
         }
 
         connections.push_back(connection);
-        model_has_beed_validated = false;
+        is_valid = false;
     }
 
     bool MarkovModel::stateExists(string name) const {
@@ -91,7 +91,11 @@ namespace ModelDefinition {
         }
 
         this->initial_state = initial_state;
-        model_has_beed_validated = false;
+        is_valid = false;
+    }
+
+    bool MarkovModel::isValid() const {
+        return is_valid;
     }
 
     /*
@@ -203,7 +207,7 @@ namespace ModelDefinition {
                     it->second->is_initial_state = true;
                 }
             }
-            model_has_beed_validated = true;
+            is_valid = true;
         }
 
         ValidationResults results(error_level, errors);

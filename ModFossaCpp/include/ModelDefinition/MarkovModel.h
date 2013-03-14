@@ -34,9 +34,11 @@ namespace ModelDefinition {
         void setInitialState(string initial_state);
         Validation::ValidationResults validate(
                 const StateOfTheWorld::SharedPointer state_of_the_world);
+        
+        bool isValid() const;
 
     private:
-        bool model_has_beed_validated;
+        bool is_valid;
         
         bool stateExists(string name) const;
         bool rateConstantExists(string name) const;

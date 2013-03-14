@@ -29,6 +29,9 @@ protected:
                 new ConstantRateConstant("rate4", 4.0));
 
         markov_model->addRateConstant(rate1);
+        markov_model->addRateConstant(rate2);
+        markov_model->addRateConstant(rate3);
+        markov_model->addRateConstant(rate4);
 
         markov_model->addConnection(Connection::SharedPointer(
                 new Connection("s1", "s2", "rate1")));
@@ -41,21 +44,28 @@ protected:
 
         markov_model->addConnection(Connection::SharedPointer(
                 new Connection("s3", "s2", "rate4")));
+        
+        markov_model->setInitialState("s1");
+
+
+        Validation::ValidationResults results = markov_model->validate(
+                StateOfTheWorld::SharedPointer(new StateOfTheWorld()));
+        ASSERT_TRUE(results.overall_result == Validation::NO_WARNINGS);
     }
 
     virtual void TearDown() {
         delete transition_matrix;
     }
-    
+
     bool MatricesAreEqual(mat a, mat b) {
-        if((a.n_rows != b.n_rows) ||
-           (a.n_cols != b.n_cols)) {
+        if ((a.n_rows != b.n_rows) ||
+                (a.n_cols != b.n_cols)) {
             return false;
         }
-                
-        for(int i = 0; i < a.n_rows; ++i) {
-            for(int j = 0; j < a.n_cols; ++j) {
-                if(a(i,j) != b(i,j)) return false;
+
+        for (int i = 0; i < a.n_rows; ++i) {
+            for (int j = 0; j < a.n_cols; ++j) {
+                if (a(i, j) != b(i, j)) return false;
             }
         }
         return true;

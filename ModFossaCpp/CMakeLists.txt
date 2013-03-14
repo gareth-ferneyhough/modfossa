@@ -31,7 +31,7 @@ set(INC_DIR ${CMAKE_SOURCE_DIR}/include/)
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test/)
 
 #set(CMAKE_CXX_FLAGS "-Wall -W -Wshadow -pedantic-errors -pedantic -Wextra -Werror")
-set(CMAKE_CXX_FLAGS "-std=c++0x")
+set(CMAKE_CXX_FLAGS "-std=c++0x -g")
 
 include_directories(${INC_DIR})
   

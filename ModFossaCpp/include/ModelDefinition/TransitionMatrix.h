@@ -23,7 +23,7 @@ namespace ModelDefinition {
         TransitionMatrix();
         TransitionMatrix(const TransitionMatrix& orig);
         virtual ~TransitionMatrix();
-        void create(MarkovModel& markov_model);
+        void create(const MarkovModel& markov_model);
         mat get() const;
         void update();
 
