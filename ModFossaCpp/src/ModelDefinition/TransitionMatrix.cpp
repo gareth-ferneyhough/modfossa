@@ -6,27 +6,58 @@
  */
 
 #include <ModelDefinition/TransitionMatrix.h>
+#include <ModelDefinition/HelperFunctions.h>
+
+#include <cassert>
 
 namespace ModelDefinition {
 
-    TransitionMatrix::TransitionMatrix() {
-    }
-
-    TransitionMatrix::TransitionMatrix(const TransitionMatrix& orig) {
+    TransitionMatrix::TransitionMatrix(const MarkovModel& markov_model) {
+        create(markov_model);
     }
 
     TransitionMatrix::~TransitionMatrix() {
     }
 
-    void TransitionMatrix::update() {
-
+    double TransitionMatrix::calculateTotalRate(
+        const vector<Transition::SharedPointer>& transitions,
+            const StateOfTheWorld::SharedPointer state_of_the_world) const {
+        double total_rate = 0;
+        
+        vector<Transition::SharedPointer>::const_iterator it;
+        for(it = transitions.begin(); it != transitions.end(); ++it) {
+            
+            double rate = (*it)->rate_constant->getRate(state_of_the_world);
+            
+            // Make sign negative if outgoing connection
+            if((*it)->sign == false) { 
+                rate *= -1;
+            }
+            
+            total_rate += rate;
+        }
+        
+        return total_rate;
+    }
+    
+    void TransitionMatrix::update(
+        StateOfTheWorld::SharedPointer state_of_the_world) {
+        assert(transition_matrix.n_rows == transitions_3d.size());
+        assert(transition_matrix.n_cols == transitions_3d[0].size());
+        
+        for(int i = 0; i < transition_matrix.n_rows; ++i) {
+            for(int j = 0; j < transition_matrix.n_cols; ++j){
+                transition_matrix(i, j) = calculateTotalRate(
+                        transitions_3d[i][j], state_of_the_world);
+            }
+        }
     }
 
     void TransitionMatrix::create(const MarkovModel& markov_model) {
 
         if (!markov_model.isValid()) {
             throw std::runtime_error(
-                    "Fatal error: Attempting to create TransitionMatrix with unvalidated MarkovModel");
+                    "Cannot create TransitionMatrix with unvalidated MarkovModel");
         }
 
         // Create the intermediate 3d transitions matrix of size NxN, where
@@ -36,8 +67,6 @@ namespace ModelDefinition {
         for (int i = 0; i < matrix_size; ++i) {
             transitions_3d[i].resize(matrix_size);
         }
-
-        std::cout << "matrix size: " << matrix_size;
 
         // Iterate through our connections and add two Transition entries
         // to the intermediate 3d transitions matrix for each connection in the
@@ -64,48 +93,21 @@ namespace ModelDefinition {
 
             // Add the transition to the appropriate position in the matrix 
             // with a negative sign
-            transitions_3d[outgoing_index][incoming_index].push_back(
+            transitions_3d[outgoing_index][outgoing_index].push_back(
                     Transition::SharedPointer(new Transition(rate, false)));
 
             // Add the reversed transition to the matrix with a positive sign
             transitions_3d[incoming_index][outgoing_index].push_back(
                     Transition::SharedPointer(new Transition(rate, true)));
+            
+            // Finally, resize our 'actual' 
+            // transition matrix of doubles that will be used by the ODE solver.
+            transition_matrix.resize(matrix_size, matrix_size);            
+            //update();
         }
     }
 
-    mat TransitionMatrix::get() const {
+    Matrix TransitionMatrix::get() const {
         return transition_matrix;
-    }
-
-    RateConstantBase::SharedPointer TransitionMatrix::findRate(string rate_name,
-            const MarkovModel::RateMap& rates) const {
-
-        MarkovModel::RateMap::const_iterator rate_iterator =
-                rates.find(rate_name);
-
-        // This should never happen; this should only be called if MarkovModel
-        // is valid.
-        if (rate_iterator == rates.end()) {
-            throw std::runtime_error(
-                    "Fatal error: " + rate_name + " not found in map_of_rates");
-        }
-
-        return rate_iterator->second;
-    }
-
-    State::SharedPointer TransitionMatrix::findState(string state_name,
-            const MarkovModel::StateMap& states) const {
-
-        MarkovModel::StateMap::const_iterator state_iterator =
-                states.find(state_name);
-
-        // This should never happen; this should only be called if MarkovModel
-        // is valid.
-        if (state_iterator == states.end()) {
-            throw std::runtime_error(
-                    "Fatal error: " + state_name + " not found in map_of_states");
-        }
-
-        return state_iterator->second;
     }
 }

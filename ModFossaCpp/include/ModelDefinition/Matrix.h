@@ -10,10 +10,7 @@
 
 #include <armadillo>
 
-// TODO: Fix this
-using namespace arma;
-
-
+typedef arma::mat Matrix;
 
 #endif	/* MATRIX_H */
 

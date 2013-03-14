@@ -26,9 +26,10 @@ endif()
 
 
 set(EXTRA_LIBS ${EXTRA_LIBS} )
-set(SRC_DIR ${CMAKE_SOURCE_DIR}/src/)
-set(INC_DIR ${CMAKE_SOURCE_DIR}/include/)
-set(TEST_DIR ${CMAKE_SOURCE_DIR}/test/)
+set(SRC_DIR    ${CMAKE_SOURCE_DIR}/src/)
+set(INC_DIR    ${CMAKE_SOURCE_DIR}/include/)
+set(TEST_DIR   ${CMAKE_SOURCE_DIR}/test/)
+set(SAMPLE_DIR ${CMAKE_SOURCE_DIR}/samples/)
 
 #set(CMAKE_CXX_FLAGS "-Wall -W -Wshadow -pedantic-errors -pedantic -Wextra -Werror")
 set(CMAKE_CXX_FLAGS "-std=c++0x -g")
@@ -52,6 +53,13 @@ WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc/
 COMMENT "Generating API documentation with Doxygen" VERBATIM
 )
 endif(DOXYGEN_FOUND)
+
+################################
+# Samples
+################################
+file(GLOB SAMPLE_FILES ${SAMPLE_DIR}/*.cpp)
+add_executable(samples ${SAMPLE_FILES})
+target_link_libraries(samples ModFossa)
 
 ################################
 # GTest

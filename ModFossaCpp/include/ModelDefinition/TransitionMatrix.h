@@ -20,22 +20,19 @@ namespace ModelDefinition {
 
     class TransitionMatrix {
     public:
-        TransitionMatrix();
-        TransitionMatrix(const TransitionMatrix& orig);
+        TransitionMatrix(const MarkovModel& markov_model);
         virtual ~TransitionMatrix();
-        void create(const MarkovModel& markov_model);
-        mat get() const;
-        void update();
+        Matrix get() const;
+        void update(StateOfTheWorld::SharedPointer state_of_the_world);
 
     private:
-        Mat<double> transition_matrix;
-        vector<vector<vector<Transition::SharedPointer > > >
-                transitions_3d; 
-        
-        RateConstantBase::SharedPointer findRate(string rate_name,
-                const MarkovModel::RateMap& rate_map) const;
-        State::SharedPointer findState(string state_name, 
-                const MarkovModel::StateMap& state_map) const;
+        void create(const MarkovModel& markov_model);
+        double calculateTotalRate(
+                const vector<Transition::SharedPointer>& transitions,
+                const StateOfTheWorld::SharedPointer state_of_the_world) const;
+
+        Matrix transition_matrix;
+        vector<vector<vector<Transition::SharedPointer > > > transitions_3d;
     };
 }
 

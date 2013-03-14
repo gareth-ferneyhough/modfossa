@@ -26,8 +26,8 @@ namespace ModelDefinition {
 
         }
 
-        RateConstantBase::SharedPointer rate_constant;
-        bool sign;
+        const RateConstantBase::SharedPointer rate_constant;
+        const bool sign;
     };
 }
 

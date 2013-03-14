@@ -34,21 +34,20 @@ namespace ModelDefinition {
         void setInitialState(string initial_state);
         Validation::ValidationResults validate(
                 const StateOfTheWorld::SharedPointer state_of_the_world);
-        
+
         bool isValid() const;
 
     private:
         bool is_valid;
-        
-        bool stateExists(string name) const;
-        bool rateConstantExists(string name) const;
-        bool connectionExists(string from_state, string to_state) const;
+        string initial_state;
 
         RateMap map_of_rates;
         StateMap map_of_states;
         ConnectionsVector connections;
 
-        string initial_state;
+        bool stateExists(string name) const;
+        bool rateConstantExists(string name) const;
+        bool connectionExists(string from_state, string to_state) const;
 
         friend class TransitionMatrix;
     };

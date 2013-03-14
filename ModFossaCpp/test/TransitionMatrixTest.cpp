@@ -9,7 +9,6 @@ class TransitionMatrixTest : public testing::Test {
 protected:
 
     virtual void SetUp() {
-        transition_matrix = new TransitionMatrix();
         markov_model = new MarkovModel();
 
         markov_model->addState(State::SharedPointer(new State("s1", false)));
@@ -44,20 +43,23 @@ protected:
 
         markov_model->addConnection(Connection::SharedPointer(
                 new Connection("s3", "s2", "rate4")));
-        
+
         markov_model->setInitialState("s1");
 
-
-        Validation::ValidationResults results = markov_model->validate(
-                StateOfTheWorld::SharedPointer(new StateOfTheWorld()));
+        state_of_the_world = std::shared_ptr<StateOfTheWorld>(new StateOfTheWorld());
+        Validation::ValidationResults results = 
+                markov_model->validate(state_of_the_world);
+     
         ASSERT_TRUE(results.overall_result == Validation::NO_WARNINGS);
+
+        transition_matrix = new TransitionMatrix(*markov_model);
     }
 
     virtual void TearDown() {
         delete transition_matrix;
     }
 
-    bool MatricesAreEqual(mat a, mat b) {
+    bool MatricesAreEqual(Matrix a, Matrix b) {
         if ((a.n_rows != b.n_rows) ||
                 (a.n_cols != b.n_cols)) {
             return false;
@@ -70,9 +72,10 @@ protected:
         }
         return true;
     }
+    
     TransitionMatrix* transition_matrix;
-
     MarkovModel* markov_model;
+    StateOfTheWorld::SharedPointer state_of_the_world;
 
 };
 
@@ -81,11 +84,13 @@ protected:
  * Use Case: X.X - Main Success Scenario
  */
 TEST_F(TransitionMatrixTest, createTransitionMatrix) {
-    mat expected;
-    expected << 1 << 2 << 3 << endr;
-    transition_matrix->create(*markov_model);
+    Matrix expected;
+    expected.resize(3, 3);
+    expected(0,0) = 1;
+    
 
-    mat actual = transition_matrix->get();
+    transition_matrix->update(state_of_the_world);
+    Matrix actual = transition_matrix->get();
 
     ASSERT_TRUE(MatricesAreEqual(expected, actual));
 }

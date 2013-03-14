@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <ModelDefinition/StateOfTheWorld.h>
 
 using std::string;
 using std::shared_ptr;
@@ -19,7 +20,8 @@ namespace ModelDefinition {
         typedef shared_ptr<RateConstantBase> SharedPointer;
         RateConstantBase();
         virtual ~RateConstantBase();
-        virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const = 0;
+        virtual double getRate(
+                const StateOfTheWorld::SharedPointer state_of_the_world) const = 0;
         virtual string getName() const = 0;
     };
 }
