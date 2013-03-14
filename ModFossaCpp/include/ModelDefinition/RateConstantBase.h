@@ -16,7 +16,7 @@ namespace ModelDefinition {
 
     class RateConstantBase {
     public:
-        typedef shared_ptr<const RateConstantBase> SharedPointer;
+        typedef shared_ptr<RateConstantBase> SharedPointer;
         RateConstantBase();
         virtual ~RateConstantBase();
         virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const = 0;

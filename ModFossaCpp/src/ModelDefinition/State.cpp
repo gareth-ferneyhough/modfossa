@@ -19,5 +19,10 @@ namespace ModelDefinition {
     bool State::getIsConducting() const {
         return is_conducting;
     }
+    
+    int State::getIndex() const
+    {
+        return index;
+    }
 }
 

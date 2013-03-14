@@ -20,7 +20,9 @@ namespace ModelDefinition {
 
     private:
         friend class MarkovModel;
+        friend class TransitionMatrix;
 
+        int getIndex() const;
         const string name;
         const bool is_conducting;
         int index;

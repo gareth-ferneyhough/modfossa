@@ -6,7 +6,8 @@
 
 namespace ModelDefinition {
 
-    MarkovModel::MarkovModel() {
+    MarkovModel::MarkovModel() :
+    model_has_beed_validated(false) {
     }
 
     MarkovModel::~MarkovModel() {
@@ -20,9 +21,10 @@ namespace ModelDefinition {
         }
 
         map_of_states[name] = state;
+        model_has_beed_validated = false;
     }
 
-    void MarkovModel::addRateConstant(const RateConstantBase::SharedPointer 
+    void MarkovModel::addRateConstant(const RateConstantBase::SharedPointer
     rate_constant) {
         string name = rate_constant->getName();
         if (rateConstantExists(name)) {
@@ -31,9 +33,10 @@ namespace ModelDefinition {
         }
 
         map_of_rates[name] = rate_constant;
+        model_has_beed_validated = false;
     }
 
-    void MarkovModel::addConnection(const Connection::SharedPointer connection){
+    void MarkovModel::addConnection(const Connection::SharedPointer connection) {
         if (connectionExists(connection->from_state, connection->to_state)) {
             throw std::runtime_error(
                     "Connection from " + connection->from_state + " to " +
@@ -41,6 +44,7 @@ namespace ModelDefinition {
         }
 
         connections.push_back(connection);
+        model_has_beed_validated = false;
     }
 
     bool MarkovModel::stateExists(string name) const {
@@ -87,6 +91,7 @@ namespace ModelDefinition {
         }
 
         this->initial_state = initial_state;
+        model_has_beed_validated = false;
     }
 
     /*
@@ -96,8 +101,8 @@ namespace ModelDefinition {
      * ValidationResults structure.
      */
     Validation::ValidationResults MarkovModel::validate(
-    const StateOfTheWorld::SharedPointer state_of_the_world) {
-        using namespace Validation; 
+            const StateOfTheWorld::SharedPointer state_of_the_world) {
+        using namespace Validation;
 
         vector < std::pair<ErrorType, string >> errors;
         ErrorLevel error_level = NO_WARNINGS;
@@ -157,7 +162,7 @@ namespace ModelDefinition {
 
             error_level = ERRORS;
         }
-        
+
         // TODO: Add warnings for unused states and rates.
 
         if (state_of_the_world != NULL) {
@@ -171,26 +176,34 @@ namespace ModelDefinition {
                     errors.push_back(std::make_pair(
                             LIGAND_NOT_DEFINED,
                             // This is a bad and ugly message!
-                            "Ligand not defined: " + string(e.what()))); 
+                            "Ligand not defined: " + string(e.what())));
 
                     error_level = ERRORS;
                 }
             }
         }
-        
+
         /* If everything is valid, set the validation flag so that no changes
          * can be made without re-validating. Also, we need to assign indices 
          * to all the states. Both of the transition matrices will be size NxN, 
          * where N is the number of states. State with index 0 will occupy the 
          * 0th row and column of the matrices.   
+         * 
+         * Also, assign the initial_state flag to the state which was 
+         * designated so.
          */
-        if(error_level != ERRORS) {
+        if (error_level != ERRORS) {
             StateMap::iterator it;
             int index = 0;
-            for(it = map_of_states.begin(); it != map_of_states.end(); ++it) {
+            for (it = map_of_states.begin(); it != map_of_states.end(); ++it) {
                 it->second->index = index;
                 ++index;
+
+                if (it->first == initial_state) {
+                    it->second->is_initial_state = true;
+                }
             }
+            model_has_beed_validated = true;
         }
 
         ValidationResults results(error_level, errors);

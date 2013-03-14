@@ -10,7 +10,7 @@ using std::string;
 namespace ModelDefinition {
 
     struct Connection {
-        typedef shared_ptr<const Connection> SharedPointer;
+        typedef shared_ptr<Connection> SharedPointer;
         Connection(string from_state, string to_state, string rate_name) :
         from_state(from_state),
         to_state(to_state),

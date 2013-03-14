@@ -14,9 +14,18 @@
 using std::shared_ptr;
 
 namespace ModelDefinition {
+
     class Transition {
     public:
-        typedef shared_ptr<const Transition> SharedPointer;
+        typedef shared_ptr<Transition> SharedPointer;
+
+        Transition(RateConstantBase::SharedPointer rate_constant,
+                bool sign) :
+        rate_constant(rate_constant),
+        sign(sign) {
+
+        }
+
         RateConstantBase::SharedPointer rate_constant;
         bool sign;
     };

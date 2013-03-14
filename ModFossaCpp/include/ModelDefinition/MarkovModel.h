@@ -36,6 +36,8 @@ namespace ModelDefinition {
                 const StateOfTheWorld::SharedPointer state_of_the_world);
 
     private:
+        bool model_has_beed_validated;
+        
         bool stateExists(string name) const;
         bool rateConstantExists(string name) const;
         bool connectionExists(string from_state, string to_state) const;
@@ -47,8 +49,6 @@ namespace ModelDefinition {
         string initial_state;
 
         friend class TransitionMatrix;
-
-        //shared_ptr<ConnectionManager> connectionManager;
     };
 }
 

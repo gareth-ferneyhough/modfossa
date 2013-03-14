@@ -33,8 +33,8 @@ protected:
  */
 TEST_F(MarkovModelTest, addRateConstant) {
     markov_model = new MarkovModel();
-    shared_ptr<const ConstantRateConstant> rc(new ConstantRateConstant("rc1", 1.1));
-    shared_ptr<const ConstantRateConstant> rc2(new ConstantRateConstant("rc2", 2.2));
+    RateConstantBase::SharedPointer rc(new ConstantRateConstant("rc1", 1.1));
+     RateConstantBase::SharedPointer rc2(new ConstantRateConstant("rc2", 2.2));
 
     markov_model->addRateConstant(rc);
     markov_model->addRateConstant(rc2);

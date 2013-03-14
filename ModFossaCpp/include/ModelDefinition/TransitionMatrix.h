@@ -23,13 +23,19 @@ namespace ModelDefinition {
         TransitionMatrix();
         TransitionMatrix(const TransitionMatrix& orig);
         virtual ~TransitionMatrix();
-        void create(const MarkovModel& markov_model);
+        void create(MarkovModel& markov_model);
         mat get() const;
         void update();
 
     private:
         Mat<double> transition_matrix;
-        vector<vector<vector<Transition::SharedPointer > > >transitions; 
+        vector<vector<vector<Transition::SharedPointer > > >
+                transitions_3d; 
+        
+        RateConstantBase::SharedPointer findRate(string rate_name,
+                const MarkovModel::RateMap& rate_map) const;
+        State::SharedPointer findState(string state_name, 
+                const MarkovModel::StateMap& state_map) const;
     };
 }
 
