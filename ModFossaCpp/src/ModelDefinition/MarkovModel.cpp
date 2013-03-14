@@ -44,7 +44,7 @@ namespace ModelDefinition {
     }
 
     bool MarkovModel::stateExists(string name) const {
-        map<const string, shared_ptr<const State >> ::const_iterator it;
+        StateMap::const_iterator it;
         it = map_of_states.find(name);
 
         if (it != map_of_states.end()) {
@@ -54,7 +54,7 @@ namespace ModelDefinition {
     }
 
     bool MarkovModel::rateConstantExists(string name) const {
-        map<const string, shared_ptr<const RateConstantBase >> ::const_iterator it;
+        RateMap::const_iterator it;
         it = map_of_rates.find(name);
 
         if (it != map_of_rates.end()) {
@@ -64,7 +64,7 @@ namespace ModelDefinition {
     }
 
     bool MarkovModel::connectionExists(string from_state, string to_state) const {
-        vector < shared_ptr<const Connection >> ::const_iterator it;
+        ConnectionsVector::const_iterator it;
         bool found = false;
         it = connections.begin();
 
@@ -89,9 +89,15 @@ namespace ModelDefinition {
         this->initial_state = initial_state;
     }
 
+    /*
+     * Checks that the model is valid and assigns indices to all of the states.
+     * If errors are detected, the error_level is set to ERRORS and the error
+     * is appended to the vector of errors, and returned in the
+     * ValidationResults structure.
+     */
     Validation::ValidationResults MarkovModel::validate(
     const StateOfTheWorld::SharedPointer state_of_the_world) {
-        using namespace Validation; // this stinks
+        using namespace Validation; 
 
         vector < std::pair<ErrorType, string >> errors;
         ErrorLevel error_level = NO_WARNINGS;
@@ -151,21 +157,39 @@ namespace ModelDefinition {
 
             error_level = ERRORS;
         }
+        
+        // TODO: Add warnings for unused states and rates.
 
         if (state_of_the_world != NULL) {
-            // Check that each LigandGated rate constant has its ligand defined in 
-            // state_of_the_world
-            map<const string, shared_ptr<const RateConstantBase> >::const_iterator it;
+            // Check that each LigandGated rate constant has its ligand 
+            // defined in state_of_the_world
+            RateMap::const_iterator it;
             for (it = map_of_rates.begin(); it != map_of_rates.end(); ++it) {
                 try {
                     it->second->getRate(state_of_the_world);
                 } catch (std::runtime_error& e) {
                     errors.push_back(std::make_pair(
                             LIGAND_NOT_DEFINED,
-                            "Ligand not defined: " + string(e.what()))); // This is a bad and ugly message!
+                            // This is a bad and ugly message!
+                            "Ligand not defined: " + string(e.what()))); 
 
                     error_level = ERRORS;
                 }
+            }
+        }
+        
+        /* If everything is valid, set the validation flag so that no changes
+         * can be made without re-validating. Also, we need to assign indices 
+         * to all the states. Both of the transition matrices will be size NxN, 
+         * where N is the number of states. State with index 0 will occupy the 
+         * 0th row and column of the matrices.   
+         */
+        if(error_level != ERRORS) {
+            StateMap::iterator it;
+            int index = 0;
+            for(it = map_of_states.begin(); it != map_of_states.end(); ++it) {
+                it->second->index = index;
+                ++index;
             }
         }
 

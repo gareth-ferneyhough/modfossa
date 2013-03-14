@@ -12,7 +12,7 @@ namespace ModelDefinition {
 
     class State {
     public:
-        typedef shared_ptr<const State> SharedPointer;
+        typedef shared_ptr<State> SharedPointer;
 
         State(string name, bool is_conducting);
         string getName() const;

@@ -23,15 +23,17 @@ namespace ModelDefinition {
         typedef map<const string, RateConstantBase::SharedPointer > RateMap;
         typedef map<const string, State::SharedPointer > StateMap;
         typedef vector<Connection::SharedPointer > ConnectionsVector;
-        
+
         MarkovModel();
         ~MarkovModel();
 
         void addState(const State::SharedPointer state);
-        void addRateConstant(const RateConstantBase::SharedPointer rate_constant);
+        void addRateConstant(
+                const RateConstantBase::SharedPointer rate_constant);
         void addConnection(const Connection::SharedPointer connection);
         void setInitialState(string initial_state);
-        Validation::ValidationResults validate(const StateOfTheWorld::SharedPointer state_of_the_world);
+        Validation::ValidationResults validate(
+                const StateOfTheWorld::SharedPointer state_of_the_world);
 
     private:
         bool stateExists(string name) const;
@@ -43,6 +45,8 @@ namespace ModelDefinition {
         ConnectionsVector connections;
 
         string initial_state;
+
+        friend class TransitionMatrix;
 
         //shared_ptr<ConnectionManager> connectionManager;
     };

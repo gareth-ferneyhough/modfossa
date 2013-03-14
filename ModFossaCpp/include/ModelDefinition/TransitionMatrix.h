@@ -8,8 +8,13 @@
 #ifndef TRANSITIONMATRIX_H
 #define	TRANSITIONMATRIX_H
 
+#include <vector>
+
+#include <ModelDefinition/Transition.h>
 #include <ModelDefinition/Matrix.h>
 #include <ModelDefinition/MarkovModel.h>
+
+using std::vector;
 
 namespace ModelDefinition {
 
@@ -23,7 +28,8 @@ namespace ModelDefinition {
         void update();
 
     private:
-        mat transition_matrix;
+        Mat<double> transition_matrix;
+        vector<vector<vector<Transition::SharedPointer > > >transitions; 
     };
 }
 

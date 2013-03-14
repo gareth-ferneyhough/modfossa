@@ -9,14 +9,9 @@
 #include <algorithm>
 #include <memory>
 
-using std::shared_ptr;
+//using std::shared_ptr;
 
-using ModelDefinition::MarkovModel;
-using ModelDefinition::StateOfTheWorld;
-using ModelDefinition::ConstantRateConstant;
-using ModelDefinition::LigandGatedRateConstant;
-using ModelDefinition::State;
-using ModelDefinition::Connection;
+using namespace ModelDefinition;
 
 class MarkovModelTest : public testing::Test {
 protected:
@@ -53,8 +48,8 @@ TEST_F(MarkovModelTest, addRateConstant) {
  */
 TEST_F(MarkovModelTest, addDuplicateRateConstant) {
     markov_model = new MarkovModel();
-    shared_ptr<const ConstantRateConstant> rc(new ConstantRateConstant("rc1", 1.1));
-    shared_ptr<const ConstantRateConstant> rc2(new ConstantRateConstant("rc1", 2.2));
+    RateConstantBase::SharedPointer rc(new ConstantRateConstant("rc1", 1.1));
+    RateConstantBase::SharedPointer  rc2(new ConstantRateConstant("rc1", 2.2));
 
     markov_model->addRateConstant(rc);
     ASSERT_THROW(markov_model->addRateConstant(rc2),
@@ -69,7 +64,7 @@ TEST_F(MarkovModelTest, addDuplicateRateConstant) {
  */
 TEST_F(MarkovModelTest, addState) {
     markov_model = new MarkovModel();
-    shared_ptr<const State> state(new State("state1", false));
+    State::SharedPointer state(new State("state1", false));
     markov_model->addState(state);
     delete markov_model;
 }
@@ -80,8 +75,8 @@ TEST_F(MarkovModelTest, addState) {
  */
 TEST_F(MarkovModelTest, addStateAlreadyExists) {
     markov_model = new MarkovModel();
-    shared_ptr<const State> state1(new State("state1", false));
-    shared_ptr<const State> state2(new State("state1", false));
+    State::SharedPointer state1(new State("state1", false));
+    State::SharedPointer state2(new State("state1", false));
 
     markov_model->addState(state1);
 
@@ -97,7 +92,7 @@ TEST_F(MarkovModelTest, addStateAlreadyExists) {
  */
 TEST_F(MarkovModelTest, addConnection) {
     markov_model = new MarkovModel();
-    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
     delete markov_model;
 }
@@ -108,8 +103,8 @@ TEST_F(MarkovModelTest, addConnection) {
  */
 TEST_F(MarkovModelTest, addDuplicateConnection) {
     markov_model = new MarkovModel();
-    shared_ptr<const Connection> connection1(new Connection("from", "to", "rate"));
-    shared_ptr<const Connection> connection2(new Connection("from", "to", "rate2"));
+    Connection::SharedPointer connection1(new Connection("from", "to", "rate"));
+    Connection::SharedPointer connection2(new Connection("from", "to", "rate2"));
 
     markov_model->addConnection(connection1);
     ASSERT_THROW(markov_model->addConnection(connection1),
@@ -149,21 +144,21 @@ TEST_F(MarkovModelTest, validateSuccess) {
     using namespace ModelDefinition::Validation;
 
     markov_model = new MarkovModel();
-    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
-    shared_ptr<const State> state1(new State("from", false));
-    shared_ptr<const State> state2(new State("to", false));
+    State::SharedPointer state1(new State("from", false));
+    State::SharedPointer state2(new State("to", false));
 
     markov_model->addState(state1);
     markov_model->addState(state2);
 
     markov_model->setInitialState("from");
 
-    shared_ptr<const ConstantRateConstant> rc1(new ConstantRateConstant("rate", 1.1));
+    RateConstantBase::SharedPointer rc1(new ConstantRateConstant("rate", 1.1));
     markov_model->addRateConstant(rc1);
 
-    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
+    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld());
     ValidationResults results = markov_model->validate(state_of_the_world);
     ASSERT_TRUE(results.overall_result == NO_WARNINGS);
 
@@ -240,7 +235,7 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
     using namespace ModelDefinition::Validation;
 
     markov_model = new MarkovModel();
-    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
     ValidationResults results = markov_model->validate(NULL);
@@ -270,7 +265,7 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
     using namespace ModelDefinition::Validation;
 
     markov_model = new MarkovModel();
-    shared_ptr<const Connection> connection(new Connection("from", "to", "rate"));
+    Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
     ValidationResults results = markov_model->validate(NULL);

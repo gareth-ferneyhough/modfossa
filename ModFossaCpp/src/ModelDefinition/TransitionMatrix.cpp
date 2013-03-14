@@ -19,8 +19,14 @@ namespace ModelDefinition {
     }
 
     void TransitionMatrix::create(const MarkovModel& markov_model) {
-        transition_matrix << 1 << 2 << 3 << endr;
+        //transition_matrix << 1 << 2 << 3 << endr;
+        
+
+        
+
     }
+    
+    
     
     mat TransitionMatrix::get() const {
         return transition_matrix;
