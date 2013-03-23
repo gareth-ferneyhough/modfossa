@@ -9,7 +9,8 @@ protected:
 
     virtual void SetUp() {
         rate_constant = NULL;
-        state_of_the_world = shared_ptr<StateOfTheWorld>(new StateOfTheWorld());
+        state_of_the_world = 
+                StateOfTheWorld::SharedPointer(new StateOfTheWorld());
     }
 
     virtual void TearDown() {
@@ -17,8 +18,7 @@ protected:
     }
 
     SigmoidalRateConstant* rate_constant;
-    //StateOfTheWorld* state_of_the_world;
-    shared_ptr<StateOfTheWorld> state_of_the_world;
+    StateOfTheWorld::SharedPointer state_of_the_world;
 };
 
 /**
@@ -69,7 +69,7 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
     double a = 1.1;
     double v_half = 2.2;
     double k = 3.3;
-    double voltage = -30;
+    double voltage = -70;
     rate_constant = new SigmoidalRateConstant("rc1", a, v_half, k);
 
     state_of_the_world->setVoltage(voltage);
@@ -91,7 +91,6 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
 TEST_F(SigmoidalRateConstantTest, getRateUnsetK) {
     double a = 1.1;
     double v_half = 2.2;
-    double voltage = -30;
     rate_constant = new SigmoidalRateConstant();
 
     rate_constant->setName("rc1");
@@ -111,7 +110,6 @@ TEST_F(SigmoidalRateConstantTest, getRateStateOfWorldNull) {
     double a = 1.1;
     double v_half = 2.2;
     double k = 3.3;
-    double voltage = -30;
     rate_constant = new SigmoidalRateConstant("rc1", a, v_half, k);
 
     ASSERT_THROW(rate_constant->getRate(state_of_the_world),

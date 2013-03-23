@@ -45,8 +45,8 @@ namespace ModelDefinition {
         assert(transition_matrix.n_rows == transitions_3d.size());
         assert(transition_matrix.n_cols == transitions_3d[0].size());
         
-        for(int i = 0; i < transition_matrix.n_rows; ++i) {
-            for(int j = 0; j < transition_matrix.n_cols; ++j){
+        for(unsigned int i = 0; i < transition_matrix.n_rows; ++i) {
+            for(unsigned int j = 0; j < transition_matrix.n_cols; ++j){
                 transition_matrix(i, j) = calculateTotalRate(
                         transitions_3d[i][j], state_of_the_world);
             }

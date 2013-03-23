@@ -31,7 +31,8 @@ namespace ModelDefinition {
     LigandGatedRateConstant::~LigandGatedRateConstant() {
     }
 
-    double LigandGatedRateConstant::getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const {
+    double LigandGatedRateConstant::getRate(
+        const StateOfTheWorld::SharedPointer state_of_the_world) const {
         if (state_of_the_world == NULL) {
             throw std::runtime_error("Error in getRate for " + name + ": state_of_the_world cannot be NULL");
         }

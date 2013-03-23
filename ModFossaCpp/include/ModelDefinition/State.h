@@ -3,16 +3,16 @@
 
 #include <string>
 #include <stdexcept>
-#include <memory>
+#include <Common/SharedPtr.h>
 
 using std::string;
-using std::shared_ptr;
+
 
 namespace ModelDefinition {
 
     class State {
     public:
-        typedef shared_ptr<State> SharedPointer;
+        typedef ModFossa::shared_ptr<State>::type SharedPointer;
 
         State(string name, bool is_conducting);
         string getName() const;

@@ -34,7 +34,7 @@ protected:
 TEST_F(MarkovModelTest, addRateConstant) {
     markov_model = new MarkovModel();
     RateConstantBase::SharedPointer rc(new ConstantRateConstant("rc1", 1.1));
-     RateConstantBase::SharedPointer rc2(new ConstantRateConstant("rc2", 2.2));
+    RateConstantBase::SharedPointer rc2(new ConstantRateConstant("rc2", 2.2));
 
     markov_model->addRateConstant(rc);
     markov_model->addRateConstant(rc2);
@@ -213,7 +213,7 @@ TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool no_connections_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !no_connections_error_exists) {
         if (results.errors[i].first == NO_CONNECTIONS) {
@@ -243,7 +243,7 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool state_undefined_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !state_undefined_error_exists) {
         if (results.errors[i].first == STATE_NOT_DEFINED) {
@@ -273,7 +273,7 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool rate_constant_undefined_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !rate_constant_undefined_error_exists) {
         if (results.errors[i].first == RATE_CONSTANT_NOT_DEFINED) {
@@ -301,7 +301,7 @@ TEST_F(MarkovModelTest, validateInitialStateNotSet) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool initial_state_not_defined_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !initial_state_not_defined_error_exists) {
         if (results.errors[i].first == INITIAL_STATE_NOT_DEFINED) {
@@ -324,14 +324,14 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
 
     string ligand_name = "Ca";
     double ligand_power = 2.0;
-    double ligand_concentration = 3.0;
-
+    
     std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
-            "rate1", "Na", 4.0));
+            "rate1", ligand_name, ligand_power));
 
     std::shared_ptr<State> state_1(new State("state1", true));
     std::shared_ptr<State> state_2(new State("state2", false));
-    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+    std::shared_ptr<Connection> connection(new Connection("state1", "state2", 
+        "rate1"));
 
     std::shared_ptr<StateOfTheWorld> state_of_the_world = NULL;
 
@@ -348,7 +348,7 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool state_of_world_null_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !state_of_world_null_error_exists) {
         if (results.errors[i].first == STATE_OF_THE_WORLD_IS_NULL) {
@@ -369,19 +369,16 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
 TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
     using namespace ModelDefinition::Validation;
 
-    string ligand_name = "Ca";
-    double ligand_power = 2.0;
-    double ligand_concentration = 3.0;
-
     std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
             "rate1", "Na", 4.0));
 
     std::shared_ptr<State> state_1(new State("state1", true));
     std::shared_ptr<State> state_2(new State("state2", false));
-    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
+    std::shared_ptr<Connection> connection(new Connection("state1", "state2", 
+        "rate1"));
 
     std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
-    state_of_the_world->addConcentration(ligand_name, ligand_concentration);
+    state_of_the_world->addConcentration("Ca", 2.0);
 
     markov_model = new MarkovModel();
     markov_model->addState(state_1);
@@ -395,7 +392,7 @@ TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
     ASSERT_TRUE(results.overall_result == ERRORS);
 
     bool concentration_not_defined_error_exists = false;
-    int i = 0;
+    unsigned int i = 0;
     while (i < results.errors.size() &&
             !concentration_not_defined_error_exists) {
         if (results.errors[i].first == LIGAND_NOT_DEFINED) {

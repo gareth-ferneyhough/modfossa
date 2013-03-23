@@ -51,7 +51,7 @@ TEST_F(ConstantRateConstantTest, createConstantRateConstantEmptyName) {
 TEST_F(ConstantRateConstantTest, getRate) {
     double k = 1.23;
     rate_constant = new ConstantRateConstant("rc1", k);
-    shared_ptr<StateOfTheWorld>state_of_the_world(new StateOfTheWorld());
+    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld());
 
     double actual = rate_constant->getRate(state_of_the_world);
     double expected = k;

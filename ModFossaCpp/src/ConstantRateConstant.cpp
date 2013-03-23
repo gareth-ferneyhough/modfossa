@@ -16,7 +16,8 @@ namespace ModelDefinition {
     ConstantRateConstant::~ConstantRateConstant() {
     }
 
-    double ConstantRateConstant::getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const {
+    double ConstantRateConstant::getRate(
+        const StateOfTheWorld::SharedPointer state_of_the_world) const {
         return k;
     }
 

@@ -8,16 +8,15 @@
 #ifndef TRANSITION_H
 #define	TRANSITION_H
 
-#include <memory>
 #include <ModelDefinition/RateConstantBase.h>
+#include <Common/SharedPtr.h>
 
-using std::shared_ptr;
 
 namespace ModelDefinition {
 
     class Transition {
     public:
-        typedef shared_ptr<Transition> SharedPointer;
+        typedef ModFossa::shared_ptr<Transition>::type SharedPointer;
 
         Transition(RateConstantBase::SharedPointer rate_constant,
                 bool sign) :

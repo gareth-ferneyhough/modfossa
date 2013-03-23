@@ -2,11 +2,11 @@
 #define RATECONSTANTBASE_H_
 
 #include <string>
-#include <memory>
+#include <Common/SharedPtr.h>
 #include <ModelDefinition/StateOfTheWorld.h>
 
 using std::string;
-using std::shared_ptr;
+//using std::shared_ptr;
 
 namespace ModelDefinition {
     class StateOfTheWorld;
@@ -17,7 +17,7 @@ namespace ModelDefinition {
 
     class RateConstantBase {
     public:
-        typedef shared_ptr<RateConstantBase> SharedPointer;
+        typedef ModFossa::shared_ptr<RateConstantBase>::type SharedPointer;
         RateConstantBase();
         virtual ~RateConstantBase();
         virtual double getRate(

@@ -8,6 +8,7 @@
 #ifndef LIGANDGATEDRATECONSTANT_H_
 #define	LIGANDGATEDRATECONSTANT_H_
 
+#include <ModelDefinition/StateOfTheWorld.h>
 #include <ModelDefinition/RateConstantBase.h>
 #include <string>
 using std::string;
@@ -16,9 +17,11 @@ namespace ModelDefinition {
 
     class LigandGatedRateConstant : public RateConstantBase {
     public:
-        LigandGatedRateConstant(string name, string ligand_name, double ligand_power);
+        LigandGatedRateConstant(string name, string ligand_name, 
+                double ligand_power);
         virtual ~LigandGatedRateConstant();
-        virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const;
+        virtual double getRate(const StateOfTheWorld::SharedPointer 
+                state_of_the_world) const;
 
         virtual string getName() const;
         string getLigandName() const;

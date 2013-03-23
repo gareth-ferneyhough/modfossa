@@ -2,7 +2,6 @@
 #define CONSTANTRATECONSTANT_H_
 
 #include <string>
-#include <memory>
 
 #include <ModelDefinition/RateConstantBase.h>
 
@@ -14,7 +13,8 @@ namespace ModelDefinition {
     public:
         ConstantRateConstant(string name, double k);
         virtual ~ConstantRateConstant();
-        virtual double getRate(const shared_ptr<const StateOfTheWorld> state_of_the_world) const;
+        virtual double getRate(
+                const StateOfTheWorld::SharedPointer state_of_the_world) const;
         string getName() const;
         double getK() const;
 

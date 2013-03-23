@@ -128,7 +128,7 @@ namespace ModelDefinition {
         }
 
         // check connections that rate_constants and states exist
-        for (int i = 0; i < connections.size(); ++i) {
+        for (unsigned int i = 0; i < connections.size(); ++i) {
 
             string from_state = connections[i]->from_state;
             string to_state = connections[i]->to_state;

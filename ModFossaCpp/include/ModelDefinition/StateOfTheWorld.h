@@ -4,19 +4,20 @@
 #include <map>
 #include <string>
 #include <stdexcept>
-#include <memory>
+//#include <memory>
 
+#include <Common/SharedPtr.h>
 #include <ModelDefinition/Concentration.h>
 
 using std::map;
 using std::string;
-using std::shared_ptr;
+//using std::shared_ptr;
 
 namespace ModelDefinition {
 
     class StateOfTheWorld {
     public:
-        typedef shared_ptr<const StateOfTheWorld> SharedPointer;
+        typedef ModFossa::shared_ptr<StateOfTheWorld>::type SharedPointer;
         StateOfTheWorld();
         ~StateOfTheWorld();
 
