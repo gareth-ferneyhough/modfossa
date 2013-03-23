@@ -8,7 +8,7 @@
 #ifndef MARKOVMODELERRORTYPE_H
 #define	MARKOVMODELERRORTYPE_H
 
-namespace ModelDefinition {
+namespace ModFossa {
     namespace Validation {
 
         enum ErrorType {

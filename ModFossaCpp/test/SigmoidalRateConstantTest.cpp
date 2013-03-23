@@ -1,8 +1,9 @@
 #include <gtest/gtest.h>
-#include <ModelDefinition/SigmoidalRateConstant.h>
-#include <ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/ModelDefinition/SigmoidalRateConstant.h>
+#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
 
-using namespace ModelDefinition;
+using namespace ModFossa;
+using std::string;
 
 class SigmoidalRateConstantTest : public testing::Test {
 protected:

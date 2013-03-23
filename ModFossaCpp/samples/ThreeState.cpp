@@ -5,13 +5,15 @@
  * Created on March 13, 2013, 11:35 PM
  */
 
-#include <ModelDefinition/MarkovModel.h>
-#include <ModelDefinition/TransitionMatrix.h>
-#include <ModelDefinition/ConstantRateConstant.h>
+#include <ModFossa/ModelDefinition/MarkovModel.h>
+#include <ModFossa/ModelDefinition/TransitionMatrix.h>
+#include <ModFossa/ModelDefinition/ConstantRateConstant.h>
 #include <cassert>
 
-using namespace std;
-using namespace ModelDefinition;
+using namespace ModFossa;
+using std::string;
+using std::cout;
+using std::endl;
 
 /*
  * 
@@ -25,16 +27,16 @@ int main(int argc, char** argv) {
     markov_model->addState(State::SharedPointer(new State("s3", true)));
 
     RateConstantBase::SharedPointer rate1(
-            new ConstantRateConstant("rate1", 3.0));
+            new ConstantRateConstant("rate1", 1.0));
 
     RateConstantBase::SharedPointer rate2(
-            new ConstantRateConstant("rate2", 7.0));
+            new ConstantRateConstant("rate2", 2.0));
 
     RateConstantBase::SharedPointer rate3(
-            new ConstantRateConstant("rate3", 4.0));
+            new ConstantRateConstant("rate3", 3.0));
 
     RateConstantBase::SharedPointer rate4(
-            new ConstantRateConstant("rate4", 9.0));
+            new ConstantRateConstant("rate4", 4.0));
 
     markov_model->addRateConstant(rate1);
     markov_model->addRateConstant(rate2);

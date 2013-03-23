@@ -8,7 +8,7 @@
 #ifndef ERRORLEVEL_H
 #define	ERRORLEVEL_H
 
-namespace ModelDefinition {
+namespace ModFossa {
     namespace Validation {
 
         enum ErrorLevel {

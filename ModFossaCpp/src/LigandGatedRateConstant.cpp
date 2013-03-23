@@ -5,15 +5,15 @@
  * Created on February 19, 2013, 11:25 AM
  */
 
-#include <ModelDefinition/LigandGatedRateConstant.h>
-#include <ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
 
 #include <math.h>
 
-namespace ModelDefinition {
+namespace ModFossa {
 
     LigandGatedRateConstant::LigandGatedRateConstant(
-            string name, string ligand_name, double ligand_power) :
+            std::string name, std::string ligand_name, double ligand_power) :
     RateConstantBase(),
     name(name),
     ligand_name(ligand_name),
@@ -45,11 +45,11 @@ namespace ModelDefinition {
         }
     }
 
-    string LigandGatedRateConstant::getName() const {
+    std::string LigandGatedRateConstant::getName() const {
         return name;
     }
 
-    string LigandGatedRateConstant::getLigandName() const {
+    std::string LigandGatedRateConstant::getLigandName() const {
         return ligand_name;
     }
 

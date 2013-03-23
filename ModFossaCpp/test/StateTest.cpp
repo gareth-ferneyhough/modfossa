@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include <ModelDefinition/State.h>
+#include <ModFossa/ModelDefinition/State.h>
 
-using namespace ModelDefinition;
+using namespace ModFossa;
 
 /**
  * TestCase for ConstantRateContant. We test the

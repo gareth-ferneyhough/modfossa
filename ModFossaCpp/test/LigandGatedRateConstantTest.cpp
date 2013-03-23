@@ -1,9 +1,10 @@
 #include <cmath>
 #include <gtest/gtest.h>
-#include <ModelDefinition/LigandGatedRateConstant.h>
-#include <ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
 
-using namespace ModelDefinition;
+using namespace ModFossa;
+using std::string;
 
 class LigandGatedRateConstantTest : public testing::Test {
 protected:

@@ -10,7 +10,9 @@
 
 #include <armadillo>
 
+namespace ModFossa {
 typedef arma::mat Matrix;
+};
 
 #endif	/* MATRIX_H */
 

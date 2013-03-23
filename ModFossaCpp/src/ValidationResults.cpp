@@ -5,18 +5,18 @@
  * Created on February 23, 2013, 2:54 PM
  */
 
-#include <ModelDefinition/Validation/ValidationResults.h>
+#include <ModFossa/ModelDefinition/Validation/ValidationResults.h>
 
-namespace ModelDefinition {
-    namespace Validation {
+namespace ModFossa {
+namespace Validation {
 
-        ValidationResults::ValidationResults(ErrorLevel overall_result,
-                vector< std::pair<ErrorType, string > > errors) :
-        overall_result(overall_result),
-        errors(errors) {
-        }
+ValidationResults::ValidationResults(ErrorLevel overall_result,
+    std::vector< std::pair<ErrorType, std::string > > errors) :
+    overall_result(overall_result),
+    errors(errors) {
+}
 
-        ValidationResults::~ValidationResults() {
-        }
-    }
+ValidationResults::~ValidationResults() {
+}
+}
 }

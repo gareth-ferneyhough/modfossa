@@ -1,74 +1,76 @@
-#include "ModelDefinition/StateOfTheWorld.h"
-
 #include <iostream>
+#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
 
-namespace ModelDefinition {
+using std::string;
+using std::map;
 
-    StateOfTheWorld::StateOfTheWorld() :
-    concentrations(),
-    voltage_initialized(false) {
+namespace ModFossa {
+
+StateOfTheWorld::StateOfTheWorld() :
+concentrations(),
+voltage_initialized(false) {
+}
+
+StateOfTheWorld::~StateOfTheWorld() {
+    if (concentrations != NULL) {
+        delete concentrations;
+    }
+}
+
+double StateOfTheWorld::getVoltage() const {
+    if (!voltage_initialized) {
+        throw std::runtime_error("voltage not initialized");
     }
 
-    StateOfTheWorld::~StateOfTheWorld() {
-        if (concentrations != NULL) {
-            delete concentrations;
-        }
+    return voltage;
+}
+
+double StateOfTheWorld::getConcentration(string ligand_name) const {
+    // I dont like this:
+    if (concentrations == NULL) {
+        throw std::runtime_error("map of Concentrations not set");
     }
 
-    double StateOfTheWorld::getVoltage() const {
-        if (!voltage_initialized) {
-            throw std::runtime_error("voltage not initialized");
-        }
-
-        return voltage;
+    map<string, Concentration*>::const_iterator it;
+    it = concentrations->find(ligand_name);
+    if (it == concentrations->end()) {
+        throw std::runtime_error("no concentration defined for " + ligand_name);
     }
 
-    double StateOfTheWorld::getConcentration(string ligand_name) const {
-        // I dont like this:
-        if (concentrations == NULL) {
-            throw std::runtime_error("map of Concentrations not set");
-        }
+    return (it->second->concentration_value);
+}
 
-        map<string, Concentration*>::const_iterator it;
-        it = concentrations->find(ligand_name);
-        if (it == concentrations->end()) {
-            throw std::runtime_error("no concentration defined for " + ligand_name);
-        }
+bool StateOfTheWorld::concentrationExists(string ligand_name) const {
+    map<string, Concentration*>::const_iterator it;
+    it = concentrations->find(ligand_name);
+    if (it == concentrations->end()) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
-        return (it->second->concentration_value);
+void StateOfTheWorld::addConcentration(string ligand_name,
+        double concentration_value) {
+    if (concentrations == NULL) {
+        concentrations = new map<string, Concentration*>();
     }
 
-    bool StateOfTheWorld::concentrationExists(string ligand_name) const {
-        map<string, Concentration*>::const_iterator it;
-        it = concentrations->find(ligand_name);
-        if (it == concentrations->end()) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    (*concentrations)[ligand_name] = new Concentration(ligand_name,
+            concentration_value);
+}
 
-    void StateOfTheWorld::addConcentration(string ligand_name,
-            double concentration_value) {
-        if (concentrations == NULL) {
-            concentrations = new map<string, Concentration*>();
-        }
+void StateOfTheWorld::setVoltage(double voltage) {
+    voltage_initialized = true;
+    this->voltage = voltage;
+}
 
-        (*concentrations)[ligand_name] = new Concentration(ligand_name,
-                concentration_value);
-    }
-
-    void StateOfTheWorld::setVoltage(double voltage) {
-        voltage_initialized = true;
-        this->voltage = voltage;
-    }
-
-    //void StateOfTheWorld::setConcentrations(map<string, Concentration*>&
-    //        concentrations) {
-    //    if (this->concentrations != NULL) {
-    //        delete this->concentrations;
-    //    }
-    //
-    //    this->concentrations = &concentrations;
-    //}
+//void StateOfTheWorld::setConcentrations(map<string, Concentration*>&
+//        concentrations) {
+//    if (this->concentrations != NULL) {
+//        delete this->concentrations;
+//    }
+//
+//    this->concentrations = &concentrations;
+//}
 }

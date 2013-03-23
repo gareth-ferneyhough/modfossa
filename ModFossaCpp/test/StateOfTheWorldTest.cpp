@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
-#include <ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
 
-using namespace ModelDefinition;
+using namespace ModFossa;
+using std::string;
 
 /**
  * TestCase for ConstantRateContant. We test the

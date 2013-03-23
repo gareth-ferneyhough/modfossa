@@ -1,17 +1,14 @@
-#include <gtest/gtest.h>
-#include <ModelDefinition/State.h>
-#include <ModelDefinition/Connection.h>
-#include <ModelDefinition/StateOfTheWorld.h>
-#include <ModelDefinition/MarkovModel.h>
-#include <ModelDefinition/ConstantRateConstant.h>
-#include <ModelDefinition/LigandGatedRateConstant.h>
-
 #include <algorithm>
 #include <memory>
 
-//using std::shared_ptr;
+#include <gtest/gtest.h>
 
-using namespace ModelDefinition;
+#include <ModFossa/ModelDefinition/MarkovModel.h>
+#include <ModFossa/ModelDefinition/ConstantRateConstant.h>
+#include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+
+using namespace ModFossa;
+using std::string;
 
 class MarkovModelTest : public testing::Test {
 protected:
@@ -141,7 +138,7 @@ TEST_F(MarkovModelTest, setInitialStateDuplicate) {
  * Use Case: 1.5 - Main Success Scenarios
  */
 TEST_F(MarkovModelTest, validateSuccess) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     markov_model = new MarkovModel();
     Connection::SharedPointer connection(new Connection("from", "to", "rate"));
@@ -170,7 +167,7 @@ TEST_F(MarkovModelTest, validateSuccess) {
  * Use Case: 1.5 - Main Success Scenario
  */
 TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     string ligand_name = "Ca";
     double ligand_power = 2.0;
@@ -204,7 +201,7 @@ TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
  * Use Case: 1.5 - Extension 2a
  */
 TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     markov_model = new MarkovModel();
 
@@ -232,7 +229,7 @@ TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
  * Use Case: 1.5 - Extension 3a
  */
 TEST_F(MarkovModelTest, validateStateUndefined) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     markov_model = new MarkovModel();
     Connection::SharedPointer connection(new Connection("from", "to", "rate"));
@@ -262,7 +259,7 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
  * Use Case: 1.5 - Extension 4a
  */
 TEST_F(MarkovModelTest, validateRateUndefined) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     markov_model = new MarkovModel();
     Connection::SharedPointer connection(new Connection("from", "to", "rate"));
@@ -292,7 +289,7 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
  * Use Case: 1.5 - Extension 5a
  */
 TEST_F(MarkovModelTest, validateInitialStateNotSet) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     markov_model = new MarkovModel();
 
@@ -320,7 +317,7 @@ TEST_F(MarkovModelTest, validateInitialStateNotSet) {
  * Use Case: 1.5 - Extension 6a
  */
 TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     string ligand_name = "Ca";
     double ligand_power = 2.0;
@@ -367,7 +364,7 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
  * Use Case: 1.5 - Extension 6b
  */
 TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
-    using namespace ModelDefinition::Validation;
+    using namespace ModFossa::Validation;
 
     std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
             "rate1", "Na", 4.0));

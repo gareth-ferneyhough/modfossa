@@ -1,10 +1,10 @@
-#include <ModelDefinition/RateConstantBase.h>
+#include <ModFossa/ModelDefinition/RateConstantBase.h>
 
-namespace ModelDefinition {
+namespace ModFossa {
 
-    RateConstantBase::RateConstantBase(void) {
-    }
+RateConstantBase::RateConstantBase(void) {
+}
 
-    RateConstantBase::~RateConstantBase(void) {
-    }
+RateConstantBase::~RateConstantBase(void) {
+}
 }
