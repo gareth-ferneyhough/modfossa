@@ -52,8 +52,10 @@ protected:
 
         markov_model->setInitialState("s1");
 
-        state_of_the_world = 
-                StateOfTheWorld::SharedPointer(new StateOfTheWorld());
+        StateOfTheWorld::ConcentrationMap concentrations;
+        state_of_the_world = StateOfTheWorld::SharedPointer(
+                new StateOfTheWorld(concentrations));
+        
         Validation::ValidationResults results = 
                 markov_model->validate(state_of_the_world);
      

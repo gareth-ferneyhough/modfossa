@@ -1,7 +1,8 @@
 #include <cmath>
+#include <map>
 #include <gtest/gtest.h>
 #include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 using namespace ModFossa;
 using std::string;
@@ -10,9 +11,13 @@ class LigandGatedRateConstantTest : public testing::Test {
 protected:
 
     virtual void SetUp() {        
+        StateOfTheWorld::ConcentrationMap concentrations;
+        Concentration::SharedPointer na_concentration(
+                new Concentration(ligand_name, ligand_concentration));
+        concentrations[ligand_name] = na_concentration;
+        
         state_of_the_world = StateOfTheWorld::SharedPointer(
-                new StateOfTheWorld());
-        state_of_the_world->addConcentration("Na", 2.0);
+                new StateOfTheWorld(concentrations));
     }
 
     virtual void TearDown() {

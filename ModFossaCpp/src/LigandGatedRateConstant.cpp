@@ -6,7 +6,7 @@
  */
 
 #include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 #include <math.h>
 

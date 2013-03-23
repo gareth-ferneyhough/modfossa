@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <ModFossa/ModelDefinition/ConstantRateConstant.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 using namespace ModFossa;
 
@@ -51,7 +51,10 @@ TEST_F(ConstantRateConstantTest, createConstantRateConstantEmptyName) {
 TEST_F(ConstantRateConstantTest, getRate) {
     double k = 1.23;
     rate_constant = new ConstantRateConstant("rc1", k);
-    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld());
+    
+    StateOfTheWorld::ConcentrationMap concentrations;
+    StateOfTheWorld::SharedPointer state_of_the_world(
+        new StateOfTheWorld(concentrations));
 
     double actual = rate_constant->getRate(state_of_the_world);
     double expected = k;

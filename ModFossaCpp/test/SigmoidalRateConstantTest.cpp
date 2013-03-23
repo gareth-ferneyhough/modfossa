@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <ModFossa/ModelDefinition/SigmoidalRateConstant.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 using namespace ModFossa;
 using std::string;
@@ -10,14 +10,23 @@ protected:
 
     virtual void SetUp() {
         rate_constant = NULL;
-        state_of_the_world = 
-                StateOfTheWorld::SharedPointer(new StateOfTheWorld());
+        
+        StateOfTheWorld::ConcentrationMap concentrations;
+        Concentration::SharedPointer na_concentration(
+                new Concentration(ligand_name, ligand_concentration));
+        concentrations[ligand_name] = na_concentration;
+        
+        state_of_the_world = StateOfTheWorld::SharedPointer(
+                new StateOfTheWorld(concentrations));
     }
 
     virtual void TearDown() {
 
     }
-
+    
+    
+    const string ligand_name = "Ca";
+    const double ligand_concentration =  3.2;
     SigmoidalRateConstant* rate_constant;
     StateOfTheWorld::SharedPointer state_of_the_world;
 };
@@ -74,7 +83,6 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
     rate_constant = new SigmoidalRateConstant("rc1", a, v_half, k);
 
     state_of_the_world->setVoltage(voltage);
-    state_of_the_world->addConcentration("Ca", 3.2);
 
     double error_allowed = 0.000001;
     double actual = rate_constant->getRate(state_of_the_world);

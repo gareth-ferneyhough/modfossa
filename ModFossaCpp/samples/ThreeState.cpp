@@ -58,7 +58,8 @@ int main(int argc, char** argv) {
     markov_model->setInitialState("s1");
 
 
-    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld());
+    StateOfTheWorld::ConcentrationMap map;
+    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld(map));
 
     Validation::ValidationResults results =
             markov_model->validate(state_of_the_world);

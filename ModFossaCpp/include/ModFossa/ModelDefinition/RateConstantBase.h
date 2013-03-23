@@ -3,7 +3,7 @@
 
 #include <string>
 #include <ModFossa/Common/SharedPtr.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 namespace ModFossa {
     class StateOfTheWorld;

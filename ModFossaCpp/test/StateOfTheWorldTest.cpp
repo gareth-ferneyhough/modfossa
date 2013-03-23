@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 using namespace ModFossa;
 using std::string;
@@ -13,6 +13,17 @@ class StateOfTheWorldTest : public testing::Test {
 protected:
 
     virtual void SetUp() {
+        Concentration::SharedPointer c1(new Concentration(ca_name, ca_value));
+        Concentration::SharedPointer c2(new Concentration(na_name, na_value));
+        Concentration::SharedPointer c3(new Concentration(k_name, k_value));
+        
+        StateOfTheWorld::ConcentrationMap map;
+        map[ca_name] = c1;
+        map[na_name] = c2;
+        map[k_name] = c3;
+        
+        state_of_the_world = StateOfTheWorld::SharedPointer(
+                new StateOfTheWorld(map));
 
     }
 
@@ -20,59 +31,30 @@ protected:
 
     }
 
-    StateOfTheWorld* state_of_the_world;
+    const string ca_name = "Ca";
+    const string na_name = "Na";
+    const string k_name = "K";
+    
+    const double ca_value = 1.1;
+    const double na_value = 2.2;
+    const double k_value = 3.3;
+    
+    StateOfTheWorld::SharedPointer state_of_the_world;
 };
-
-/**
- * Test default constructor
- */
-TEST_F(StateOfTheWorldTest, defaultConstructor) {
-    state_of_the_world = new StateOfTheWorld();
-    ASSERT_TRUE(state_of_the_world != NULL);
-    delete state_of_the_world;
-}
 
 /**
  * Test getConcentration() with ligand name that exists.
  */
 TEST_F(StateOfTheWorldTest, getConcentration) {
-    state_of_the_world = new StateOfTheWorld();
-
-    state_of_the_world->addConcentration("Ca", 1.11);
-    state_of_the_world->addConcentration("Na", 2.22);
-    state_of_the_world->addConcentration("K", 3.33);
-
-    ASSERT_TRUE(state_of_the_world->getConcentration("Ca") == 1.11);
-    ASSERT_TRUE(state_of_the_world->getConcentration("Na") == 2.22);
-    ASSERT_TRUE(state_of_the_world->getConcentration("K") == 3.33);
+    ASSERT_TRUE(state_of_the_world->getConcentration(ca_name) == ca_value);
+    ASSERT_TRUE(state_of_the_world->getConcentration(na_name) == na_value);
+    ASSERT_TRUE(state_of_the_world->getConcentration(k_name) == k_value);
 }
 
 /**
  * Test getConcentration() with ligand name that does not exist.
  */
 TEST_F(StateOfTheWorldTest, getUndeclaredConcentration) {
-    state_of_the_world = new StateOfTheWorld();
-
-    state_of_the_world->addConcentration("Ca", 1.1);
-
-
-    ASSERT_THROW(state_of_the_world->getConcentration("Na"),
+    ASSERT_THROW(state_of_the_world->getConcentration("Cl"),
             std::runtime_error);
-}
-
-/**
- * Test getConcentration() when the map of Concentrations has not been 
- * initialized.
- */
-TEST_F(StateOfTheWorldTest, concentrationsNotSet) {
-    state_of_the_world = new StateOfTheWorld();
-    ASSERT_THROW(state_of_the_world->getConcentration("Na"),
-            std::runtime_error);
-}
-
-TEST_F(StateOfTheWorldTest, addConcentrationNoMap) {
-    state_of_the_world = new StateOfTheWorld();
-    state_of_the_world->addConcentration("Na", 1.23);
-
-    ASSERT_TRUE(state_of_the_world->getConcentration("Na") == 1.23);
 }

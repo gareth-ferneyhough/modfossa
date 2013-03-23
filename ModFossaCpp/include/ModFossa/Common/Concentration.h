@@ -2,11 +2,13 @@
 #define CONCENTRATION_H_
 
 #include <string>
+#include <ModFossa/Common/SharedPtr.h>
 
 namespace ModFossa {
 
 struct Concentration {
-
+    typedef ModFossa::shared_ptr<Concentration>::type SharedPointer;
+    
     Concentration() {
     }
 

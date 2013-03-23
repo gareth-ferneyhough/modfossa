@@ -8,7 +8,7 @@
 #include <math.h>
 
 #include <ModFossa/ModelDefinition/SigmoidalRateConstant.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 namespace ModFossa {
 

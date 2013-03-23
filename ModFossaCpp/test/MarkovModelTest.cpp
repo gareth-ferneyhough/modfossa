@@ -6,6 +6,7 @@
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 #include <ModFossa/ModelDefinition/ConstantRateConstant.h>
 #include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 using namespace ModFossa;
 using std::string;
@@ -15,13 +16,24 @@ protected:
 
     virtual void SetUp() {
         markov_model = NULL;
+        
+        Concentration::SharedPointer concentration(
+                new Concentration(ligand_name, ligand_concentration));
+        StateOfTheWorld::ConcentrationMap concentration_map;
+        concentration_map[ligand_name] = concentration;
+        
+        state_of_the_world = StateOfTheWorld::SharedPointer(
+                new StateOfTheWorld(concentration_map));
     }
 
     virtual void TearDown() {
 
     }
 
+    const string ligand_name = "Ca";
+    const double ligand_concentration = 2.0;
     MarkovModel* markov_model;
+    StateOfTheWorld::SharedPointer state_of_the_world;
 };
 
 /**
@@ -155,7 +167,11 @@ TEST_F(MarkovModelTest, validateSuccess) {
     RateConstantBase::SharedPointer rc1(new ConstantRateConstant("rate", 1.1));
     markov_model->addRateConstant(rc1);
 
-    StateOfTheWorld::SharedPointer state_of_the_world(new StateOfTheWorld());
+
+    StateOfTheWorld::ConcentrationMap concentration_map;
+    StateOfTheWorld::SharedPointer state_of_the_world(
+        new StateOfTheWorld(concentration_map));
+
     ValidationResults results = markov_model->validate(state_of_the_world);
     ASSERT_TRUE(results.overall_result == NO_WARNINGS);
 
@@ -171,18 +187,15 @@ TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
 
     string ligand_name = "Ca";
     double ligand_power = 2.0;
-    double ligand_concentration = 3.0;
 
-    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+    RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
             "rate1", ligand_name, ligand_power));
 
-    std::shared_ptr<State> state_1(new State("state1", true));
-    std::shared_ptr<State> state_2(new State("state2", false));
-    std::shared_ptr<Connection> connection(new Connection("state1", "state2", "rate1"));
-
-    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
-    state_of_the_world->addConcentration(ligand_name, ligand_concentration);
-
+    State::SharedPointer state_1(new State("state1", true));
+    State::SharedPointer state_2(new State("state2", false));
+    Connection::SharedPointer connection(
+        new Connection("state1", "state2", "rate1"));
+    
     markov_model = new MarkovModel();
     markov_model->addState(state_1);
     markov_model->addState(state_2);
@@ -322,15 +335,15 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
     string ligand_name = "Ca";
     double ligand_power = 2.0;
     
-    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+    RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
             "rate1", ligand_name, ligand_power));
 
-    std::shared_ptr<State> state_1(new State("state1", true));
-    std::shared_ptr<State> state_2(new State("state2", false));
-    std::shared_ptr<Connection> connection(new Connection("state1", "state2", 
+    State::SharedPointer state_1(new State("state1", true));
+    State::SharedPointer state_2(new State("state2", false));
+    Connection::SharedPointer connection(new Connection("state1", "state2", 
         "rate1"));
 
-    std::shared_ptr<StateOfTheWorld> state_of_the_world = NULL;
+    state_of_the_world = NULL;
 
 
     markov_model = new MarkovModel();
@@ -366,16 +379,13 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
 TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
     using namespace ModFossa::Validation;
 
-    std::shared_ptr<LigandGatedRateConstant> rate1(new LigandGatedRateConstant(
+    RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
             "rate1", "Na", 4.0));
 
-    std::shared_ptr<State> state_1(new State("state1", true));
-    std::shared_ptr<State> state_2(new State("state2", false));
-    std::shared_ptr<Connection> connection(new Connection("state1", "state2", 
+    State::SharedPointer state_1(new State("state1", true));
+    State::SharedPointer state_2(new State("state2", false));
+    Connection::SharedPointer connection(new Connection("state1", "state2", 
         "rate1"));
-
-    std::shared_ptr<StateOfTheWorld> state_of_the_world(new StateOfTheWorld());
-    state_of_the_world->addConcentration("Ca", 2.0);
 
     markov_model = new MarkovModel();
     markov_model->addState(state_1);

@@ -9,12 +9,13 @@
 #include <ModFossa/ModelDefinition/RateConstantBase.h>
 #include <ModFossa/ModelDefinition/Connection.h>
 #include <ModFossa/ModelDefinition/Validation/ValidationResults.h>
-#include <ModFossa/ModelDefinition/StateOfTheWorld.h>
+#include <ModFossa/Common/StateOfTheWorld.h>
 
 namespace ModFossa {
 
 class MarkovModel {
 public:
+    typedef ModFossa::shared_ptr<MarkovModel>::type SharedPtr;
     typedef std::map<const std::string, RateConstantBase::SharedPointer > 
         RateMap;
     typedef std::map<const std::string, State::SharedPointer > StateMap;

@@ -7,9 +7,10 @@
 
 #include <ModFossa/Experiment/Experiment.h>
 
+namespace ModFossa {
 Experiment::Experiment() {
 }
 
 Experiment::~Experiment() {
 }
-
+}
