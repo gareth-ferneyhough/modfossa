@@ -26,15 +26,15 @@ public:
     
     void addVoltageProtocol(VoltageProtocol::SharedPointer voltage_protocol);
     void addExperimentSweep(ExperimentSweep::SharedPointer experiment_sweep);
-    
-    
+    void runExperimentSweep();
+        
 private:
     MarkovModel::SharedPtr markov_model;
     VoltageProtocolMap voltage_protocols;
     ExperimentSweepMap experiment_sweeps;
     
     void createExperimentSweepInternalData();
-    void runExperimentSweep();
+
 
 };
 }

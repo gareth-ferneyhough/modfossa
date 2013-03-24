@@ -101,7 +101,7 @@ std::string VoltageProtocol::getName() const {
     return name;
 }
 
-SerializedVoltageProtocol VoltageProtocol::serializeVoltageProtocol() const {
+SerializedProtocol VoltageProtocol::serializeVoltageProtocol() const {
     if(voltage_protocol_stages.empty()) {
         throw std::runtime_error(
                 "Error from " + this->name +
@@ -126,7 +126,7 @@ SerializedVoltageProtocol VoltageProtocol::serializeVoltageProtocol() const {
         }  
     }
     
-    SerializedVoltageProtocol results; 
+    SerializedProtocol results; 
     
     // Now iterate through voltage_protocol_stages number_of_steps times and 
     // create the 2-D time,voltage pair structure.

@@ -13,7 +13,7 @@
 #include <stdexcept>
 
 #include <ModFossa/Common/SharedPtr.h>
-#include <ModFossa/Experiment/SerializedVoltageProtocol.h>
+#include <ModFossa/Experiment/SerializedProtocol.h>
 
 namespace ModFossa {
 class VoltageProtocol {
@@ -60,10 +60,10 @@ public:
      * stages. The size of the time, voltage pair vector is equal to the number
      * of steps in the stepped stage, or 1 if there is no stepped stage defined.
      *  
-     * @return A SerializedVoltageProtocol as a 2-D vector of time, 
+     * @return A SerializedProtocol as a 2-D vector of time, 
      * voltage pairs.
      */
-    SerializedVoltageProtocol serializeVoltageProtocol() const;
+    SerializedProtocol serializeVoltageProtocol() const;
 
 private:   
     

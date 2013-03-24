@@ -144,7 +144,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccess) {
     vp->addSteppedStage("step1", -100, 45, 20, 200);
     vp->addConstantStage("hold2", -60, 400);
     
-    SerializedVoltageProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocol results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
@@ -243,7 +243,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccessConstantOnly) {
     vp->addConstantStage("hold1", -80, 200);
     vp->addConstantStage("hold2", -60, 400);
     
-    SerializedVoltageProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocol results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
@@ -271,7 +271,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccessSteppedOnly) {
     // it shouldn't be reached.
     vp->addSteppedStage("step1", -20, 25, 20, 200);
     
-    SerializedVoltageProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocol results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
