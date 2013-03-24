@@ -35,6 +35,7 @@ ExperimentSweep::SharedPointer Experiment::getExperimentSweep(std::string name){
         throw std::runtime_error(
             "ExperimentSweep " + name + " does not exist");
     }
+    return experiment_sweeps[name];
 }
 
 void Experiment::addVoltageProtocol(
@@ -99,17 +100,56 @@ Validation::ValidationResults Experiment::validateExperimentSweep(
         ExperimentSweep::SharedPointer experiment_sweep) {
     
     using namespace Validation;
+    
+    ValidationResults::ErrorVector errors;
+    ErrorLevel error_level = NO_WARNINGS;
 
-    // for each experiment sweep:
-        // check that its voltage protocol exists
-        // set the reference to its serialized data
-        // generate a state of the world
-        // validate the markov model with the state of the world
-       
-        //ValidationResults mm_validation_results = 
-          //      markov_model->validate(state_of_the_world);
+    // Check that the experiment_sweep's voltage protocol exists
+    string vp_name = experiment_sweep->getVoltageProtocolName();
+    string exp_name = experiment_sweep->getName();
+    if(!voltageProtocolExists(vp_name)) {
+        errors.push_back(std::make_pair(        
+            VOLTAGE_PROTOCOL_NOT_DEFINED,
+            "VoltageProtocol " + vp_name + " referenced by "\
+                + exp_name + " not defined"));
         
+        error_level = ERRORS;
+    }
+    
+    // Save the errors from above.
+    ValidationResults return_val(error_level, errors);
+    
+    if(error_level != ERRORS) {
+        // The voltage_protocol exists, so generate its serialized data and set
+        // the reference inside our experiment_sweep
+        VoltageProtocol::SharedPointer voltage_protocol = 
+                voltage_protocols[vp_name];
+
+        experiment_sweep->setSerializedProtocol(
+            voltage_protocol->serializeVoltageProtocol());
+
+
+        // experiment_sweep is now ready to be used by the solver.
+        // Lets generate a StateOfTheWorld instance from it and validate  
+        // our MarkovModel with the StateOfTheWorld.
+
+        const StateOfTheWorld::SharedPointer temp_state_of_the_world(
+        new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
         
+        return_val.AppendAdditionalResults(
+                markov_model->validate(temp_state_of_the_world));
+    }
+    
+    // If we had errors above (could not find the voltage protocol), then try
+    // to validate the MarkovModel with an empty state of the world. This will 
+    // produce errors of course, but will return validation information about 
+    // the MarkovModel that the user may find helpful.
+    else {
+        return_val.AppendAdditionalResults(
+                markov_model->validate(NULL));
+    }
+    
+    return return_val;
 }
 
 Validation::ValidationResults Experiment::validate() {
@@ -136,12 +176,9 @@ Validation::ValidationResults Experiment::validate() {
         error_level = ERRORS;
     }
     
-    // for each voltage protocol, serialize its data
-//    VoltageProtocolMap::const_iterator it;
-//    for(it = voltage_protocols.begin(); it != voltage_protocols.end(); ++it) {
-//        it->second->
-//    }
-//    
+    // Create validation results structure. We will append additional 
+    // information to it further down.
+    ValidationResults validation_results(error_level, errors);
     
     // for each experiment sweep:
         // check that its voltage protocol exists
@@ -149,93 +186,21 @@ Validation::ValidationResults Experiment::validate() {
         // generate a state of the world
         // validate the markov model with the state of the world
 
+    ExperimentSweepMap::iterator it;
+    for(it = experiment_sweeps.begin(); it != experiment_sweeps.end(); ++it) {
+        validation_results.AppendAdditionalResults(
+                validateExperimentSweep(it->second));
+    }
     
     
-    // check connections that rate_constants and states exist
-//    for (unsigned int i = 0; i < connections.size(); ++i) {
-//
-//        string from_state = connections[i]->from_state;
-//        string to_state = connections[i]->to_state;
-//        string rate_name = connections[i]->rate_name;
-//
-//        if (!stateExists(from_state)) {
-//            errors.push_back(std::make_pair(
-//                    STATE_NOT_DEFINED,
-//                    "State not defined: " + from_state));
-//
-//            error_level = ERRORS;
-//        }
-//
-//        if (!stateExists(to_state)) {
-//            errors.push_back(std::make_pair(
-//                    STATE_NOT_DEFINED,
-//                    "State not defined: " + to_state));
-//
-//            error_level = ERRORS;
-//        }
-//
-//        if (!rateConstantExists(rate_name)) {
-//            errors.push_back(std::make_pair(
-//                    RATE_CONSTANT_NOT_DEFINED,
-//                    "Rate constant not defined: " + rate_name));
-//
-//            error_level = ERRORS;
-//        }
-//    }
-//
-//    if (state_of_the_world == NULL) {
-//        errors.push_back(std::make_pair(
-//                STATE_OF_THE_WORLD_IS_NULL,
-//                "state_of_the_world cannot be NULL"));
-//
-//        error_level = ERRORS;
-//    }
-//
-//    // TODO: Add warnings for unused states and rates.
-//
-//    if (state_of_the_world != NULL) {
-//        // Check that each LigandGated rate constant has its ligand 
-//        // defined in state_of_the_world
-//        RateMap::const_iterator it;
-//        for (it = map_of_rates.begin(); it != map_of_rates.end(); ++it) {
-//            try {
-//                it->second->getRate(state_of_the_world);
-//            } catch (std::runtime_error& e) {
-//                errors.push_back(std::make_pair(
-//                        LIGAND_NOT_DEFINED,
-//                        // This is a bad and ugly message!
-//                        "Ligand not defined: " + string(e.what())));
-//
-//                error_level = ERRORS;
-//            }
-//        }
-//    }
-//
-//    /* If everything is valid, set the validation flag so that no changes
-//     * can be made without re-validating. Also, we need to assign indices 
-//     * to all the states. Both of the transition matrices will be size NxN, 
-//     * where N is the number of states. State with index 0 will occupy the 
-//     * 0th row and column of the matrices.   
-//     * 
-//     * Also, assign the initial_state flag to the state which was 
-//     * designated so.
-//     */
-//    if (error_level != ERRORS) {
-//        StateMap::iterator it;
-//        int index = 0;
-//        for (it = map_of_states.begin(); it != map_of_states.end(); ++it) {
-//            it->second->index = index;
-//            ++index;
-//
-//            if (it->first == initial_state) {
-//                it->second->is_initial_state = true;
-//            }
-//        }
-//        is_valid = true;
-//    }
 
-    ValidationResults results(error_level, errors);
-    return results;
+    /* If everything is valid, set the validation flag so that no changes
+     * can be made without re-validating. 
+     */
+    if (error_level != ERRORS) {
+        is_valid = true;
+    }
+    return validation_results;
 }
 
 

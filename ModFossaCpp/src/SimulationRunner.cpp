@@ -28,8 +28,8 @@ void SimulationRunner::runExperimentSweep(std::string experiment_sweep_name) {
     
 
     // Create state of the world from experiment_sweep concentration map
-    StateOfTheWorld::SharedPointer state_of_the_world(
-        new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
+    //StateOfTheWorld::SharedPointer state_of_the_world(
+      //  new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
     
     // Ensure markovModel is valid with state_of_the_world
     //ValidationResults MarkovModel::SharedPtr->validate(state_of_the_world);
