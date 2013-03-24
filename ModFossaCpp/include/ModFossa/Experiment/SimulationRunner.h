@@ -11,18 +11,27 @@
 
 #include <string>
 #include <ModFossa/Experiment/Experiment.h>
+#include <ModFossa/Experiment/Simulator.h>
 
 namespace ModFossa {
 class SimulationRunner {
 public:
     SimulationRunner();
     ~SimulationRunner();
-
-    void runAllExperimentSweeps(Experiment);
+    
+    Experiment::SharedPointer getExperiment() const;
+    
+    void runAllExperimentSweeps();
     void runExperimentSweep(std::string experiment_sweep_name);
+    
 private:
-    Experiment experiment;
+    Experiment::SharedPointer experiment;
+    Simulator::SharedPointer simulator;
 
+    /**
+     * Initialize the Experiment and Simulator classes.
+     */
+    void initialize();
 };
 }
 

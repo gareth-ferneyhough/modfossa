@@ -8,7 +8,7 @@
 #include <ModFossa/ModelDefinition/State.h>
 #include <ModFossa/ModelDefinition/RateConstantBase.h>
 #include <ModFossa/ModelDefinition/Connection.h>
-#include <ModFossa/ModelDefinition/Validation/ValidationResults.h>
+#include <ModFossa/Common/Validation/ValidationResults.h>
 #include <ModFossa/Common/StateOfTheWorld.h>
 
 namespace ModFossa {

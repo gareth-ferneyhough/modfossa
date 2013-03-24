@@ -2,7 +2,7 @@
 
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 #include <ModFossa/ModelDefinition/RateConstantBase.h>
-#include <ModFossa/ModelDefinition/Validation/ValidationResults.h>
+#include <ModFossa/Common/Validation/ValidationResults.h>
 
 using std::string;
 using std::vector;

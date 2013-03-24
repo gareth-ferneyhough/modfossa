@@ -7,7 +7,7 @@
 
 #include <cassert>
 
-#include <ModFossa/ModelDefinition/TransitionMatrix.h>
+#include <ModFossa/Common/TransitionMatrix.h>
 #include <ModFossa/ModelDefinition/HelperFunctions.h>
 
 namespace ModFossa {

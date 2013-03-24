@@ -19,7 +19,7 @@ namespace ModFossa {
 class ExperimentSweep {
 public:
     typedef ModFossa::shared_ptr<ExperimentSweep>::type SharedPointer;
-    typedef std::map<const std::string, Concentration::SharedPointer> 
+    typedef std::map<std::string, Concentration::SharedPointer> 
         ConcentrationMap;
     
     ExperimentSweep(
@@ -29,10 +29,10 @@ public:
     
     ~ExperimentSweep();
     
-    std::string get_name() const;
-    std::string get_voltage_protocol_name() const;
-    ConcentrationMap get_concentration_map() const;
-    SerializedProtocol get_serialized_voltage_protocol() const;
+    std::string getName() const;
+    std::string getVoltageProtocolName() const;
+    ConcentrationMap getConcentrationMap();
+    SerializedProtocol getSerializedVoltageProtocol() const;
     
 private:
     const std::string name;

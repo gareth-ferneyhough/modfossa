@@ -52,6 +52,7 @@ public:
         int voltage_stop, int voltage_step, int duration);
     
     std::string getName() const;
+    bool isEmpty() const;
 
 
     /**
@@ -60,11 +61,11 @@ public:
      * stages. The size of the time, voltage pair vector is equal to the number
      * of steps in the stepped stage, or 1 if there is no stepped stage defined.
      *  
-     * @return A SerializedProtocol as a 2-D vector of time, 
+     * @return A SerializedProtocolSharedPointer, a 2-D vector of time, 
      * voltage pairs.
      */
-    SerializedProtocol serializeVoltageProtocol() const;
-
+    SerializedProtocolSharedPointer serializeVoltageProtocol();
+   
 private:   
     
     friend class Experiment;
@@ -93,6 +94,7 @@ private:
     std::vector<VoltageProtocolStage> voltage_protocol_stages;
     
     std::string name;
+    SerializedProtocolSharedPointer serialized_data;
         
     void CheckNameNotEmpty(std::string name) const;
     void CheckDurationPositive(int duration) const;

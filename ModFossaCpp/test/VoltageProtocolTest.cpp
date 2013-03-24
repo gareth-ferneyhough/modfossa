@@ -144,7 +144,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccess) {
     vp->addSteppedStage("step1", -100, 45, 20, 200);
     vp->addConstantStage("hold2", -60, 400);
     
-    SerializedProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocolSharedPointer results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
@@ -160,77 +160,77 @@ TEST_F(VoltageProtocolTest, getResultsSuccess) {
      * 
      */
     
-    ASSERT_EQ(results[0][0].first, 0);
-    ASSERT_EQ(results[0][0].second, -80);
-    ASSERT_EQ(results[0][1].first, 200);
-    ASSERT_EQ(results[0][1].second, -100);
-    ASSERT_EQ(results[0][2].first, 400);
-    ASSERT_EQ(results[0][2].second, -60);
-    ASSERT_EQ(results[0][3].first, 800);
-    ASSERT_EQ(results[0][3].second, -60);
+    ASSERT_EQ((*results)[0][0].first, 0);
+    ASSERT_EQ((*results)[0][0].second, -80);
+    ASSERT_EQ((*results)[0][1].first, 200);
+    ASSERT_EQ((*results)[0][1].second, -100);
+    ASSERT_EQ((*results)[0][2].first, 400);
+    ASSERT_EQ((*results)[0][2].second, -60);
+    ASSERT_EQ((*results)[0][3].first, 800);
+    ASSERT_EQ((*results)[0][3].second, -60);
     
-    ASSERT_EQ(results[1][0].first, 0);
-    ASSERT_EQ(results[1][0].second, -80);
-    ASSERT_EQ(results[1][1].first, 200);
-    ASSERT_EQ(results[1][1].second, -80);
-    ASSERT_EQ(results[1][2].first, 400);
-    ASSERT_EQ(results[1][2].second, -60);
-    ASSERT_EQ(results[1][3].first, 800);
-    ASSERT_EQ(results[1][3].second, -60);
+    ASSERT_EQ((*results)[1][0].first, 0);
+    ASSERT_EQ((*results)[1][0].second, -80);
+    ASSERT_EQ((*results)[1][1].first, 200);
+    ASSERT_EQ((*results)[1][1].second, -80);
+    ASSERT_EQ((*results)[1][2].first, 400);
+    ASSERT_EQ((*results)[1][2].second, -60);
+    ASSERT_EQ((*results)[1][3].first, 800);
+    ASSERT_EQ((*results)[1][3].second, -60);
     
-    ASSERT_EQ(results[2][0].first, 0);
-    ASSERT_EQ(results[2][0].second, -80);
-    ASSERT_EQ(results[2][1].first, 200);
-    ASSERT_EQ(results[2][1].second, -60);
-    ASSERT_EQ(results[2][2].first, 400);
-    ASSERT_EQ(results[2][2].second, -60);
-    ASSERT_EQ(results[2][3].first, 800);
-    ASSERT_EQ(results[2][3].second, -60);
+    ASSERT_EQ((*results)[2][0].first, 0);
+    ASSERT_EQ((*results)[2][0].second, -80);
+    ASSERT_EQ((*results)[2][1].first, 200);
+    ASSERT_EQ((*results)[2][1].second, -60);
+    ASSERT_EQ((*results)[2][2].first, 400);
+    ASSERT_EQ((*results)[2][2].second, -60);
+    ASSERT_EQ((*results)[2][3].first, 800);
+    ASSERT_EQ((*results)[2][3].second, -60);
     
-    ASSERT_EQ(results[3][0].first, 0);
-    ASSERT_EQ(results[3][0].second, -80);
-    ASSERT_EQ(results[3][1].first, 200);
-    ASSERT_EQ(results[3][1].second, -40);
-    ASSERT_EQ(results[3][2].first, 400);
-    ASSERT_EQ(results[3][2].second, -60);
-    ASSERT_EQ(results[3][3].first, 800);
-    ASSERT_EQ(results[3][3].second, -60);
+    ASSERT_EQ((*results)[3][0].first, 0);
+    ASSERT_EQ((*results)[3][0].second, -80);
+    ASSERT_EQ((*results)[3][1].first, 200);
+    ASSERT_EQ((*results)[3][1].second, -40);
+    ASSERT_EQ((*results)[3][2].first, 400);
+    ASSERT_EQ((*results)[3][2].second, -60);
+    ASSERT_EQ((*results)[3][3].first, 800);
+    ASSERT_EQ((*results)[3][3].second, -60);
     
-    ASSERT_EQ(results[4][0].first, 0);
-    ASSERT_EQ(results[4][0].second, -80);
-    ASSERT_EQ(results[4][1].first, 200);
-    ASSERT_EQ(results[4][1].second, -20);
-    ASSERT_EQ(results[4][2].first, 400);
-    ASSERT_EQ(results[4][2].second, -60);
-    ASSERT_EQ(results[4][3].first, 800);
-    ASSERT_EQ(results[4][3].second, -60);
+    ASSERT_EQ((*results)[4][0].first, 0);
+    ASSERT_EQ((*results)[4][0].second, -80);
+    ASSERT_EQ((*results)[4][1].first, 200);
+    ASSERT_EQ((*results)[4][1].second, -20);
+    ASSERT_EQ((*results)[4][2].first, 400);
+    ASSERT_EQ((*results)[4][2].second, -60);
+    ASSERT_EQ((*results)[4][3].first, 800);
+    ASSERT_EQ((*results)[4][3].second, -60);
     
-    ASSERT_EQ(results[5][0].first, 0);
-    ASSERT_EQ(results[5][0].second, -80);
-    ASSERT_EQ(results[5][1].first, 200);
-    ASSERT_EQ(results[5][1].second, 0);
-    ASSERT_EQ(results[5][2].first, 400);
-    ASSERT_EQ(results[5][2].second, -60);
-    ASSERT_EQ(results[5][3].first, 800);
-    ASSERT_EQ(results[5][3].second, -60);
+    ASSERT_EQ((*results)[5][0].first, 0);
+    ASSERT_EQ((*results)[5][0].second, -80);
+    ASSERT_EQ((*results)[5][1].first, 200);
+    ASSERT_EQ((*results)[5][1].second, 0);
+    ASSERT_EQ((*results)[5][2].first, 400);
+    ASSERT_EQ((*results)[5][2].second, -60);
+    ASSERT_EQ((*results)[5][3].first, 800);
+    ASSERT_EQ((*results)[5][3].second, -60);
     
-    ASSERT_EQ(results[6][0].first, 0);
-    ASSERT_EQ(results[6][0].second, -80);
-    ASSERT_EQ(results[6][1].first, 200);
-    ASSERT_EQ(results[6][1].second, 20);
-    ASSERT_EQ(results[6][2].first, 400);
-    ASSERT_EQ(results[6][2].second, -60);
-    ASSERT_EQ(results[6][3].first, 800);
-    ASSERT_EQ(results[6][3].second, -60);
+    ASSERT_EQ((*results)[6][0].first, 0);
+    ASSERT_EQ((*results)[6][0].second, -80);
+    ASSERT_EQ((*results)[6][1].first, 200);
+    ASSERT_EQ((*results)[6][1].second, 20);
+    ASSERT_EQ((*results)[6][2].first, 400);
+    ASSERT_EQ((*results)[6][2].second, -60);
+    ASSERT_EQ((*results)[6][3].first, 800);
+    ASSERT_EQ((*results)[6][3].second, -60);
     
-    ASSERT_EQ(results[7][0].first, 0);
-    ASSERT_EQ(results[7][0].second, -80);
-    ASSERT_EQ(results[7][1].first, 200);
-    ASSERT_EQ(results[7][1].second, 40);
-    ASSERT_EQ(results[7][2].first, 400);
-    ASSERT_EQ(results[7][2].second, -60);
-    ASSERT_EQ(results[7][3].first, 800);
-    ASSERT_EQ(results[7][3].second, -60);
+    ASSERT_EQ((*results)[7][0].first, 0);
+    ASSERT_EQ((*results)[7][0].second, -80);
+    ASSERT_EQ((*results)[7][1].first, 200);
+    ASSERT_EQ((*results)[7][1].second, 40);
+    ASSERT_EQ((*results)[7][2].first, 400);
+    ASSERT_EQ((*results)[7][2].second, -60);
+    ASSERT_EQ((*results)[7][3].first, 800);
+    ASSERT_EQ((*results)[7][3].second, -60);
 }
 
 /**
@@ -243,7 +243,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccessConstantOnly) {
     vp->addConstantStage("hold1", -80, 200);
     vp->addConstantStage("hold2", -60, 400);
     
-    SerializedProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocolSharedPointer results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
@@ -252,12 +252,12 @@ TEST_F(VoltageProtocolTest, getResultsSuccessConstantOnly) {
      * 
      */
     
-    ASSERT_EQ(results[0][0].first, 0);
-    ASSERT_EQ(results[0][0].second, -80);
-    ASSERT_EQ(results[0][1].first, 200);
-    ASSERT_EQ(results[0][1].second, -60);
-    ASSERT_EQ(results[0][2].first, 600);
-    ASSERT_EQ(results[0][2].second, -60);
+    ASSERT_EQ((*results)[0][0].first, 0);
+    ASSERT_EQ((*results)[0][0].second, -80);
+    ASSERT_EQ((*results)[0][1].first, 200);
+    ASSERT_EQ((*results)[0][1].second, -60);
+    ASSERT_EQ((*results)[0][2].first, 600);
+    ASSERT_EQ((*results)[0][2].second, -60);
 }
 
 /**
@@ -271,7 +271,7 @@ TEST_F(VoltageProtocolTest, getResultsSuccessSteppedOnly) {
     // it shouldn't be reached.
     vp->addSteppedStage("step1", -20, 25, 20, 200);
     
-    SerializedProtocol results = vp->serializeVoltageProtocol();
+    SerializedProtocolSharedPointer results = vp->serializeVoltageProtocol();
     
     /*
      * The serialized voltage protocol should look like this:
@@ -282,20 +282,20 @@ TEST_F(VoltageProtocolTest, getResultsSuccessSteppedOnly) {
      * 
      */
     
-    ASSERT_EQ(results[0][0].first, 0);
-    ASSERT_EQ(results[0][0].second, -20);
-    ASSERT_EQ(results[0][1].first, 200);
-    ASSERT_EQ(results[0][1].second, -20);
+    ASSERT_EQ((*results)[0][0].first, 0);
+    ASSERT_EQ((*results)[0][0].second, -20);
+    ASSERT_EQ((*results)[0][1].first, 200);
+    ASSERT_EQ((*results)[0][1].second, -20);
 
-    ASSERT_EQ(results[1][0].first, 0);
-    ASSERT_EQ(results[1][0].second, 0);
-    ASSERT_EQ(results[1][1].first, 200);
-    ASSERT_EQ(results[1][1].second, 0);
+    ASSERT_EQ((*results)[1][0].first, 0);
+    ASSERT_EQ((*results)[1][0].second, 0);
+    ASSERT_EQ((*results)[1][1].first, 200);
+    ASSERT_EQ((*results)[1][1].second, 0);
     
-    ASSERT_EQ(results[2][0].first, 0);
-    ASSERT_EQ(results[2][0].second, 20);
-    ASSERT_EQ(results[2][1].first, 200);
-    ASSERT_EQ(results[2][1].second, 20);
+    ASSERT_EQ((*results)[2][0].first, 0);
+    ASSERT_EQ((*results)[2][0].second, 20);
+    ASSERT_EQ((*results)[2][1].first, 200);
+    ASSERT_EQ((*results)[2][1].second, 20);
 }
 
 

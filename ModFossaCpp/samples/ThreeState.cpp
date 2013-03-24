@@ -6,7 +6,7 @@
  */
 
 #include <ModFossa/ModelDefinition/MarkovModel.h>
-#include <ModFossa/ModelDefinition/TransitionMatrix.h>
+#include <ModFossa/Common/TransitionMatrix.h>
 #include <ModFossa/ModelDefinition/ConstantRateConstant.h>
 #include <cassert>
 

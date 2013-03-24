@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 #include <ModFossa/ModelDefinition/ConstantRateConstant.h>
-#include <ModFossa/ModelDefinition/TransitionMatrix.h>
+#include <ModFossa/Common/TransitionMatrix.h>
 
 using namespace ModFossa;
 using std::string;

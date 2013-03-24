@@ -20,22 +20,71 @@ public:
         VoltageProtocolMap;
     typedef std::map<const std::string, ExperimentSweep::SharedPointer > 
         ExperimentSweepMap;
+    typedef shared_ptr<Experiment>::type SharedPointer;
     
     Experiment();
     ~Experiment();
     
-    void addVoltageProtocol(VoltageProtocol::SharedPointer voltage_protocol);
-    void addExperimentSweep(ExperimentSweep::SharedPointer experiment_sweep);
-    void runExperimentSweep();
+    /**
+     * Add VoltageProtocol to the map of VoltageProtocols. A runtime error
+     * will be thrown if the VoltageProtocol is empty, ie has no stages defined,
+     * or if a VoltageProtocol with the same name already exists in the map.
+     * 
+     * @param voltage_protocol The VoltageProtocol to add to the map of 
+     * VoltageProtocols.
+     */
+    void addVoltageProtocol(VoltageProtocol::SharedPointer voltage_protocol);    
+    
+    /**
+     * Add ExperimentSweep to the map of ExperimentSweeps. A runtime error
+     * will be thrown if an ExperimentSweep with the same name already exists in
+     * the map.
+     * 
+     * @param experiment_sweep The ExperimentSweep to add to the map of
+     * ExperimentSweeps.
+     */
+    void addExperimentSweep(ExperimentSweep::SharedPointer experiment_sweep);    
+    
+    
+    MarkovModel::SharedPtr getMarkovModel() const;
+    
+    /**
+     * Validate the Experiment. This will perform several checks. They include,
+     * checking that at least one VoltageProtocol and ExperimentSweep exist,
+     * and that each ExperimentSweep is valid and generates a StateOfTheWorld
+     * instance that the MarkovModel is valid against.
+     * 
+     * The validate method will generate internal data structures for each
+     * VoltageProtocol. If any changes are made to the MarkovModel, or any
+     * VoltageProtocol or ExperimentSweep, validate will have to be called 
+     * again.
+     * 
+     * @return ValidationResults structure containing the overall validation
+     * result, and a vector of error types with textual descriptions, if any.
+     * 
+     */
+    Validation::ValidationResults validate();
+    
+    bool isValid() const;
         
 private:
+    friend class SimulationRunner;
+        
     MarkovModel::SharedPtr markov_model;
     VoltageProtocolMap voltage_protocols;
     ExperimentSweepMap experiment_sweeps;
     
-    void createExperimentSweepInternalData();
-
-
+    bool is_valid;
+    
+    bool voltageProtocolExists(std::string name) const;
+    bool experimentSweepExists(std::string name) const;    
+    void initialize();
+    
+    void serializeExperimentSweep(std::string name);
+    ExperimentSweep::SharedPointer getExperimentSweep(std::string name);
+    Validation::ValidationResults validateExperimentSweep(
+        ExperimentSweep::SharedPointer experiment_sweep);
+    
 };
 }
 

@@ -10,10 +10,13 @@
 
 #include <vector>
 #include <utility>
+#include <ModFossa/Common/SharedPtr.h>
 
 namespace ModFossa {
 typedef std::vector<std::pair<double, double> > ProtocolIteration;
 typedef std::vector<ProtocolIteration> SerializedProtocol;
+typedef ModFossa::shared_ptr<SerializedProtocol>::type 
+        SerializedProtocolSharedPointer;
 }
 #endif	/* PROTOCOLITERATION_H */
 

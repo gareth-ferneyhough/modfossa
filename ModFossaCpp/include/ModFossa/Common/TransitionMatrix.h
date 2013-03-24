@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <ModFossa/ModelDefinition/Transition.h>
-#include <ModFossa/ModelDefinition/Matrix.h>
+#include <ModFossa/Common/Matrix.h>
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 
 namespace ModFossa {

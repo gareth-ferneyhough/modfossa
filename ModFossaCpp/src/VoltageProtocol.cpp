@@ -101,8 +101,12 @@ std::string VoltageProtocol::getName() const {
     return name;
 }
 
-SerializedProtocol VoltageProtocol::serializeVoltageProtocol() const {
-    if(voltage_protocol_stages.empty()) {
+bool VoltageProtocol::isEmpty() const {
+    return voltage_protocol_stages.empty();
+}
+
+SerializedProtocolSharedPointer VoltageProtocol::serializeVoltageProtocol() {
+    if(isEmpty()) {
         throw std::runtime_error(
                 "Error from " + this->name +
                 ": no VoltageProtocolStages defined");
@@ -126,7 +130,8 @@ SerializedProtocol VoltageProtocol::serializeVoltageProtocol() const {
         }  
     }
     
-    SerializedProtocol results; 
+    serialized_data = SerializedProtocolSharedPointer(new SerializedProtocol());
+    //SerializedProtocol results; 
     
     // Now iterate through voltage_protocol_stages number_of_steps times and 
     // create the 2-D time,voltage pair structure.
@@ -153,10 +158,10 @@ SerializedProtocol VoltageProtocol::serializeVoltageProtocol() const {
         protocol_iteration.push_back(makeTimeVoltagePair(
         (voltage_protocol_stages.back()), step_index, current_time));
 
-        results.push_back(protocol_iteration);
+        serialized_data->push_back(protocol_iteration);
     }
     
-    return results;
+    return serialized_data;
 }
 
 int VoltageProtocol::numberOfSteps(int start, int stop, int step) const {
