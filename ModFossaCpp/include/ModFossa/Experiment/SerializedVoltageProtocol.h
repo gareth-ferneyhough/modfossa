@@ -12,7 +12,8 @@
 #include <utility>
 
 namespace ModFossa {
-typedef std::vector<std::pair<double, double> > SerializedVoltageProtocol;
+typedef std::vector<std::pair<double, double> > ProtocolIteration;
+typedef std::vector<ProtocolIteration> SerializedVoltageProtocol;
 }
 #endif	/* PROTOCOLITERATION_H */
 
