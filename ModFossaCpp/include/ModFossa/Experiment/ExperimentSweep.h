@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <ModFossa/Experiment/SerializedVoltageProtocol.h>
 #include <ModFossa/Common/SharedPtr.h>
 #include <ModFossa/Common/Concentration.h>
 
@@ -21,12 +22,27 @@ public:
     typedef std::map<const std::string, Concentration::SharedPointer> 
         ConcentrationMap;
     
-    ExperimentSweep();
+    ExperimentSweep(
+        const std::string name, 
+        const std::string voltage_protocol_name, 
+        ConcentrationMap concentration_map);
+    
     ~ExperimentSweep();
+    
+    std::string get_name() const;
+    std::string get_voltage_protocol_name() const;
+    ConcentrationMap get_concentration_map() const;
+    SerializedVoltageProtocol get_serialized_voltage_protocol() const;
+    
 private:
-    std::string voltage_protocol_name;
-    ConcentrationMap concentration_map;
-
+    const std::string name;
+    const std::string voltage_protocol_name;
+    const ConcentrationMap concentration_map;
+    SerializedVoltageProtocol serialized_voltage_protocol; 
+    
+    friend class Experiment;
+    void setSerializedVoltageProtocol(SerializedVoltageProtocol 
+        serialized_voltage_protocol);
 };
 }
 

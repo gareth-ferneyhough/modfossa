@@ -27,7 +27,7 @@ public:
 private:
     double voltage;
     bool voltage_initialized;
-    ConcentrationMap concentrations;
+    const ConcentrationMap concentrations;
 };
 }
 #endif
