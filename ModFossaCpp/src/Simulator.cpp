@@ -51,7 +51,7 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     // The minus 1 is because we have an extra protocol stage which signals
     // that we are done with the protocol_iteration. This last stage is
     // necessary to calculate the stop time of the second to last stage.
-    for(int i = 0; i < protocol_iteration.size()-1; ++i) {
+    for(unsigned int i = 0; i < protocol_iteration.size()-1; ++i) {
                
         double start_time = protocol_iteration[i].first / 1000 + dt;
         double stop_time = protocol_iteration[i+1].first / 1000;
@@ -78,7 +78,7 @@ ProtocolIterationResults Simulator::runProtocolIteration(
         Matrix T = transition_matrix->get();
 
         Matrix mat_results;
-        shared_ptr<Matrix>::type t_ptr = std::make_shared<Matrix>(T);
+        shared_ptr<Matrix>::type t_ptr = make_shared<Matrix>(T);
         ode_solver.solve(tspan, t_ptr, mat_results);
 
         results.push_back(resultsMatrixToVector(mat_results));            

@@ -87,7 +87,7 @@ TEST_F(LigandGatedRateConstantTest, getRate) {
  */
 TEST_F(LigandGatedRateConstantTest, getRateStateOfWorldNull) {
     // Set state_of_the_world to NULL
-    state_of_the_world = NULL;
+    state_of_the_world = StateOfTheWorld::SharedPointer();
 
     double ligand_power = 2.0;
     rate_constant = new LigandGatedRateConstant("rc1", ligand_name, 

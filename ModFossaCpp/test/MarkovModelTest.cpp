@@ -218,7 +218,8 @@ TEST_F(MarkovModelTest, validateNoConnectionsDefined) {
 
     markov_model = new MarkovModel();
 
-    ValidationResults results = markov_model->validate(NULL);
+    ValidationResults results = 
+            markov_model->validate(StateOfTheWorld::SharedPointer());
 
     ASSERT_TRUE(results.overall_result == ERRORS);
 
@@ -248,7 +249,8 @@ TEST_F(MarkovModelTest, validateStateUndefined) {
     Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
-    ValidationResults results = markov_model->validate(NULL);
+    ValidationResults results = 
+            markov_model->validate(StateOfTheWorld::SharedPointer());
 
     ASSERT_TRUE(results.overall_result == ERRORS);
 
@@ -278,7 +280,8 @@ TEST_F(MarkovModelTest, validateRateUndefined) {
     Connection::SharedPointer connection(new Connection("from", "to", "rate"));
     markov_model->addConnection(connection);
 
-    ValidationResults results = markov_model->validate(NULL);
+    ValidationResults results = 
+            markov_model->validate(StateOfTheWorld::SharedPointer());
 
     ASSERT_TRUE(results.overall_result == ERRORS);
 
@@ -306,7 +309,8 @@ TEST_F(MarkovModelTest, validateInitialStateNotSet) {
 
     markov_model = new MarkovModel();
 
-    ValidationResults results = markov_model->validate(NULL);
+    ValidationResults results = 
+            markov_model->validate(StateOfTheWorld::SharedPointer());
 
     ASSERT_TRUE(results.overall_result == ERRORS);
 
@@ -343,7 +347,7 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
     Connection::SharedPointer connection(new Connection("state1", "state2", 
         "rate1"));
 
-    state_of_the_world = NULL;
+    state_of_the_world = StateOfTheWorld::SharedPointer();
 
 
     markov_model = new MarkovModel();

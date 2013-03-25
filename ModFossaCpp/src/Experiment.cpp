@@ -139,7 +139,7 @@ Validation::ValidationResults Experiment::validateExperimentSweep(
     // the MarkovModel that the user may find helpful.
     else {
         return_val.AppendAdditionalResults(
-                markov_model->validate(NULL));
+                markov_model->validate(shared_ptr<StateOfTheWorld>::type ()));
     }
     
     return return_val;
@@ -184,7 +184,7 @@ Validation::ValidationResults Experiment::validate() {
     // validate it even if we don't have any ExperimentSweeps.
     if(experiment_sweeps.empty()) {
         validation_results.AppendAdditionalResults(
-                markov_model->validate(NULL));
+                markov_model->validate(StateOfTheWorld::SharedPointer()));
     }   
 
     // If everything is valid, set the validation flag so that no changes
