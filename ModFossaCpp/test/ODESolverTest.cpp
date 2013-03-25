@@ -23,16 +23,23 @@ protected:
  */
 TEST_F(ODESolverTest, createSuccess) {
     
+    double rate1 = 0.1;
+    double rate2 = 0.2;
+    double rate3 = 0.3;
+    double rate4 = 0.4;
+    
     shared_ptr<Matrix>::type transition_matrix(new Matrix(3,3));
-    (*transition_matrix)(0, 0) = 1;
-    (*transition_matrix)(0, 1) = 2;
-    (*transition_matrix)(0, 2) = 3;
-    (*transition_matrix)(1, 0) = 4;
-    (*transition_matrix)(1, 1) = 5;
-    (*transition_matrix)(1, 2) = 6;
-    (*transition_matrix)(2, 0) = 7;
-    (*transition_matrix)(2, 1) = 8;
-    (*transition_matrix)(2, 2) = 9;
+    (*transition_matrix)(0, 0) = rate1 * -1;
+    (*transition_matrix)(0, 1) = rate2;
+    (*transition_matrix)(0, 2) = 0;
+    
+    (*transition_matrix)(1, 0) = rate1;
+    (*transition_matrix)(1, 1) = -1*(rate2 + rate3);
+    (*transition_matrix)(1, 2) = rate4;
+    
+    (*transition_matrix)(2, 0) = 0;
+    (*transition_matrix)(2, 1) = rate3;
+    (*transition_matrix)(2, 2) = rate4 * -1;
     
     std::vector<double> ic;
     ic.push_back(0.1);
@@ -41,9 +48,50 @@ TEST_F(ODESolverTest, createSuccess) {
     ODESolver solver;
     solver.initialize(ic);
     
+    std::vector<double>tspan;
+    for(double i = 0.001; i < 0.5; i+=0.001){
+        tspan.push_back(i);
+    }
+    
     Matrix results;
+    solver.solve(tspan, transition_matrix, results);
     
-    solver.solve(10, transition_matrix, results);
+    //std::cout << results;
     
-    std::cout << results;
+    // Not quite sure how to verify this.
+}
+
+/**
+ * Test Case XX.1 - XX
+ * Use Case: XX.1 - XX
+ */
+TEST_F(ODESolverTest, twoStateModel) {
+    double kon = 10;
+    double koff = 1;
+
+    
+    shared_ptr<Matrix>::type transition_matrix(new Matrix(2,2));
+    (*transition_matrix)(0, 0) = kon * -1;
+    (*transition_matrix)(0, 1) = koff;
+    
+    (*transition_matrix)(1, 0) = kon;
+    (*transition_matrix)(1, 1) = koff * -1;
+
+    
+    std::vector<double> ic;
+    ic.push_back(1);
+    
+    ODESolver solver;
+    solver.initialize(ic);
+    
+    std::vector<double>tspan;
+    for(double i = 0.001; i < 0.5; i+=0.001){
+        tspan.push_back(i);
+    }
+    
+    Matrix results;
+    solver.solve(tspan, transition_matrix, results);
+    //std::cout << results;
+    
+    // Not quite sure how to verify this.
 }

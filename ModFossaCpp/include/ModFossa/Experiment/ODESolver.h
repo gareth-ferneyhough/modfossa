@@ -35,7 +35,8 @@ public:
     
     int initialize(std::vector<double> initial_conditions);
         
-    int solve(int stop_time, MatrixSharedPointer transition_matrix, Matrix& y);
+    int solve(std::vector<double> tspan, 
+        MatrixSharedPointer transition_matrix, Matrix& y);
     
     static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot, 
         void *f_data);
@@ -44,14 +45,12 @@ private:
     void init();
     
     MatrixSharedPointer transition_matrix;
-    CVRhsFn odefun;
     
-    realtype reltol; //= 1e-6;
-    realtype abstol; //= 1e-8;
+    const realtype reltol = 1e-6;
+    const realtype abstol = 1e-8;
     void* cvode_mem;
     N_Vector y_n_vector;
     int y_size;
-    int current_time;
 };
 }
 
