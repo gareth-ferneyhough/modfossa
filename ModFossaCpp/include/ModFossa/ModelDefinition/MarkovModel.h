@@ -8,6 +8,7 @@
 #include <ModFossa/ModelDefinition/RateConstantBase.h>
 #include <ModFossa/ModelDefinition/ConstantRateConstant.h>
 #include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+#include <ModFossa/ModelDefinition/SigmoidalRateConstant.h>
 #include <ModFossa/ModelDefinition/State.h>
 #include <ModFossa/ModelDefinition/Connection.h>
 #include <ModFossa/Common/Validation/ValidationResults.h>

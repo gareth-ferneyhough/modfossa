@@ -20,7 +20,7 @@ protected:
         State::SharedPointer state_2(new State("state2", false));
 
         RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
-                "rate1", "Ca", 2));
+                "rate1", 2, "Ca", 2));
         Connection::SharedPointer connection(
             new Connection("state1", "state2", "rate1"));
 

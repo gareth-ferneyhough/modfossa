@@ -34,7 +34,7 @@ protected:
  * Use Case: 4.1 - Main Success Scenario
  */
 TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstant) {
-    rate_constant = new LigandGatedRateConstant("rc1", "Ca", 2.0);
+    rate_constant = new LigandGatedRateConstant("rc1", 2.0, "Ca", 2.0);
     ASSERT_TRUE(rate_constant->getName() == "rc1");
     ASSERT_TRUE(rate_constant->getLigandName() == "Ca");
     ASSERT_TRUE(rate_constant->getLigandPower() == 2.0);
@@ -47,8 +47,8 @@ TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstant) {
  * Use Case: 4.1 - Extension 2a
  */
 TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstantEmptyName) {
-    ASSERT_THROW(rate_constant = new LigandGatedRateConstant("", "Ca", 2.0),
-            std::runtime_error);
+    ASSERT_THROW(rate_constant = new LigandGatedRateConstant(
+            "", 2.0, "Ca", 2.0), std::runtime_error);
 }
 
 /**
@@ -57,8 +57,8 @@ TEST_F(LigandGatedRateConstantTest, createLigandGatedRateConstantEmptyName) {
  */
 TEST_F(LigandGatedRateConstantTest, 
         createLigandGatedRateConstantEmptyLigandName) {
-    ASSERT_THROW(rate_constant = new LigandGatedRateConstant("rc1", "", 2.0),
-            std::runtime_error);
+    ASSERT_THROW(rate_constant = new LigandGatedRateConstant(
+            "rc1", 2.0, "", 2.0), std::runtime_error);
 }
 
 /**
@@ -68,13 +68,14 @@ TEST_F(LigandGatedRateConstantTest,
 TEST_F(LigandGatedRateConstantTest, getRate) {
     // Create new rate constant dependent.
     double ligand_power = 2.0;
-    rate_constant = new LigandGatedRateConstant("rc1", ligand_name, 
+    double k = 2.0;
+    rate_constant = new LigandGatedRateConstant("rc1", k, ligand_name, 
         ligand_power);
     
     // getRate() should succeed, because our rate constant depends on a 
     // concentration which has been defined. 
     double actual = rate_constant->getRate(state_of_the_world);
-    double expected = pow(ligand_concentration, ligand_power);
+    double expected = k * pow(ligand_concentration, ligand_power);
 
     ASSERT_EQ(expected, actual);
 
@@ -90,7 +91,7 @@ TEST_F(LigandGatedRateConstantTest, getRateStateOfWorldNull) {
     state_of_the_world = StateOfTheWorld::SharedPointer();
 
     double ligand_power = 2.0;
-    rate_constant = new LigandGatedRateConstant("rc1", ligand_name, 
+    rate_constant = new LigandGatedRateConstant("rc1", 2.0, ligand_name, 
         ligand_power);
     
     // getRate() should throw due to state_of_the_world being null.
@@ -109,7 +110,7 @@ TEST_F(LigandGatedRateConstantTest, getRateConcentrationNotDeclared) {
     string ligand_name = "Ca";
     double ligand_concentration = 2.0;
 
-    rate_constant = new LigandGatedRateConstant("rc1", ligand_name, 
+    rate_constant = new LigandGatedRateConstant("rc1", 2.0, ligand_name, 
         ligand_concentration);
 
     // getRate() should throw, because we do not have a concentration value

@@ -9,7 +9,7 @@
 #include <ModFossa/Experiment/SimulationRunner.h>
 
 using namespace boost::python;
-//using namespace ModFossa;
+
 using boost::shared_ptr;
 using boost::make_shared;
 
@@ -17,29 +17,35 @@ using ModFossa::SimulationRunner;
 using ModFossa::Experiment;
 using ModFossa::MarkovModel;
 using ModFossa::State;
-
-class Factory {
-public:
-    Factory() {}
-    
-//    State::SharedPointer createState(std::string name, bool conducting) {
-//        return State::SharedPointer(new State("test1", false));
-//    }
-    
-    void money() {
-        throw std::runtime_error("wtf");
-    }
-    
-    State::SharedPointer createState(const State& state) {
-        return make_shared<State>(state);
-    }
-};
+using ModFossa::Connection;
+using ModFossa::LigandGatedRateConstant;
+using ModFossa::ConstantRateConstant;
+using ModFossa::RateConstantBase;
+using ModFossa::SigmoidalRateConstant;
 
 BOOST_PYTHON_MODULE(ModFossa) {
     
-    class_<Factory>("factory")
-            .def("createState", &Factory::createState)
-            .def("money", &Factory::money)
+    class_<RateConstantBase, boost::noncopyable,  
+            shared_ptr<RateConstantBase> >("rateConstantBase", no_init)
+       ;
+    
+    class_<ConstantRateConstant, bases<RateConstantBase>,
+            shared_ptr<ConstantRateConstant> >("constantRateConstant", 
+                init < std::string, double>())    
+            ;
+        
+    class_<LigandGatedRateConstant, bases<RateConstantBase>, 
+            shared_ptr<LigandGatedRateConstant> >("ligandGatedRateConstant", 
+                init < std::string, double, std::string, double>())    
+            ;
+    
+    class_<SigmoidalRateConstant, 
+            shared_ptr<SigmoidalRateConstant> >("sigmoidalRateConstant", 
+                init < std::string, double, double, double>())    
+            ;
+    
+    class_<Connection, shared_ptr<Connection> >("connection", 
+                init < std::string, std::string, std::string>())    
             ;
 
     class_<State, shared_ptr<State> >("state", init < std::string, bool>())
@@ -49,6 +55,8 @@ BOOST_PYTHON_MODULE(ModFossa) {
 
     class_<MarkovModel, shared_ptr<MarkovModel> >("markovModel")
             .def("addState", &MarkovModel::addState)
+            .def("addConnection", &MarkovModel::addConnection)
+            .def("addRateConstant", &MarkovModel::addRateConstant)
             ;
 
     class_<Experiment, shared_ptr<Experiment> >("experiment")
@@ -59,9 +67,5 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("version", &SimulationRunner::getVersion)
             .def("experiment", &SimulationRunner::getExperiment)
             ;
-    //
-    //    class_<World, shared_ptr<World> >("World", init<std::string>())
-    //            .def("greet", &World::greet)
-    //            .def("set", &World::set)
-    //            ;
+    
 }

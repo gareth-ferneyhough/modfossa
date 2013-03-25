@@ -18,8 +18,12 @@ namespace ModFossa {
 
 class LigandGatedRateConstant : public RateConstantBase {
 public:
-    LigandGatedRateConstant(std::string name, std::string ligand_name, 
+    LigandGatedRateConstant(
+            std::string name, 
+            double k, 
+            std::string ligand_name, 
             double ligand_power);
+    
     virtual ~LigandGatedRateConstant();
     virtual double getRate(const StateOfTheWorld::SharedPointer 
             state_of_the_world) const;
@@ -30,6 +34,7 @@ public:
 
 private:
     const std::string name;
+    const double k;
     const std::string ligand_name;
     const double ligand_power;
 };

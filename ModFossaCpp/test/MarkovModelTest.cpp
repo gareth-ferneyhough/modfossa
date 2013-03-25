@@ -189,7 +189,7 @@ TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
     double ligand_power = 2.0;
 
     RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
-            "rate1", ligand_name, ligand_power));
+            "rate1", 2, ligand_name, ligand_power));
 
     State::SharedPointer state_1(new State("state1", true));
     State::SharedPointer state_2(new State("state2", false));
@@ -340,7 +340,7 @@ TEST_F(MarkovModelTest, validateStateOfTheWorldNull) {
     double ligand_power = 2.0;
     
     RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
-            "rate1", ligand_name, ligand_power));
+            "rate1", 2, ligand_name, ligand_power));
 
     State::SharedPointer state_1(new State("state1", true));
     State::SharedPointer state_2(new State("state2", false));
@@ -384,7 +384,7 @@ TEST_F(MarkovModelTest, validateConcentrationNotDefined) {
     using namespace ModFossa::Validation;
 
     RateConstantBase::SharedPointer rate1(new LigandGatedRateConstant(
-            "rate1", "Na", 4.0));
+            "rate1", 2, "Na", 4.0));
 
     State::SharedPointer state_1(new State("state1", true));
     State::SharedPointer state_2(new State("state2", false));

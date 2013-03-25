@@ -13,9 +13,11 @@
 namespace ModFossa {
 
     LigandGatedRateConstant::LigandGatedRateConstant(
-            std::string name, std::string ligand_name, double ligand_power) :
+            std::string name, double k, 
+            std::string ligand_name, double ligand_power) :
     RateConstantBase(),
     name(name),
+    k(k),
     ligand_name(ligand_name),
     ligand_power(ligand_power) {
 
@@ -34,12 +36,16 @@ namespace ModFossa {
     double LigandGatedRateConstant::getRate(
         const StateOfTheWorld::SharedPointer state_of_the_world) const {
         if (state_of_the_world == NULL) {
-            throw std::runtime_error("Error in getRate for " + name + ": state_of_the_world cannot be NULL");
+            throw std::runtime_error(
+                    "Error in getRate for " + name +
+                    ": state_of_the_world cannot be NULL");
         }
 
+        // Fix rate
         try {
             double concentration = state_of_the_world->getConcentration(ligand_name);
-            return pow(concentration, ligand_power);
+            return k*pow(concentration, ligand_power);
+            
         } catch (std::runtime_error& e) {
             throw std::runtime_error("Error in getRate for " + name + ": " + e.what());
         }

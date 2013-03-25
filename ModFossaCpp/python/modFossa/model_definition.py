@@ -18,22 +18,60 @@ def state(name, conducting = False):
         print e
 
 
-def add_constant_rate_constant(name, **args):
+def _addConstantRateConstant(name, **args):
     if not 'k' in args:
-        raise RuntimeError('arguement \'k\' not found when adding ConstantRateConstant \'' + name + '\'')
-    print 'adding constant rate constant: ' + name
+        raise RuntimeError("argument \'k\' not found when adding "
+                            "ConstantRateConstant \'' + name + '\'")
+
+    try: rateConstant = ModFossa.constantRateConstant(name, args['k'])
+    except RuntimeError, e:
+        print e
+
+    try: markovModel.addRateConstant(rateConstant)
+    except RuntimeError, e:
+        print e
+
+def _addLigandGatedRateConstant(name, **args):
+    if not 'k' in args:
+        raise RuntimeError("argument \'k\' not found when adding "
+                            "LigandGatedRateConstant \'' + name + '\'")
+
+    if not 'ligand' in args:
+        raise RuntimeError("argument \'ligand\' not found when adding "
+                            "LigandGatedRateConstant \'' + name + '\'")
+
+    if not 'power' in args:
+        raise RuntimeError("argument \'power\' not found when adding "
+                            "LigandGatedRateConstant \'' + name + '\'")
+
+    try: rateConstant = ModFossa.ligandGatedRateConstant(
+        name, args['k'], args['ligand'], args['power'])
+
+    except RuntimeError, e:
+        print e
+
+    try: markovModel.addRateConstant(rateConstant)
+    except RuntimeError, e:
+        print e
 
 def rate(name, **args):
     if args['type'] == 'constant':
-        add_constant_rate_constant(name, **args)
+        _addConstantRateConstant(name, **args)
     elif args['type'] == 'sigmoidal':
         print 'sigmoidal'
-    elif args['type'] == 'ligand-gated':
-        print 'ligand-gated'
+    elif args['type'] == 'ligandGated':
+        _addLigandGatedRateConstant(name, **args)
     elif args['type'] == 'boltzman':
         print 'boltzman'
     elif args['type'] == 'exponential':
         print 'exponential'
 
-def connection(name, from_state, to_state):
-    pass
+def connect(name, fromState, toState):
+    try: connection = ModFossa.connection(name, fromState, toState)
+    except RuntimeError, e:
+        print e
+
+    try:
+        markovModel.addConnection(connection)
+    except RuntimeError, e:
+        print e
