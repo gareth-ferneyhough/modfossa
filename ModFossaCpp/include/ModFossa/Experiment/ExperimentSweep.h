@@ -8,6 +8,7 @@
 #ifndef EXPERIMENTSWEEP_H
 #define	EXPERIMENTSWEEP_H
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 #include <map>

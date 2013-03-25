@@ -5,8 +5,10 @@
 #include <map>
 #include <string>
 
-#include <ModFossa/ModelDefinition/State.h>
 #include <ModFossa/ModelDefinition/RateConstantBase.h>
+#include <ModFossa/ModelDefinition/ConstantRateConstant.h>
+#include <ModFossa/ModelDefinition/LigandGatedRateConstant.h>
+#include <ModFossa/ModelDefinition/State.h>
 #include <ModFossa/ModelDefinition/Connection.h>
 #include <ModFossa/Common/Validation/ValidationResults.h>
 #include <ModFossa/Common/StateOfTheWorld.h>
@@ -15,7 +17,7 @@ namespace ModFossa {
 
 class MarkovModel {
 public:
-    typedef ModFossa::shared_ptr<MarkovModel>::type SharedPtr;
+    typedef ModFossa::shared_ptr<MarkovModel>::type SharedPointer;
     typedef std::map<const std::string, RateConstantBase::SharedPointer > 
         RateMap;
     typedef std::map<const std::string, State::SharedPointer > StateMap;

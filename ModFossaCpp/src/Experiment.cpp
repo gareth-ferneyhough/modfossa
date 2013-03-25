@@ -17,12 +17,12 @@ Experiment::Experiment() {
 Experiment::~Experiment() {
 }
 
-MarkovModel::SharedPtr Experiment::getMarkovModel() const {
+MarkovModel::SharedPointer Experiment::getMarkovModel() const {
     return markov_model;
 }
 
 void Experiment::initialize() {
-    markov_model = MarkovModel::SharedPtr(new MarkovModel());
+    markov_model = MarkovModel::SharedPointer(new MarkovModel());
     is_valid = false;
 }
 
@@ -66,8 +66,7 @@ void Experiment::addExperimentSweep(
     }
 
     experiment_sweeps[name] = experiment_sweep;
-    is_valid = false;
-    
+    is_valid = false;    
 }
 
 bool Experiment::isValid() const {
@@ -192,6 +191,13 @@ Validation::ValidationResults Experiment::validate() {
                 validateExperimentSweep(it->second));
     }
     
+    // Just so we don't leave the MarkovModel out of the validation, lets
+    // validate it even if we don't have any ExperimentSweeps.
+    if(experiment_sweeps.empty()) {
+        validation_results.AppendAdditionalResults(
+                markov_model->validate(NULL));
+    }
+    
     
 
     /* If everything is valid, set the validation flag so that no changes
@@ -202,6 +208,4 @@ Validation::ValidationResults Experiment::validate() {
     }
     return validation_results;
 }
-
-
 }

@@ -46,7 +46,7 @@ public:
     void addExperimentSweep(ExperimentSweep::SharedPointer experiment_sweep);    
     
     
-    MarkovModel::SharedPtr getMarkovModel() const;
+    MarkovModel::SharedPointer getMarkovModel() const;
     
     /**
      * Validate the Experiment. This will perform several checks. They include,
@@ -70,7 +70,7 @@ public:
 private:
     friend class SimulationRunner;
         
-    MarkovModel::SharedPtr markov_model;
+    MarkovModel::SharedPointer markov_model;
     VoltageProtocolMap voltage_protocols;
     ExperimentSweepMap experiment_sweeps;
     

@@ -21,8 +21,16 @@ ExperimentSweep::ExperimentSweep(
         const std::string voltage_protocol_name,
         ConcentrationMap concentration_map) :
 name(name),
-voltage_protocol_name(voltage_protocol_name) {
-
+voltage_protocol_name(voltage_protocol_name),
+concentration_map(concentration_map) {
+    
+    if (name.empty()) {
+        throw std::runtime_error("ExperimentSweep name cannot be empty");
+    }
+    
+    if (voltage_protocol_name.empty()) {
+        throw std::runtime_error("voltage_protocol_name name cannot be empty");
+    }
 }
 
 ExperimentSweep::~ExperimentSweep() {
