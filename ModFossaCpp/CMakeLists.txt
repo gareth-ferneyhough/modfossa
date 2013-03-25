@@ -12,17 +12,13 @@ else()
     message(FATAL_ERROR "CMakeLists.txt has not been tested/written for your compiler.")
 endif()
 
+find_package(Boost COMPONENTS python REQUIRED)
+message("Include dirs of boost: " ${Boost_INCLUDE_DIRS} )
+message("Libs of boost: " ${Boost_LIBRARIES} )
 
-#find_package(Boost 1.48.0)
-#if(Boost_FOUND)
-#    include_directories("${Boost_INCLUDE_DIRS}" "/usr/include/python2.6")
-#    set(Boost_USE_STATIC_LIBS OFF)
-#    set(Boost_USE_MULTITHREADED ON)
-#    set(Boost_USE_STATIC_RUNTIME OFF)
-#    find_package(Boost 1.49.0 COMPONENTS log)
-#elseif(NOT Boost_FOUND)
-#    message(FATAL_ERROR "Unable to find correct Boost version. Did you set BOOST_ROOT?")
-#endif()
+find_package(PythonLibs 2.7 REQUIRED)
+message("Include dirs of Python: " ${PYTHON_INCLUDE_DIRS} )
+message("Libs of Python: " ${PYTHON_LIBRARIES} )
 
 
 set(EXTRA_LIBS ${EXTRA_LIBS} sundials_cvode sundials_nvecserial armadillo)
@@ -33,13 +29,23 @@ set(SAMPLE_DIR ${CMAKE_SOURCE_DIR}/samples/)
 
 #set(CMAKE_CXX_FLAGS "-Wall -W -Wshadow -pedantic-errors -pedantic -Wextra -Werror")
 set(CMAKE_CXX_FLAGS "-std=c++0x -g")
-
-include_directories(${INC_DIR})
   
 file(GLOB_RECURSE SRC_FILES ${SRC_DIR}/*.cpp)
 
 add_library(ModFossa SHARED ${SRC_FILES})
-target_link_libraries (ModFossa ${EXTRA_LIBS} )#${Boost_LIBRARIES})
+set_target_properties(ModFossa PROPERTIES PREFIX "")
+
+include_directories(ModFossa
+    ${Boost_INCLUDE_DIRS}
+    ${PYTHON_INCLUDE_DIRS}
+    ${INC_DIR}
+)
+
+target_link_libraries(ModFossa
+    ${Boost_LIBRARIES}
+    ${PYTHON_LIBRARIES}
+    ${EXTRA_LIBS}
+)
 
 ################################
 # Documentation

@@ -56,8 +56,6 @@ TEST_F(ODESolverTest, createSuccess) {
     Matrix results;
     solver.solve(tspan, transition_matrix, results);
     
-    //std::cout << results;
-    
     // Not quite sure how to verify this.
 }
 
@@ -79,7 +77,7 @@ TEST_F(ODESolverTest, twoStateModel) {
 
     
     std::vector<double> ic;
-    ic.push_back(1);
+    ic.push_back(0);
     
     ODESolver solver;
     solver.initialize(ic);
@@ -91,8 +89,6 @@ TEST_F(ODESolverTest, twoStateModel) {
     
     Matrix results;
     solver.solve(tspan, transition_matrix, results);
-    //std::cout << "tmatrix1 " << *transition_matrix;
-    std::cout << results;
     
     // Not quite sure how to verify this.
 }

@@ -29,7 +29,12 @@ public:
     void runAllExperimentSweeps();
     void runExperimentSweep(std::string experiment_sweep_name);
     
+    // test
+    std::string getVersion() { return version; }
+    // test
+    
 private:
+    const std::string version = "0.1";
     Experiment::SharedPointer experiment;
     Simulator::SharedPointer simulator;
     ResultsMap results_map;
