@@ -26,10 +26,6 @@ void Experiment::initialize() {
     is_valid = false;
 }
 
-void Experiment::serializeExperimentSweep(std::string name) {
-
-}
-
 ExperimentSweep::SharedPointer Experiment::getExperimentSweep(std::string name){
     if(!experimentSweepExists(name)) {
         throw std::runtime_error(
@@ -72,8 +68,6 @@ void Experiment::addExperimentSweep(
 bool Experiment::isValid() const {
     return is_valid;
 }
-
-
 
 bool Experiment::voltageProtocolExists(string name) const {
     VoltageProtocolMap::const_iterator it;
@@ -179,12 +173,7 @@ Validation::ValidationResults Experiment::validate() {
     // information to it further down.
     ValidationResults validation_results(error_level, errors);
     
-    // for each experiment sweep:
-        // check that its voltage protocol exists
-        // set the reference to its serialized data
-        // generate a state of the world
-        // validate the markov model with the state of the world
-
+    // Check each ExperimentSweep and append the ValidationResults
     ExperimentSweepMap::iterator it;
     for(it = experiment_sweeps.begin(); it != experiment_sweeps.end(); ++it) {
         validation_results.AppendAdditionalResults(
@@ -196,13 +185,11 @@ Validation::ValidationResults Experiment::validate() {
     if(experiment_sweeps.empty()) {
         validation_results.AppendAdditionalResults(
                 markov_model->validate(NULL));
-    }
-    
-    
+    }   
 
-    /* If everything is valid, set the validation flag so that no changes
-     * can be made without re-validating. 
-     */
+    // If everything is valid, set the validation flag so that no changes
+    // can be made without re-validating. 
+    //
     if (error_level != ERRORS) {
         is_valid = true;
     }

@@ -25,7 +25,7 @@ endif()
 #endif()
 
 
-set(EXTRA_LIBS ${EXTRA_LIBS} sundials_cvode sundials_nvecserial)
+set(EXTRA_LIBS ${EXTRA_LIBS} sundials_cvode sundials_nvecserial armadillo)
 set(SRC_DIR    ${CMAKE_SOURCE_DIR}/src/)
 set(INC_DIR    ${CMAKE_SOURCE_DIR}/include/)
 set(TEST_DIR   ${CMAKE_SOURCE_DIR}/test/)

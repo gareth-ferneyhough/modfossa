@@ -20,7 +20,7 @@ void SimulationRunner::runExperimentSweep(std::string experiment_sweep_name) {
     // Serialize experiment sweep by getting the voltage protocol data that
     // it references. This will throw a runtime error if the sweep does not
     // exist, or the voltage protocol it references does not exist, or is empty.
-    experiment->serializeExperimentSweep(experiment_sweep_name);
+    //experiment->serializeExperimentSweep(experiment_sweep_name);
     
     // Get the experiment sweep we just serialized
     ExperimentSweep::SharedPointer experiment_sweep = 

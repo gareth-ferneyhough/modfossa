@@ -59,6 +59,10 @@ public:
      * VoltageProtocol or ExperimentSweep, validate will have to be called 
      * again.
      * 
+     * Validation will continue if validation errors are encountered. This way,
+     * the user will be notified of every error in the experiment and Markov
+     * Model.
+     * 
      * @return ValidationResults structure containing the overall validation
      * result, and a vector of error types with textual descriptions, if any.
      * 

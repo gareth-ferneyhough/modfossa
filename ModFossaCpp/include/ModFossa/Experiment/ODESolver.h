@@ -17,30 +17,41 @@
 
 #include <vector>
 
-#include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/io.hpp>
+//#include <boost/numeric/ublas/matrix.hpp>
+//#include <boost/numeric/ublas/io.hpp>
 
 #include <ModFossa/Common/Matrix.h>
+#include <ModFossa/Common/SharedPtr.h>
 
 //using namespace boost::numeric::ublas;
 
 namespace ModFossa {
 class ODESolver {
 public:
+    typedef shared_ptr<Matrix>::type MatrixSharedPointer;
+    
     ODESolver();
     ~ODESolver();
     
-    void initialize(Matrix transition_matrix);
+    int initialize(std::vector<double> initial_conditions);
         
-    int solve(CVRhsFn, std::vector<double> tspan, std::vector<double> y0,
-            Matrix& y);
+    int solve(int stop_time, MatrixSharedPointer transition_matrix, Matrix& y);
+    
+    static int channelProb(realtype t, N_Vector y_vec, N_Vector ydot, 
+        void *f_data);
 
 private:
     void init();
-
+    
+    MatrixSharedPointer transition_matrix;
+    CVRhsFn odefun;
+    
     realtype reltol; //= 1e-6;
     realtype abstol; //= 1e-8;
     void* cvode_mem;
+    N_Vector y_n_vector;
+    int y_size;
+    int current_time;
 };
 }
 
