@@ -25,11 +25,14 @@ public:
     
 ProtocolIterationResults runProtocolIteration(
         ProtocolIteration protocol_iteration,   
-        StateOfTheWorld state_of_the_world, 
-        TransitionMatrix transition_matrix);
+        StateOfTheWorld::SharedPointer state_of_the_world, 
+        TransitionMatrix::SharedPointer transition_matrix);
 
 private:
-    ODESolver ode_solver;
+    //ODESolver ode_solver;
+    const double dt = 0.001;
+    
+    std::vector<std::vector<double> > resultsMatrixToVector(const Matrix& mat);
 
 };
 }

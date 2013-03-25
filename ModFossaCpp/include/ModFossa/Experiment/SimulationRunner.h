@@ -10,12 +10,17 @@
 
 
 #include <string>
+#include <map>
+
+#include <ModFossa/Common/TransitionMatrix.h>
 #include <ModFossa/Experiment/Experiment.h>
 #include <ModFossa/Experiment/Simulator.h>
 
 namespace ModFossa {
 class SimulationRunner {
 public:
+    typedef std::map<std::string, ExperimentSweepResults> ResultsMap;
+    
     SimulationRunner();
     ~SimulationRunner();
     
@@ -27,6 +32,7 @@ public:
 private:
     Experiment::SharedPointer experiment;
     Simulator::SharedPointer simulator;
+    ResultsMap results_map;
 
     /**
      * Initialize the Experiment and Simulator classes.

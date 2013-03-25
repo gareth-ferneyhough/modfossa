@@ -17,13 +17,8 @@
 
 #include <vector>
 
-//#include <boost/numeric/ublas/matrix.hpp>
-//#include <boost/numeric/ublas/io.hpp>
-
 #include <ModFossa/Common/Matrix.h>
 #include <ModFossa/Common/SharedPtr.h>
-
-//using namespace boost::numeric::ublas;
 
 namespace ModFossa {
 class ODESolver {

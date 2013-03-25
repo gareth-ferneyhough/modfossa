@@ -46,6 +46,8 @@ TEST_F(VoltageProtocolTest, createEmptyName) {
 TEST_F(VoltageProtocolTest, addConstantStageSuccess) {
     vp = new VoltageProtocol("vp1");
     vp->addConstantStage("stage1", -50, 200);
+    
+    ASSERT_EQ(vp->serializeVoltageProtocol()->size(), 1);
 }
 
 /**

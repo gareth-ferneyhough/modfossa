@@ -69,9 +69,10 @@ int ODESolver::initialize(std::vector<double> y0) {
 
 int ODESolver::solve(std::vector<double> tspan, 
         MatrixSharedPointer transition_matrix,
-        Matrix& y) {
+        Matrix& y) { 
 
     this->transition_matrix = transition_matrix;
+    //std::cout << "tmatrix " << *transition_matrix;
 
     // Resize result matrix and copy initial conditions into it.
     int result_rows = tspan.size();
@@ -107,12 +108,12 @@ int ODESolver::solve(std::vector<double> tspan,
         // Append results to matrix y
         for (int j = 0; j < result_cols; ++j) {
             y(time_step, j) = NV_Ith_S(y_n_vector, j);
-        }
+       }
     }
 
     CVodeFree(&cvode_mem);
     N_VDestroy_Serial(y_n_vector); /* Free y vector */
-
+    
     return 0;
 }
 

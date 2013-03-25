@@ -55,5 +55,10 @@ void ExperimentSweep::setSerializedProtocol(SerializedProtocolSharedPointer
     
     this->serialized_voltage_protocol = serialized_voltage_protocol;
 }
+
+SerializedProtocolSharedPointer 
+        ExperimentSweep::getSerializedVoltageProtocol() const {
+    return serialized_voltage_protocol;
+}
 }
 

@@ -86,6 +86,19 @@ private:
     
     void serializeExperimentSweep(std::string name);
     ExperimentSweep::SharedPointer getExperimentSweep(std::string name);
+    
+    /**
+     * Validate a single ExperimentSweep. The corresponding VoltageProtocol
+     * will be located and serialized. The ExperimentSweep will be given a 
+     * pointer to the serialized data. Then a StateOfTheWorld will be 
+     * constructed using the ExperimentSweep, and our MarkovModel will be
+     * validated using the StateOfTheWorld. All errors will be saved to the 
+     * ValidationResults and returned.
+     * 
+     * @param experiment_sweep
+     * @return 
+     * 
+     */
     Validation::ValidationResults validateExperimentSweep(
         ExperimentSweep::SharedPointer experiment_sweep);
     

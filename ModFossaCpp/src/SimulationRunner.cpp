@@ -15,37 +15,55 @@ SimulationRunner::SimulationRunner() {
 SimulationRunner::~SimulationRunner() {
 }
 
+Experiment::SharedPointer SimulationRunner::getExperiment() const {
+    return experiment;
+}
+
 void SimulationRunner::runExperimentSweep(std::string experiment_sweep_name) {
     
-    // Serialize experiment sweep by getting the voltage protocol data that
-    // it references. This will throw a runtime error if the sweep does not
-    // exist, or the voltage protocol it references does not exist, or is empty.
-    //experiment->serializeExperimentSweep(experiment_sweep_name);
+    // Make sure that we have already validated the experiment.
+    if(!experiment->isValid()) {
+        throw std::runtime_error("Experiment must be validated\
+                                  before it can be run");
+    }
     
-    // Get the experiment sweep we just serialized
+    // Get the experiment sweep. This will throw if the sweep does not exist.
     ExperimentSweep::SharedPointer experiment_sweep = 
             experiment->getExperimentSweep(experiment_sweep_name);
+      
+        
+    // Create StateOfTheWorld from ExperimentSweep
+    StateOfTheWorld::SharedPointer state_of_the_world(
+        new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
     
+    // Create TransitionMatrix
+    TransitionMatrix::SharedPointer transition_matrix(
+        new TransitionMatrix(*(experiment->getMarkovModel())));
 
-    // Create state of the world from experiment_sweep concentration map
-    //StateOfTheWorld::SharedPointer state_of_the_world(
-      //  new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
-    
-    // Ensure markovModel is valid with state_of_the_world
-    //ValidationResults MarkovModel::SharedPtr->validate(state_of_the_world);
+    SerializedProtocolSharedPointer serialized_protocol = 
+            experiment_sweep->getSerializedVoltageProtocol();
     
     
-    // create transition_matrix
+    // Get our results ready
+    ExperimentSweepResults results;
     
-    // for each protocol_iteration in experiment_sweep.get_serialized_voltage_protocol
-        // runProtocolIteration()
+    // Run protocol iteration, appending the results to our results each time.
+    SerializedProtocol::const_iterator it;
+    for(it = serialized_protocol->begin(); 
+            it != serialized_protocol->end(); ++it) {
+     
+        std::cout << "running protocol iteration" << std::endl;
+        
+        results.push_back(simulator->runProtocolIteration(
+                *it, state_of_the_world, transition_matrix));        
+    }
     
+    // Save results to map
+    results_map[experiment_sweep_name] = results;
 }
 
 void SimulationRunner::initialize() {
     experiment = Experiment::SharedPointer(new Experiment());
     simulator = Simulator::SharedPointer(new Simulator());
 }
-
-
 }

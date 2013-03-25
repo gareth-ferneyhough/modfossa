@@ -12,12 +12,15 @@
 
 #include <ModFossa/ModelDefinition/Transition.h>
 #include <ModFossa/Common/Matrix.h>
+#include <ModFossa/Common/SharedPtr.h>
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 
 namespace ModFossa {
 
 class TransitionMatrix {
 public:
+    typedef shared_ptr<TransitionMatrix>::type SharedPointer;
+    
     TransitionMatrix(const MarkovModel& markov_model);
     ~TransitionMatrix();
     Matrix get() const;

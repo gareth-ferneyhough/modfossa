@@ -91,7 +91,8 @@ TEST_F(ODESolverTest, twoStateModel) {
     
     Matrix results;
     solver.solve(tspan, transition_matrix, results);
-    //std::cout << results;
+    //std::cout << "tmatrix1 " << *transition_matrix;
+    std::cout << results;
     
     // Not quite sure how to verify this.
 }

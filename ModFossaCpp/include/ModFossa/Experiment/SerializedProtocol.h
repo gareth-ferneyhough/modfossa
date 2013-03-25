@@ -13,6 +13,10 @@
 #include <ModFossa/Common/SharedPtr.h>
 
 namespace ModFossa {
+    
+/**
+ * Vector of time, voltage pairs.
+ */
 typedef std::vector<std::pair<double, double> > ProtocolIteration;
 typedef std::vector<ProtocolIteration> SerializedProtocol;
 typedef ModFossa::shared_ptr<SerializedProtocol>::type 
