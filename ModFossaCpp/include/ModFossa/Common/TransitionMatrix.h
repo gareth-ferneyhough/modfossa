@@ -25,6 +25,7 @@ public:
     ~TransitionMatrix();
     Matrix get() const;
     void update(StateOfTheWorld::SharedPointer state_of_the_world);
+    int getInitialStateIndex() const;
 
 private:
     void create(const MarkovModel& markov_model);
@@ -32,6 +33,7 @@ private:
             const std::vector<Transition::SharedPointer>& transitions,
             const StateOfTheWorld::SharedPointer state_of_the_world) const;
 
+    int initial_state_index;
     Matrix transition_matrix;
     std::vector<std::vector<std::vector<Transition::SharedPointer > > > 
         transitions_3d;

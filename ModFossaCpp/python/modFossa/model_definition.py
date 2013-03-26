@@ -1,5 +1,5 @@
 import ModFossa
-
+import matplotlib.pyplot as plt
 #class modFossa:
     
   #  def __init__():

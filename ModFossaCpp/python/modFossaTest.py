@@ -1,25 +1,23 @@
 from modFossa import *
 
-state('state1')
-state('state2', False)
-#state('state3', False)
+state('open', True)
+state('closed')
 
-connect('state1', 'state2', 'k1')
-connect('state2', 'state1', 'k1')
-#connect('state2', 'state3', 'k2')
-#connect('state3', 'state2', 'k2')
+# connect(from, to, rate)
+connect('open', 'closed', 'koff')
+connect('closed', 'open', 'kon')
 
-rate('k1', type='constant', k=1.2)
-rate('k1', type='constant', k=1.2)
+rate('kon', type='constant', k=10)
+rate('koff', type='constant', k=1)
 
-rate('k2', type='ligandGated', k=2.2, ligand='Ca', power=4.0)
+#rate('k2', type='ligandGated', k=2.2, ligand='Ca', power=4.0)
 
-initialState('state1')
+initialState('closed')
 
 
 voltageProtocol('protocol1')
-voltageProtocolAddStage('protocol1', 'start', voltage=-50, duration=200)
-voltageProtocolAddStage('protocol1', 'step', start=-60, stop=20, step=20, duration=200)
+voltageProtocolAddStage('protocol1', 'start', voltage=-50, duration=500)
+#voltageProtocolAddStage('protocol1', 'step', start=-60, stop=20, step=20, duration=200)
 
 
 experimentSweep('ca1', 'protocol1', Ca=2.2, Na=3.3)
@@ -46,3 +44,18 @@ for timeStep in iterationResults1:
 	for stateProb in timeStep:
 		probabilities += ' ' + str(stateProb)
 	#print probabilities
+
+
+## Do ALL the plotting ##                                                       
+fig = plt.figure(1)
+ax = fig.add_subplot(111)
+ax.plot(iterationResults1)
+#ax.plot(mat[:,1])
+#ax.plot(mat[:,2])
+
+leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
+ax.set_xlabel('Time (ms)')
+ax.set_ylabel('Probability')
+ax.set_title('Channel Probability')
+
+plt.show()

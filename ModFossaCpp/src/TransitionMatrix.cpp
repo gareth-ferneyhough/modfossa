@@ -12,7 +12,8 @@
 
 namespace ModFossa {
 
-TransitionMatrix::TransitionMatrix(const MarkovModel& markov_model) {
+TransitionMatrix::TransitionMatrix(const MarkovModel& markov_model) :
+        initial_state_index(-1) {
     create(markov_model);
 }
 
@@ -86,7 +87,7 @@ void TransitionMatrix::create(const MarkovModel& markov_model) {
         std::string from_state_name = (*it)->from_state;
         std::string to_state_name = (*it)->to_state;
         std::string rate_name = (*it)->rate_name;
-
+       
         State::SharedPointer from_state =
                 findState(from_state_name, markov_model.map_of_states);
         State::SharedPointer to_state =
@@ -98,9 +99,14 @@ void TransitionMatrix::create(const MarkovModel& markov_model) {
         // These will be the indices to the matrix.
         int outgoing_index = from_state->getIndex();
         int incoming_index = to_state->getIndex();
+        
+        // Look for the initial state and set our initial_state_index.
+        if(from_state->is_initial_state) {
+            initial_state_index = from_state->getIndex();
+        }
 
         // Add the transition to the appropriate position in the matrix 
-        // with a negative sign
+        // with a negative sign.
         transitions_3d[outgoing_index][outgoing_index].push_back(
                 Transition::SharedPointer(new Transition(rate, false)));
 
@@ -114,6 +120,9 @@ void TransitionMatrix::create(const MarkovModel& markov_model) {
     }
 }
 
+int TransitionMatrix::getInitialStateIndex() const {
+    return initial_state_index;
+}
 Matrix TransitionMatrix::get() const {
     return transition_matrix;
 }

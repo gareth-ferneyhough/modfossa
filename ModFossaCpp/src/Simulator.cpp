@@ -29,16 +29,22 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     
     ProtocolIterationResults results;
     
-    // Solve for initial conditions
-    std::vector<double> initial_conditions;
+    // Set up our initial conditions
     int number_of_states = T.n_rows;
+    std::vector<double> initial_conditions;    
+    int initial_state_index = transition_matrix->getInitialStateIndex();
     
-    // TEMP
-    initial_conditions.push_back(1.0);
-    for(int i = 0; i < number_of_states -2; ++i ){
-        initial_conditions.push_back(1.0);
+    for(int i = 0; i < number_of_states -1; ++i ){
+        initial_conditions.push_back(0.0);
     }
-    // TEMP    
+    
+    // If our initial state is the last state, 
+    // don't set the probability to one, since the simulator doesn't solve
+    // for it. There isn't room for it in the initial_conditions vector anyway.
+
+    if(initial_state_index != number_of_states - 1) {
+        initial_conditions[initial_state_index] = 1.0;
+    }
     
     // Save the initial conditions.
     results.push_back(std::vector<double>());
