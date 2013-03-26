@@ -195,6 +195,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<SimulationRunner>("simulationRunner")
             .def("version", &SimulationRunner::getVersion)
             .def("experiment", &SimulationRunner::getExperiment)
+            .def("runExperimentSweep", &SimulationRunner::runExperimentSweep)
             ;
 
     class_<std::vector<std::string> >("stringVec")

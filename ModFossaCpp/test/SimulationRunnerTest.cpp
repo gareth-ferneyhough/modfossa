@@ -54,6 +54,18 @@ protected:
         experiment->addVoltageProtocol(vp);
     }
     
+    void addSteppedVoltageProtocol() {
+        // Define VoltageProtocol
+        VoltageProtocol::SharedPointer vp(
+            new VoltageProtocol("voltage protocol 1"));
+
+        vp->addConstantStage("hold1", -80, 500);
+        vp->addSteppedStage("step1", -80, 40, 20, 500);
+
+        // Add VoltageProtocol
+        experiment->addVoltageProtocol(vp);
+    }
+    
     void addExperimentSweep() {
         // Define ConcentrationMap
         ExperimentSweep::ConcentrationMap concentrations;
@@ -96,7 +108,26 @@ TEST_F(SimulationRunnerTest, runSweepSuccess) {
     simulation_runner.runExperimentSweep("experiment sweep 1");
 }
 
-
+/**
+ * Test Case X.1 - Run Stepped Sweep Success
+ * Use Case: X.1 - Main Success Scenario
+ */
+TEST_F(SimulationRunnerTest, runSteppedSweepSuccess) {
+    
+    // Create a valid MarkovModel with a rate dependent on Ca
+    createValidMarkovModel();
+    
+    // Add valid VoltageProtocol
+    addSteppedVoltageProtocol();
+    
+    // Add ExperimentSweep with a concentration defined for Ca
+    addExperimentSweep();
+    
+    // Validate Experiment
+    experiment->validate();
+       
+    simulation_runner.runExperimentSweep("experiment sweep 1");
+}
 
 
 

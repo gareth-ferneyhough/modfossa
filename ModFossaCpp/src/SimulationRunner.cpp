@@ -53,8 +53,6 @@ namespace ModFossa {
         for (it = serialized_protocol->begin();
                 it != serialized_protocol->end(); ++it) {
 
-            std::cout << "running protocol iteration" << std::endl;
-
             results.push_back(simulator->runProtocolIteration(
                     *it, state_of_the_world, transition_matrix));
         }

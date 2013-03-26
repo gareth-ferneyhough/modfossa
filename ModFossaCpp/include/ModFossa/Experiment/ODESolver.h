@@ -29,6 +29,7 @@ public:
     ~ODESolver();
     
     int initialize(std::vector<double> initial_conditions);
+    void cleanUp();
         
     int solve(std::vector<double> tspan, 
         MatrixSharedPointer transition_matrix, Matrix& y);
@@ -38,6 +39,7 @@ public:
 
 private:
     void init();
+    bool initialized;
     
     MatrixSharedPointer transition_matrix;
     

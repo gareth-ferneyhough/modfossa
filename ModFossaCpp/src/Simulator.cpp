@@ -70,7 +70,7 @@ ProtocolIterationResults Simulator::runProtocolIteration(
         for(double t = start_time; t <= stop_time; t+=dt){
             tspan.push_back(t);
         }
-                       
+                    
         // Set state_of_the_world initial voltage
         // We are doing this twice the first time. Fix it.
         state_of_the_world->setVoltage(voltage);
@@ -87,9 +87,10 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     return results;
 }
    
-std::vector<std::vector<double> > Simulator::resultsMatrixToVector(const Matrix& mat) {
+std::vector<std::vector<double> > Simulator::resultsMatrixToVector(
+        const Matrix& mat) {
     
-    std::cout << mat;
+    //std::cout << mat;
     
     std::vector<std::vector<double> >  results;    
     for(unsigned int i = 0; i < mat.n_rows; ++i){

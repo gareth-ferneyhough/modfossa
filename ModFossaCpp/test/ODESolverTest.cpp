@@ -63,6 +63,46 @@ TEST_F(ODESolverTest, createSuccess) {
  * Test Case XX.1 - XX
  * Use Case: XX.1 - XX
  */
+TEST_F(ODESolverTest, destructorTest) {
+    ODESolver* solver;
+    solver = new ODESolver();
+    delete solver;
+    
+    solver = new ODESolver();
+    std::vector<double> ic;
+    ic.push_back(0.1);
+    ic.push_back(0.9);
+    solver->initialize(ic);
+    delete solver;
+}
+
+/**
+ * Test Case XX.1 - XX
+ * Use Case: XX.1 - XX
+ */
+TEST_F(ODESolverTest, solveNotInitializedTest) {
+    ODESolver* solver;
+    solver = new ODESolver();
+    
+    shared_ptr<Matrix>::type transition_matrix(new Matrix(3,3));
+    std::vector<double> ic;
+    std::vector<double>tspan;
+    for(double i = 0.001; i < 0.5; i+=0.001){
+        tspan.push_back(i);
+    }
+    Matrix results;
+    
+    ASSERT_THROW(solver->solve(tspan, transition_matrix, results),
+            std::runtime_error);
+
+    delete solver;
+}
+
+
+/**
+ * Test Case XX.1 - XX
+ * Use Case: XX.1 - XX
+ */
 TEST_F(ODESolverTest, twoStateModel) {
     double kon = 10;
     double koff = 1;

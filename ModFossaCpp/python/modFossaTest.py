@@ -27,3 +27,6 @@ results = validate()
 print 'validation results:'
 for r in results:
 	print r
+
+
+simulationRunner.runExperimentSweep('ca1')

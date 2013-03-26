@@ -5,16 +5,21 @@
  *      Author: gareth
  */
 
-#include <math.h>
+#include <stdexcept>
+#include <cmath>
 #include <ModFossa/Experiment/ODESolver.h>
 
 namespace ModFossa {
 
 ODESolver::ODESolver() :
-cvode_mem(0) {
+    initialized(false), cvode_mem(0), y_n_vector(0) {
 }
 
 ODESolver::~ODESolver() {
+    if(initialized) {
+        CVodeFree(&cvode_mem);
+        N_VDestroy_Serial(y_n_vector); /* Free y vector */
+    }
 }
 
 int ODESolver::initialize(std::vector<double> y0) {
@@ -34,22 +39,19 @@ int ODESolver::initialize(std::vector<double> y0) {
 
     cvode_mem = CVodeCreate(CV_ADAMS, CV_FUNCTIONAL);
     if (cvode_mem == 0) {
-        fprintf(stderr, "Error in CVodeCreate: could not allocate\n");
-        return -1;
+        throw std::runtime_error("Error in CVodeCreate: could not allocate");
     }
 
     /* Call CVodeInitto initialize the integrator memory */
     flag = CVodeInit(cvode_mem, (channelProb), 0, y_n_vector);
     if (flag < 0) {
-        fprintf(stderr, "Error in CVodeMalloc: %d\n", flag);
-        return -1;
+        throw std::runtime_error("Error in CVodeMalloc: " + flag);
     }
 
     /* Set CVODE tolerances */
     flag = CVodeSStolerances(cvode_mem, reltol, abstol);
     if (flag < 0) {
-        fprintf(stderr, "Error in CVodeSStolerances: %d\n", flag);
-        return -1;
+        throw std::runtime_error("Error in CVodeSStolerances: " + flag);
     }
 
     /* Set user data so that the rhs function has a pointer to our
@@ -60,10 +62,9 @@ int ODESolver::initialize(std::vector<double> y0) {
 
     flag = CVodeSetUserData(cvode_mem, user_data);
     if (flag < 0) {
-        fprintf(stderr, "Error in CVodeSetUserData: %d\n", flag);
-        return -1;
+        throw std::runtime_error("Error in CVodeSetUserData: " + flag);
     }
-    
+    initialized = true;
     return 0;
 }
 
@@ -72,7 +73,6 @@ int ODESolver::solve(std::vector<double> tspan,
         Matrix& y) { 
 
     this->transition_matrix = transition_matrix;
-    //std::cout << "tmatrix " << *transition_matrix;
 
     // Resize result matrix and copy initial conditions into it.
     int result_rows = tspan.size();
@@ -94,15 +94,12 @@ int ODESolver::solve(std::vector<double> tspan,
         // stop time, which could mess up the results. 
 
         if (CVodeSetStopTime(cvode_mem, tstop)) {
-            fprintf(stderr, "Error in CVode: %d\n", flag);
-            return -1;
+            throw std::runtime_error("Error in CVode: " + flag);
         }
 
 
-        if (CVode(cvode_mem, tout, y_n_vector, 
-                &t_realtype, CV_NORMAL) < 0) {
-            fprintf(stderr, "Error in CVode: %d\n", flag);
-            return -1;
+        if (CVode(cvode_mem, tout, y_n_vector, &t_realtype, CV_NORMAL) < 0) {
+            throw std::runtime_error("Error in CVode: " + flag);
         }
 
         // Append results to matrix y
@@ -110,9 +107,6 @@ int ODESolver::solve(std::vector<double> tspan,
             y(time_step, j) = NV_Ith_S(y_n_vector, j);
        }
     }
-
-    CVodeFree(&cvode_mem);
-    N_VDestroy_Serial(y_n_vector); /* Free y vector */
     
     return 0;
 }
