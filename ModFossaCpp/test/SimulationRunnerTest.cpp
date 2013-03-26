@@ -62,8 +62,9 @@ protected:
         
         ExperimentSweep::SharedPointer exp_sweep(new ExperimentSweep(
             "experiment sweep 1", 
-            "voltage protocol 1", 
-            concentrations));
+            "voltage protocol 1"));
+        
+        exp_sweep->addConcentration(Concentration("Ca", 2.0));
 
         // Add ExperimentSweep
         experiment->addExperimentSweep(exp_sweep);

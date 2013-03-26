@@ -3,10 +3,12 @@
 #include <boost/make_shared.hpp>
 #include <boost/python/suite/indexing/indexing_suite.hpp>
 #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <boost/python/suite/indexing/map_indexing_suite.hpp>
 
 #include <stdexcept>
 #include <iostream>
 #include <vector>
+#include <map>
 
 #include <ModFossa/Experiment/SimulationRunner.h>
 //#include "std_pair_conversion.h"
@@ -29,6 +31,9 @@ using ModFossa::LigandGatedRateConstant;
 using ModFossa::ConstantRateConstant;
 using ModFossa::RateConstantBase;
 using ModFossa::SigmoidalRateConstant;
+using ModFossa::VoltageProtocol;
+using ModFossa::ExperimentSweep;
+using ModFossa::Concentration;
 
 template<class T1, class T2>
 struct PairToTupleConverter {
@@ -50,6 +55,22 @@ struct VecToList {
     }
 };
 
+class Test {
+public:
+    std::map<std::string, double> map;
+        
+    Test(){}
+
+    void setMap(std::map<std::string, double> map) {
+        this->map = map;
+    }
+    
+    std::map<std::string, double> getMap() {
+        return map;
+    }
+
+};
+
 BOOST_PYTHON_MODULE(ModFossa) {
 
     typedef std::pair<int, int> IntPair;
@@ -60,9 +81,32 @@ BOOST_PYTHON_MODULE(ModFossa) {
     //    class_ <IntPair> ("intpair")
     //          ;
 
+    class_<Test>("Test")
+        .def("setMap", &Test::setMap)
+        .def("getMap", &Test::getMap)
+    ;
+    
+    
+    class_<std::map<std::string, double> >("MyMap")
+        .def(map_indexing_suite<std::map<std::wstring, double> >() );
+    
     class_< std::vector< IntPair >, shared_ptr<std::vector< IntPair > > > ("vectorOfPairs")
             .def(vector_indexing_suite< std::vector< IntPair > >())
             ;
+
+    class_<VoltageProtocol,
+            shared_ptr<VoltageProtocol> >("voltageProtocol",
+            init < std::string>())
+            .def("addConstantStage", &VoltageProtocol::addConstantStage)
+            .def("addSteppedStage", &VoltageProtocol::addSteppedStage)
+            ;
+    
+    class_<ExperimentSweep,
+            shared_ptr<ExperimentSweep> >("experimentSweep",
+            init < std::string, std::string>())
+            .def("addConcentration", &ExperimentSweep::addConcentration)
+            ;
+
 
     class_<RateConstantBase, boost::noncopyable,
             shared_ptr<RateConstantBase> >("rateConstantBase", no_init)
@@ -86,6 +130,10 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<Connection, shared_ptr<Connection> >("connection",
             init < std::string, std::string, std::string>())
             ;
+    
+    class_<Concentration, shared_ptr<Concentration> >("concentration",
+            init < std::string, double>())
+            ;
 
     class_<State, shared_ptr<State> >("state", init < std::string, bool>())
             .def("name", &State::getName)
@@ -103,7 +151,11 @@ BOOST_PYTHON_MODULE(ModFossa) {
 
     class_<Experiment, shared_ptr<Experiment> >("experiment")
             .def("markovModel", &Experiment::getMarkovModel)
-            .def("validate", &Experiment::validate3)
+            .def("validate", &Experiment::validate3) // fix this
+            .def("addVoltageProtocol", &Experiment::addVoltageProtocol)
+            .def("getVoltageProtocol", &Experiment::getVoltageProtocol)
+            .def("addExperimentSweep", &Experiment::addExperimentSweep)
+            .def("getExperimentSweep", &Experiment::getExperimentSweep)
             ;
 
     enum_<ErrorLevel>("errorLevel")

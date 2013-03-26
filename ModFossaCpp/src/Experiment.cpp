@@ -34,6 +34,14 @@ ExperimentSweep::SharedPointer Experiment::getExperimentSweep(std::string name){
     return experiment_sweeps[name];
 }
 
+VoltageProtocol::SharedPointer Experiment::getVoltageProtocol(std::string name){
+     if(!voltageProtocolExists(name)) {
+        throw std::runtime_error(
+            "VoltageProtocol " + name + " does not exist");
+    }
+    return voltage_protocols[name];   
+}
+
 void Experiment::addVoltageProtocol(
         VoltageProtocol::SharedPointer voltage_protocol) {
     
@@ -43,14 +51,8 @@ void Experiment::addVoltageProtocol(
             "VoltageProtocol with name " + name + " already exists");
     }
     
-    if (voltage_protocol->isEmpty()) {
-        throw std::runtime_error(
-            "VoltageProtocol " + name + " has no stages defined");
-    }
-    
     voltage_protocols[name] = voltage_protocol;
-    is_valid = false;
-    
+    is_valid = false;    
 }
 void Experiment::addExperimentSweep(
         ExperimentSweep::SharedPointer experiment_sweep) {

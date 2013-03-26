@@ -30,7 +30,7 @@ TEST_F(ExperimentSweepTest, createSuccess) {
     
     ExperimentSweep::ConcentrationMap map;
     
-    exp_sweep = new ExperimentSweep(name, vp_name, map);
+    exp_sweep = new ExperimentSweep(name, vp_name);//, map);
     ASSERT_EQ(exp_sweep->getName(), name);
     ASSERT_EQ(exp_sweep->getVoltageProtocolName(), vp_name);
 }
@@ -42,7 +42,7 @@ TEST_F(ExperimentSweepTest, createSuccess) {
 TEST_F(ExperimentSweepTest, createEmptyName) {   
     ExperimentSweep::ConcentrationMap map;
     
-    ASSERT_THROW(exp_sweep = new ExperimentSweep("", "vp1", map),
+    ASSERT_THROW(exp_sweep = new ExperimentSweep("", "vp1"),
         std::runtime_error);
 }
 
@@ -53,7 +53,7 @@ TEST_F(ExperimentSweepTest, createEmptyName) {
 TEST_F(ExperimentSweepTest, createEmptyVoltageProtocolName) {   
     ExperimentSweep::ConcentrationMap map;
     
-    ASSERT_THROW(exp_sweep = new ExperimentSweep("exp1", "", map),
+    ASSERT_THROW(exp_sweep = new ExperimentSweep("exp1", ""),
         std::runtime_error);
 }
 

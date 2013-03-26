@@ -18,11 +18,11 @@ namespace ModFossa {
  */
 ExperimentSweep::ExperimentSweep(
         const std::string name,
-        const std::string voltage_protocol_name,
-        ConcentrationMap concentration_map) :
+        const std::string voltage_protocol_name)://,
+        //ConcentrationMap concentration_map) :
 name(name),
-voltage_protocol_name(voltage_protocol_name),
-concentration_map(concentration_map) {
+voltage_protocol_name(voltage_protocol_name){
+//concentration_map(concentration_map) {
     
     if (name.empty()) {
         throw std::runtime_error("ExperimentSweep name cannot be empty");
@@ -42,6 +42,17 @@ ExperimentSweep::ConcentrationMap
     return concentration_map;
 }
 
+void ExperimentSweep::addConcentration(Concentration concentration) {
+    if (concentrationExists(concentration.ligand_name)) {
+        throw std::runtime_error(
+                "Concentration for ligand " + 
+                concentration.ligand_name + " already exists");
+    }
+    
+    concentration_map[concentration.ligand_name] = 
+            make_shared<Concentration>(concentration);
+}
+
 std::string ExperimentSweep::getName() const {
     return name;
 }
@@ -59,6 +70,16 @@ void ExperimentSweep::setSerializedProtocol(SerializedProtocolSharedPointer
 SerializedProtocolSharedPointer 
         ExperimentSweep::getSerializedVoltageProtocol() const {
     return serialized_voltage_protocol;
+}
+
+bool ExperimentSweep::concentrationExists(std::string name) const {
+    ConcentrationMap::const_iterator it;
+    it = concentration_map.find(name);
+
+    if (it != concentration_map.end()) {
+        return true;
+    }
+    return false;
 }
 }
 

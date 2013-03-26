@@ -69,6 +69,8 @@ public:
      */
     Validation::ValidationResults validate();
     
+    ExperimentSweep::SharedPointer getExperimentSweep(std::string name);
+    VoltageProtocol::SharedPointer getVoltageProtocol(std::string name);
     
     ////
     //shared_ptr<Validation::ValidationResults>::type validate2();
@@ -92,7 +94,7 @@ private:
     void initialize();
     
     void serializeExperimentSweep(std::string name);
-    ExperimentSweep::SharedPointer getExperimentSweep(std::string name);
+
     
     /**
      * Validate a single ExperimentSweep. The corresponding VoltageProtocol

@@ -25,11 +25,12 @@ public:
     
     ExperimentSweep(
         const std::string name, 
-        const std::string voltage_protocol_name, 
-        const ConcentrationMap concentration_map);
+        const std::string voltage_protocol_name);//, 
+        //const ConcentrationMap concentration_map);
     
     ~ExperimentSweep();
     
+    void addConcentration(Concentration);
     std::string getName() const;
     std::string getVoltageProtocolName() const;
     ConcentrationMap getConcentrationMap() const;
@@ -38,12 +39,14 @@ public:
 private:
     const std::string name;
     const std::string voltage_protocol_name;
-    const ConcentrationMap concentration_map;
+    ConcentrationMap concentration_map;
     SerializedProtocolSharedPointer serialized_voltage_protocol; 
     
     friend class Experiment;
     void setSerializedProtocol(SerializedProtocolSharedPointer 
         serialized_voltage_protocol);
+    
+    bool concentrationExists(std::string name) const;
 };
 }
 

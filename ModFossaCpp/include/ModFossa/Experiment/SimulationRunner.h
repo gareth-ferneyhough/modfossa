@@ -38,8 +38,8 @@ namespace ModFossa {
         std::string getVersion() {
             return version;
         }
-        std::vector<std::string> getShit();
-            std::vector<std::pair<int, int> >getTuple();
+        //std::vector<std::string> getShit();
+          //  std::vector<std::pair<int, int> >getTuple();
         //std::pair<int, int>getTuple();
         // test
 
