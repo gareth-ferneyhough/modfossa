@@ -1,11 +1,13 @@
 from modFossa import *
 
 state('state1')
-state('state1', False)
 state('state2', False)
+#state('state3', False)
 
 connect('state1', 'state2', 'k1')
-connect('state1', 'state2', 'k2')
+connect('state2', 'state1', 'k1')
+#connect('state2', 'state3', 'k2')
+#connect('state3', 'state2', 'k2')
 
 rate('k1', type='constant', k=1.2)
 rate('k1', type='constant', k=1.2)
@@ -31,6 +33,16 @@ for r in results:
 
 simulationRunner.runExperimentSweep('ca1')
 sweepResults = simulationRunner.getExperimentSweepResults('ca1')
+
+print 'number of protocol iterations: ', len(sweepResults)
+print 'number of time steps', len(sweepResults[0])
+print 'number of states', len(sweepResults[0][0])
+
 iterationResults1 = sweepResults[0]
 
-print iterationResults1[0][0][0]
+print len(iterationResults1)
+for timeStep in iterationResults1:
+	probabilities = ''
+	for stateProb in timeStep:
+		probabilities += ' ' + str(stateProb)
+	#print probabilities

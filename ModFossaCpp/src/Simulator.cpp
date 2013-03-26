@@ -25,10 +25,13 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     transition_matrix->update(state_of_the_world);
     Matrix T = transition_matrix->get();
     
-    int number_of_states = T.n_rows;
+
+    
+    ProtocolIterationResults results;
     
     // Solve for initial conditions
     std::vector<double> initial_conditions;
+    int number_of_states = T.n_rows;
     
     // TEMP
     initial_conditions.push_back(1.0);
@@ -37,12 +40,27 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     }
     // TEMP    
     
+    // Save the initial conditions.
+    results.push_back(std::vector<double>());
+    double probability = 0;
+    std::vector<double>::const_iterator it;
+    
+    for(it = initial_conditions.begin(); 
+            it != initial_conditions.end(); ++it) {
+        probability += *it;
+        results.back().push_back(*it);
+    }
+    // Append the probability of the final state, which is calculated using
+    // conservation of probabilities.
+    results.back().push_back(1.0 - probability);
+    
+    
     // Create an ODESolver
     ODESolver ode_solver;
     ode_solver.initialize(initial_conditions);
    
     
-    ProtocolIterationResults results;
+
     // Solve each protocol iteration
     // Start initialy at dt, not 0 because we have 
     // already done the initial conditions
@@ -53,17 +71,16 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     // necessary to calculate the stop time of the second to last stage.
     for(unsigned int i = 0; i < protocol_iteration.size()-1; ++i) {
                
-        double start_time = protocol_iteration[i].first / 1000 + dt;
         double stop_time = protocol_iteration[i+1].first / 1000;
         double voltage = protocol_iteration[i].second;
-               
-        // This looks awful. It assigns the stop time, which is determined by
-        // looking at the start time of the next stage. If we are the last stage,
-        // then the stop time is now.
-        //double stop_time = (i+1 < protocol_iteration.size()) ? 
-        //    (protocol_iteration[i+1].first) : (protocol_iteration[i+1].first);
-        //stop_time /= 1000;
+        double start_time = protocol_iteration[i].first / 1000;
         
+        // If this is our first iteration, start not at time 0, but at dt.
+        // Time 0 is the initial conditions, and they have already been saved
+        // to the results.
+        if(i == 0) {
+            start_time += dt;
+        } 
                       
         // Create the tspan
         std::vector<double> tspan;
@@ -77,33 +94,34 @@ ProtocolIterationResults Simulator::runProtocolIteration(
         transition_matrix->update(state_of_the_world);
         Matrix T = transition_matrix->get();
 
+        // The ODESolver returns a Matrix structure.
         Matrix mat_results;
         shared_ptr<Matrix>::type t_ptr = make_shared<Matrix>(T);
         ode_solver.solve(tspan, t_ptr, mat_results);
 
-        results.push_back(resultsMatrixToVector(mat_results));            
+        // Save the ODE run to our results vector
+        resultsMatrixToVector(results, mat_results);         
         }
     
     return results;
 }
    
-std::vector<std::vector<double> > Simulator::resultsMatrixToVector(
-        const Matrix& mat) {
-    
-    //std::cout << mat;
-    
-    std::vector<std::vector<double> >  results;    
+void Simulator::resultsMatrixToVector(
+        ProtocolIterationResults& results, const Matrix& mat) {
+
+    // Copy the results from the solver into our 2-D results vector.
+    // The rows of the Matrix are our times. The columns are the state
+    // probabilities. The probability of the last state is not calculated by
+    // the solver. We calculate it here using conservation of probabilities.
     for(unsigned int i = 0; i < mat.n_rows; ++i){
         
         results.push_back(std::vector<double>());
         double probability = 0.0;
         for(unsigned int j = 0; j < mat.n_cols; ++j) {
             probability += mat(i,j);
-            results[i].push_back(mat(i,j));
+            results.back().push_back(mat(i,j));
         }
-        results[i].push_back(1.0 - probability);
+        results.back().push_back(1.0 - probability);
     }
-    
-    return results;
 }
 }

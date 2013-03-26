@@ -23,7 +23,7 @@ public:
     Simulator();
     ~Simulator();
     
-ProtocolIterationResults runProtocolIteration(
+        ProtocolIterationResults runProtocolIteration(
         ProtocolIteration protocol_iteration,   
         StateOfTheWorld::SharedPointer state_of_the_world, 
         TransitionMatrix::SharedPointer transition_matrix);
@@ -32,8 +32,8 @@ private:
     //ODESolver ode_solver;
     const double dt = 0.001;
     
-    std::vector<std::vector<double> > resultsMatrixToVector(const Matrix& mat);
-
+    void resultsMatrixToVector(
+        ProtocolIterationResults& results, const Matrix& mat); 
 };
 }
 

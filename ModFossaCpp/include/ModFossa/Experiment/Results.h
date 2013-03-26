@@ -12,7 +12,7 @@
 #include <utility>
 
 namespace ModFossa {
-typedef std::vector<std::vector<std::vector<double > > >ProtocolIterationResults;
+typedef std::vector<std::vector<double > >ProtocolIterationResults;
 typedef std::vector<ProtocolIterationResults> ExperimentSweepResults;
 }
 #endif	/* RESULTS_H */
