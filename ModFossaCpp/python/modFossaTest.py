@@ -20,7 +20,7 @@ voltageProtocolAddStage('protocol1', 'start', voltage=-50, duration=200)
 voltageProtocolAddStage('protocol1', 'step', start=-60, stop=20, step=20, duration=200)
 
 
-experimentSweep('ca1', 'protocol1', Ca=2, Na=3)
+experimentSweep('ca1', 'protocol1', Ca=2.2, Na=3.3)
 
 
 results = validate()
@@ -30,3 +30,7 @@ for r in results:
 
 
 simulationRunner.runExperimentSweep('ca1')
+sweepResults = simulationRunner.getExperimentSweepResults('ca1')
+iterationResults1 = sweepResults[0]
+
+print iterationResults1[0][0][0]

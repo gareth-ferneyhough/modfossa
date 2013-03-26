@@ -20,7 +20,18 @@ namespace ModFossa {
         return experiment;
     }
 
-    void SimulationRunner::runExperimentSweep(std::string experiment_sweep_name) {
+    ExperimentSweepResults SimulationRunner::getExperimentSweepResults(
+            std::string name) {
+
+        if (!experimentSweepResultsExist(name)) {
+            throw std::runtime_error(
+                    "ExperimentSweep results " + name + " does not exist");
+        }
+        return results_map[name];
+    }
+
+    void SimulationRunner::runExperimentSweep(
+            std::string name) {
 
         // Make sure that we have already validated the experiment.
         if (!experiment->isValid()) {
@@ -30,7 +41,7 @@ namespace ModFossa {
 
         // Get the experiment sweep. This will throw if the sweep does not exist.
         ExperimentSweep::SharedPointer experiment_sweep =
-                experiment->getExperimentSweep(experiment_sweep_name);
+                experiment->getExperimentSweep(name);
 
 
         // Create StateOfTheWorld from ExperimentSweep
@@ -58,11 +69,21 @@ namespace ModFossa {
         }
 
         // Save results to map
-        results_map[experiment_sweep_name] = results;
+        results_map[name] = results;
     }
 
     void SimulationRunner::initialize() {
         experiment = Experiment::SharedPointer(new Experiment());
         simulator = Simulator::SharedPointer(new Simulator());
+    }
+
+    bool SimulationRunner::experimentSweepResultsExist(std::string name) const {
+        ResultsMap::const_iterator it;
+        it = results_map.find(name);
+
+        if (it != results_map.end()) {
+            return true;
+        }
+        return false;
     }
 }

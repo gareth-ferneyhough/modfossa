@@ -58,13 +58,14 @@ struct VecToList {
 class Test {
 public:
     std::map<std::string, double> map;
-        
-    Test(){}
+
+    Test() {
+    }
 
     void setMap(std::map<std::string, double> map) {
         this->map = map;
     }
-    
+
     std::map<std::string, double> getMap() {
         return map;
     }
@@ -82,14 +83,14 @@ BOOST_PYTHON_MODULE(ModFossa) {
     //          ;
 
     class_<Test>("Test")
-        .def("setMap", &Test::setMap)
-        .def("getMap", &Test::getMap)
-    ;
-    
-    
+            .def("setMap", &Test::setMap)
+            .def("getMap", &Test::getMap)
+            ;
+
+
     class_<std::map<std::string, double> >("MyMap")
-        .def(map_indexing_suite<std::map<std::wstring, double> >() );
-    
+            .def(map_indexing_suite<std::map<std::wstring, double> >());
+
     class_< std::vector< IntPair >, shared_ptr<std::vector< IntPair > > > ("vectorOfPairs")
             .def(vector_indexing_suite< std::vector< IntPair > >())
             ;
@@ -100,7 +101,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("addConstantStage", &VoltageProtocol::addConstantStage)
             .def("addSteppedStage", &VoltageProtocol::addSteppedStage)
             ;
-    
+
     class_<ExperimentSweep,
             shared_ptr<ExperimentSweep> >("experimentSweep",
             init < std::string, std::string>())
@@ -130,7 +131,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<Connection, shared_ptr<Connection> >("connection",
             init < std::string, std::string, std::string>())
             ;
-    
+
     class_<Concentration, shared_ptr<Concentration> >("concentration",
             init < std::string, double>())
             ;
@@ -196,9 +197,27 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("version", &SimulationRunner::getVersion)
             .def("experiment", &SimulationRunner::getExperiment)
             .def("runExperimentSweep", &SimulationRunner::runExperimentSweep)
+            .def("getExperimentSweepResults",
+            &SimulationRunner::getExperimentSweepResults)
             ;
 
-    class_<std::vector<std::string> >("stringVec")
+    class_<std::vector<std::string> >("stringVector")
             .def(vector_indexing_suite<std::vector<std::string> >())
+            ;
+
+    class_<std::vector<std::vector<std::vector<std::vector<double> > > > >("fourDVector")
+            .def(vector_indexing_suite<std::vector<std::vector<std::vector<std::vector<double> > > > >())
+            ;
+    
+    class_<std::vector<std::vector<std::vector<double> > > >("threeDVector")
+            .def(vector_indexing_suite<std::vector<std::vector<std::vector<double> > > >())
+            ;
+    
+    class_<std::vector<std::vector<double> > >("twoDVector")
+            .def(vector_indexing_suite<std::vector<std::vector<double> > >())
+            ;
+
+    class_<std::vector<double> >("doubleVector")
+            .def(vector_indexing_suite<std::vector<double> >())
             ;
 }

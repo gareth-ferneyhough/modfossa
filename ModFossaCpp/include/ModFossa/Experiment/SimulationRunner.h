@@ -32,6 +32,7 @@ namespace ModFossa {
 
         void runAllExperimentSweeps();
         void runExperimentSweep(std::string experiment_sweep_name);
+        ExperimentSweepResults getExperimentSweepResults(std::string name);
 
         // test
 
@@ -39,7 +40,7 @@ namespace ModFossa {
             return version;
         }
         //std::vector<std::string> getShit();
-          //  std::vector<std::pair<int, int> >getTuple();
+        //  std::vector<std::pair<int, int> >getTuple();
         //std::pair<int, int>getTuple();
         // test
 
@@ -48,6 +49,9 @@ namespace ModFossa {
         Experiment::SharedPointer experiment;
         Simulator::SharedPointer simulator;
         ResultsMap results_map;
+
+        bool experimentSweepResultsExist(std::string name) const;
+
 
         /**
          * Initialize the Experiment and Simulator classes.
