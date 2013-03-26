@@ -195,4 +195,17 @@ Validation::ValidationResults Experiment::validate() {
     }
     return validation_results;
 }
+
+std::vector<std::string> Experiment::validate3(){
+    Validation::ValidationResults res = validate();
+    
+    std::vector<std::string> results;
+    
+    Validation::ValidationResults::ErrorVector::const_iterator it;
+    for(it = res.errors.begin(); it!=res.errors.end(); ++it){
+        results.push_back(it->second);
+    }
+      
+    return results;
+}
 }

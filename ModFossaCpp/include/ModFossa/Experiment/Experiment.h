@@ -69,6 +69,13 @@ public:
      */
     Validation::ValidationResults validate();
     
+    
+    ////
+    //shared_ptr<Validation::ValidationResults>::type validate2();
+    std::vector<std::string> validate3();
+    ///
+    
+    
     bool isValid() const;
         
 private:

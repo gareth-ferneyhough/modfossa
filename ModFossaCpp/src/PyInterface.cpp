@@ -1,17 +1,24 @@
 
 #include <boost/python.hpp>
 #include <boost/make_shared.hpp>
+#include <boost/python/suite/indexing/indexing_suite.hpp>
+#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
 
 #include <stdexcept>
 #include <iostream>
 #include <vector>
 
 #include <ModFossa/Experiment/SimulationRunner.h>
+//#include "std_pair_conversion.h"
 
 using namespace boost::python;
 
 using boost::shared_ptr;
 using boost::make_shared;
+
+using ModFossa::Validation::ErrorType;
+using ModFossa::Validation::ErrorLevel;
+using ModFossa::Validation::ValidationResults;
 
 using ModFossa::SimulationRunner;
 using ModFossa::Experiment;
@@ -23,29 +30,61 @@ using ModFossa::ConstantRateConstant;
 using ModFossa::RateConstantBase;
 using ModFossa::SigmoidalRateConstant;
 
+template<class T1, class T2>
+struct PairToTupleConverter {
+
+    static PyObject * convert(const std::pair<T1, T2>& pair) {
+        return incref(make_tuple(pair.first, pair.second).ptr());
+    }
+};
+
+template<class T>
+struct VecToList {
+
+    static PyObject * convert(const std::vector<T>& vec) {
+        boost::python::list* l = new boost::python::list();
+        for (size_t i = 0; i < vec.size(); i++)
+            (*l).append(vec[i]);
+
+        return l->ptr();
+    }
+};
+
 BOOST_PYTHON_MODULE(ModFossa) {
-    
-    class_<RateConstantBase, boost::noncopyable,  
+
+    typedef std::pair<int, int> IntPair;
+    to_python_converter<IntPair, PairToTupleConverter<int, int> >();
+    //to_python_converter<std::vector< IntPair, class std::allocator<IntPair > >, VecToList<IntPair > >();
+    //def("getListValue", getListValue);
+
+    //    class_ <IntPair> ("intpair")
+    //          ;
+
+    class_< std::vector< IntPair >, shared_ptr<std::vector< IntPair > > > ("vectorOfPairs")
+            .def(vector_indexing_suite< std::vector< IntPair > >())
+            ;
+
+    class_<RateConstantBase, boost::noncopyable,
             shared_ptr<RateConstantBase> >("rateConstantBase", no_init)
-       ;
-    
+            ;
+
     class_<ConstantRateConstant, bases<RateConstantBase>,
-            shared_ptr<ConstantRateConstant> >("constantRateConstant", 
-                init < std::string, double>())    
+            shared_ptr<ConstantRateConstant> >("constantRateConstant",
+            init < std::string, double>())
             ;
-        
-    class_<LigandGatedRateConstant, bases<RateConstantBase>, 
-            shared_ptr<LigandGatedRateConstant> >("ligandGatedRateConstant", 
-                init < std::string, double, std::string, double>())    
+
+    class_<LigandGatedRateConstant, bases<RateConstantBase>,
+            shared_ptr<LigandGatedRateConstant> >("ligandGatedRateConstant",
+            init < std::string, double, std::string, double>())
             ;
-    
-    class_<SigmoidalRateConstant, 
-            shared_ptr<SigmoidalRateConstant> >("sigmoidalRateConstant", 
-                init < std::string, double, double, double>())    
+
+    class_<SigmoidalRateConstant,
+            shared_ptr<SigmoidalRateConstant> >("sigmoidalRateConstant",
+            init < std::string, double, double, double>())
             ;
-    
-    class_<Connection, shared_ptr<Connection> >("connection", 
-                init < std::string, std::string, std::string>())    
+
+    class_<Connection, shared_ptr<Connection> >("connection",
+            init < std::string, std::string, std::string>())
             ;
 
     class_<State, shared_ptr<State> >("state", init < std::string, bool>())
@@ -57,15 +96,56 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("addState", &MarkovModel::addState)
             .def("addConnection", &MarkovModel::addConnection)
             .def("addRateConstant", &MarkovModel::addRateConstant)
+            .def("setInitialState", &MarkovModel::setInitialState)
+            .def("isValid", &MarkovModel::isValid)
+            .def("validate", &MarkovModel::validate)
             ;
 
     class_<Experiment, shared_ptr<Experiment> >("experiment")
             .def("markovModel", &Experiment::getMarkovModel)
+            .def("validate", &Experiment::validate3)
+            ;
+
+    enum_<ErrorLevel>("errorLevel")
+            .value("no_warnings", ErrorLevel::NO_WARNINGS)
+            .value("warnings", ErrorLevel::WARNINGS)
+            .value("errors", ErrorLevel::ERRORS)
+            ;
+
+    enum_<ErrorType>("errorType")
+            .value("no connections defined",
+            ErrorType::NO_CONNECTIONS)
+            .value("rate constant not defined",
+            ErrorType::RATE_CONSTANT_NOT_DEFINED)
+            .value("state not defined",
+            ErrorType::STATE_NOT_DEFINED)
+            .value("ligand not defined",
+            ErrorType::LIGAND_NOT_DEFINED)
+            .value("initial state not defined",
+            ErrorType::INITIAL_STATE_NOT_DEFINED)
+            .value("state of the world is null",
+            ErrorType::STATE_OF_THE_WORLD_IS_NULL)
+            .value("no voltage protocols defined",
+            ErrorType::NO_VOLTAGE_PROTOCOLS)
+            .value("no experiment sweeps defined",
+            ErrorType::NO_EXPERIMENT_SWEEPS)
+            .value("voltage protocol not defined",
+            ErrorType::VOLTAGE_PROTOCOL_NOT_DEFINED)
+            ;
+
+    class_<ValidationResults, shared_ptr<ValidationResults> >(
+            "validationResults",
+            init < ErrorLevel, ValidationResults::ErrorVector>())
+            .def_readonly("errorLevel", &ValidationResults::overall_result)
+            .def_readonly("errors", &ValidationResults::errors)
             ;
 
     class_<SimulationRunner>("simulationRunner")
             .def("version", &SimulationRunner::getVersion)
             .def("experiment", &SimulationRunner::getExperiment)
             ;
-    
+
+    class_<std::vector<std::string> >("stringVec")
+            .def(vector_indexing_suite<std::vector<std::string> >())
+            ;
 }

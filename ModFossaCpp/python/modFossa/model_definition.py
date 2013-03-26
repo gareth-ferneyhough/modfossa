@@ -75,3 +75,17 @@ def connect(name, fromState, toState):
         markovModel.addConnection(connection)
     except RuntimeError, e:
         print e
+
+def initialState(name):
+    try: markovModel.setInitialState(name)
+    except RuntimeError, e:
+        print e
+
+def isValid():
+    return markovModel.isValid()
+
+def validate():
+    return experiment.validate()
+
+def validate2():
+    return experiment.validate2()

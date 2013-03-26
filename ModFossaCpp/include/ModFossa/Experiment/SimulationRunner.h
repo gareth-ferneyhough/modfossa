@@ -11,39 +11,49 @@
 
 #include <string>
 #include <map>
+#include <vector>
+
+#include <boost/tuple/tuple.hpp>
 
 #include <ModFossa/Common/TransitionMatrix.h>
 #include <ModFossa/Experiment/Experiment.h>
 #include <ModFossa/Experiment/Simulator.h>
 
 namespace ModFossa {
-class SimulationRunner {
-public:
-    typedef std::map<std::string, ExperimentSweepResults> ResultsMap;
-    
-    SimulationRunner();
-    ~SimulationRunner();
-    
-    Experiment::SharedPointer getExperiment() const;
-    
-    void runAllExperimentSweeps();
-    void runExperimentSweep(std::string experiment_sweep_name);
-    
-    // test
-    std::string getVersion() { return version; }
-    // test
-    
-private:
-    const std::string version = "0.1";
-    Experiment::SharedPointer experiment;
-    Simulator::SharedPointer simulator;
-    ResultsMap results_map;
 
-    /**
-     * Initialize the Experiment and Simulator classes.
-     */
-    void initialize();
-};
+    class SimulationRunner {
+    public:
+        typedef std::map<std::string, ExperimentSweepResults> ResultsMap;
+
+        SimulationRunner();
+        ~SimulationRunner();
+
+        Experiment::SharedPointer getExperiment() const;
+
+        void runAllExperimentSweeps();
+        void runExperimentSweep(std::string experiment_sweep_name);
+
+        // test
+
+        std::string getVersion() {
+            return version;
+        }
+        std::vector<std::string> getShit();
+            std::vector<std::pair<int, int> >getTuple();
+        //std::pair<int, int>getTuple();
+        // test
+
+    private:
+        const std::string version = "0.1";
+        Experiment::SharedPointer experiment;
+        Simulator::SharedPointer simulator;
+        ResultsMap results_map;
+
+        /**
+         * Initialize the Experiment and Simulator classes.
+         */
+        void initialize();
+    };
 }
 
 #endif	/* SIMULATIONRUNNER_H */

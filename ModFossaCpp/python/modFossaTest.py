@@ -12,3 +12,10 @@ rate('k1', type='constant', k=1.2)
 rate('k1', type='constant', k=1.2)
 
 rate('k2', type='ligandGated', k=2.2, ligand='Ca', power=4.0)
+
+initialState('state1')
+results = validate()
+
+print 'validation results:'
+for r in results:
+	print r

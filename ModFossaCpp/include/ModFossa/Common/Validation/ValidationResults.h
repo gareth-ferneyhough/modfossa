@@ -20,7 +20,7 @@ namespace Validation {
 
 struct ValidationResults {
 public:
-    
+       
     /**
      * ErrorVector is a vector of ErrorType, and string pairs.
      * ErrorType is an enum, and the string is a description of the particular
