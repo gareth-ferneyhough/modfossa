@@ -20,37 +20,51 @@ ProtocolIterationResults Simulator::runProtocolIteration(
         StateOfTheWorld::SharedPointer state_of_the_world, 
         TransitionMatrix::SharedPointer transition_matrix) {
     
-    // Set initial voltage and get first 'actual' transition matrix
+    // Set initial voltage and get first transition matrix
     state_of_the_world->setVoltage(protocol_iteration[0].second);
     transition_matrix->update(state_of_the_world);
     Matrix T = transition_matrix->get();
-    
-
-    
-    ProtocolIterationResults results;
-    
-    // Set up our initial conditions
+       
     int number_of_states = T.n_rows;
+    
+    /**
+     *  Solve for the initial conditions, which are the steady-state
+     * probabilities. These can be found by solving the system 
+     * S=T/P
+     * where P is a column vector of zeros with a one in the final row, and T
+     * is our transition matrix.
+     * 
+     */
+    
+    // Create column vector
+    Matrix P(number_of_states, 1); 
+    for(int i = 0; i < number_of_states -1; ++i){
+        P(i, 0) = 0.0;
+    }
+    P(number_of_states - 1, 0) = 1.0;    
+   
+    /**
+     *  Solve for steady-state probabilities which will be our 
+     * initial conditions.
+     * 
+     * @todo Remove the dependency on arma::solve.
+     */
+    Matrix S = arma::solve(T, P);
+    
+    // Copy S into an std::vector. Yes, this is lame. Would be better if
+    // we didn't actually have to do a deep-copy.
     std::vector<double> initial_conditions;    
-    int initial_state_index = transition_matrix->getInitialStateIndex();
-    
-    for(int i = 0; i < number_of_states -1; ++i ){
-        initial_conditions.push_back(0.0);
+    for(int i = 0; i < number_of_states - 1; ++i){
+        initial_conditions.push_back(S(i, 0));
     }
     
-    // If our initial state is the last state, 
-    // don't set the probability to one, since the simulator doesn't solve
-    // for it. There isn't room for it in the initial_conditions vector anyway.
-
-    if(initial_state_index != number_of_states - 1) {
-        initial_conditions[initial_state_index] = 1.0;
-    }
     
-    // Save the initial conditions.
+    // Save the initial conditions to our results structure.
+    ProtocolIterationResults results;
     results.push_back(std::vector<double>());
-    double probability = 0;
-    std::vector<double>::const_iterator it;
     
+    double probability = 0;
+    std::vector<double>::const_iterator it;    
     for(it = initial_conditions.begin(); 
             it != initial_conditions.end(); ++it) {
         probability += *it;
@@ -63,12 +77,10 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     
     // Create an ODESolver
     ODESolver ode_solver;
-    ode_solver.initialize(initial_conditions);
-   
-    
+    ode_solver.initialize(initial_conditions);   
 
     // Solve each protocol iteration
-    // Start initialy at dt, not 0 because we have 
+    // Start initially at dt, not 0 because we have 
     // already done the initial conditions
     
     

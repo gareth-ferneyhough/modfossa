@@ -37,15 +37,7 @@ print 'number of time steps', len(sweepResults[0])
 print 'number of states', len(sweepResults[0][0])
 
 iterationResults1 = sweepResults[0]
-
-print len(iterationResults1)
-for timeStep in iterationResults1:
-	probabilities = ''
-	for stateProb in timeStep:
-		probabilities += ' ' + str(stateProb)
-	#print probabilities
-
-
+print iterationResults1[0][0]
 ## Do ALL the plotting ##                                                       
 fig = plt.figure(1)
 ax = fig.add_subplot(111)

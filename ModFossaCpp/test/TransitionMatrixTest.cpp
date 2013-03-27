@@ -103,6 +103,15 @@ TEST_F(TransitionMatrixTest, createTransitionMatrix) {
      * dPs2 |  k1    -k2-k3  k4 |
      * dPs3 |         k3    -k4 |
      * 
+     * However, the last row will contain all ones so that we can use
+     * conservation of probabilities to avoid over-specifying the system of
+     * ODEs. So, the transition matrix will actually look like this:
+     * 
+     * Ps1    Ps2     Ps3
+     * dPs1 | -k1     k2        |          
+     * dPs2 |  k1    -k2-k3  k4 |
+     * dPs3 |  1.0    1.0   1.0 |
+     * 
      */
     
     Matrix expected;
@@ -116,9 +125,9 @@ TEST_F(TransitionMatrixTest, createTransitionMatrix) {
     expected(1,1) = -2-3;
     expected(1,2) = 4;
     
-    expected(2,0) = 0;
-    expected(2,1) = 3;
-    expected(2,2) = -4;
+    expected(2,0) = 1.0;
+    expected(2,1) = 1.0;
+    expected(2,2) = 1.0;
     
 
     transition_matrix->update(state_of_the_world);

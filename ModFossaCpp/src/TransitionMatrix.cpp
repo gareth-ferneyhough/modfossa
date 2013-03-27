@@ -54,11 +54,27 @@ void TransitionMatrix::update(
      * which does not have a concentration defined in state_of_the_world.
      */
 
-    for(unsigned int i = 0; i < transition_matrix.n_rows; ++i) {
+    // Create the transition matrix. We don't need the last row, because it 
+    // would over-specify the system of equations. Instead, the probability of 
+    // the last state can be solved using conservation of probabilities. We will
+    // however put a row of all ones for the last row. This is useful for 
+    // calculating the steady-state probabilities, because we can then do:
+    // S = R\P 
+    // where S is the column vector of steady-state probabilities, R is
+    // this transition matrix, and P is a column vector of zeros, and a one
+    // for the last row. 
+    // 
+    for(unsigned int i = 0; i < transition_matrix.n_rows - 1; ++i) {
         for(unsigned int j = 0; j < transition_matrix.n_cols; ++j){
             transition_matrix(i, j) = calculateTotalRate(
                     transitions_3d[i][j], state_of_the_world);
         }
+    }
+    
+    // Add ones to last row
+    int i = transition_matrix.n_rows - 1;
+    for(unsigned int j = 0; j < transition_matrix.n_cols; ++j){
+        transition_matrix(i, j) = 1.0;
     }
 }
 
