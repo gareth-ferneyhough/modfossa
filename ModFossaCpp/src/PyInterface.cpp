@@ -129,7 +129,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
             init < std::string, double, std::string, double>())
             ;
 
-    class_<SigmoidalRateConstant,
+    class_<SigmoidalRateConstant, bases<RateConstantBase>,
             shared_ptr<SigmoidalRateConstant> >("sigmoidalRateConstant",
             init < std::string, double, double, double>())
             ;

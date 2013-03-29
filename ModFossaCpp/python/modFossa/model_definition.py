@@ -54,6 +54,27 @@ def _addLigandGatedRateConstant(name, **args):
     except RuntimeError, e:
         print e
 
+def _addSigmoidalRateConstant(name, **args):
+    if not 'a' in args:
+        raise RuntimeError("argument \'a\' not found when adding "
+                            "SigmoidalRateConstant \'' + name + '\'")
+
+    if not 'v_half' in args:
+        raise RuntimeError("argument \'v_half\' not found when adding "
+                            "SigmoidalRateConstant \'' + name + '\'")
+
+    if not 'k' in args:
+        raise RuntimeError("argument \'k\' not found when adding "
+                            "SigmoidalRateConstant \'' + name + '\'")
+
+    try: 
+        rateConstant = ModFossa.sigmoidalRateConstant(
+        name, float(args['a']), float(args['v_half']), float(args['k']))
+
+        markovModel.addRateConstant(rateConstant)
+    except RuntimeError, e:
+        print e
+
 def _addExponentialRateConstant(name, **args):
     if not 'k' in args:
         raise RuntimeError("argument \'k\' not found when adding "
@@ -77,7 +98,7 @@ def rate(name, **args):
     if args['type'] == 'constant':
         _addConstantRateConstant(name, **args)
     elif args['type'] == 'sigmoidal':
-        print 'sigmoidal'
+        _addSigmoidalRateConstant(name, **args)
     elif args['type'] == 'ligandGated':
         _addLigandGatedRateConstant(name, **args)
     elif args['type'] == 'boltzman':
