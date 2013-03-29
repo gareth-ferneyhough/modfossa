@@ -131,6 +131,9 @@ Validation::ValidationResults Experiment::validateExperimentSweep(
         const StateOfTheWorld::SharedPointer temp_state_of_the_world(
         new StateOfTheWorld(experiment_sweep->getConcentrationMap()));
         
+        // Maybe dont test this at 0.
+        temp_state_of_the_world->setVoltage(0.0);
+        
         return_val.AppendAdditionalResults(
                 markov_model->validate(temp_state_of_the_world));
     }

@@ -30,6 +30,7 @@ using ModFossa::Connection;
 using ModFossa::LigandGatedRateConstant;
 using ModFossa::ConstantRateConstant;
 using ModFossa::RateConstantBase;
+using ModFossa::ExponentialRateConstant;
 using ModFossa::SigmoidalRateConstant;
 using ModFossa::VoltageProtocol;
 using ModFossa::ExperimentSweep;
@@ -116,6 +117,11 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<ConstantRateConstant, bases<RateConstantBase>,
             shared_ptr<ConstantRateConstant> >("constantRateConstant",
             init < std::string, double>())
+            ;
+
+    class_<ExponentialRateConstant, bases<RateConstantBase>,
+            shared_ptr<ExponentialRateConstant> >("exponentialRateConstant",
+            init < std::string, double, double>())
             ;
 
     class_<LigandGatedRateConstant, bases<RateConstantBase>,
@@ -208,11 +214,11 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<std::vector<std::vector<std::vector<std::vector<double> > > > >("fourDVector")
             .def(vector_indexing_suite<std::vector<std::vector<std::vector<std::vector<double> > > > >())
             ;
-    
+
     class_<std::vector<std::vector<std::vector<double> > > >("threeDVector")
             .def(vector_indexing_suite<std::vector<std::vector<std::vector<double> > > >())
             ;
-    
+
     class_<std::vector<std::vector<double> > >("twoDVector")
             .def(vector_indexing_suite<std::vector<std::vector<double> > >())
             ;

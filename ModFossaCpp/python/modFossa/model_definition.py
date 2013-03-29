@@ -54,6 +54,25 @@ def _addLigandGatedRateConstant(name, **args):
     except RuntimeError, e:
         print e
 
+def _addExponentialRateConstant(name, **args):
+    if not 'k' in args:
+        raise RuntimeError("argument \'k\' not found when adding "
+                            "ExponentialRateConstant \'' + name + '\'")
+
+    if not 'a' in args:
+        raise RuntimeError("argument \'a\' not found when adding "
+                            "ExponentialRateConstant \'' + name + '\'")
+
+    try: rateConstant = ModFossa.exponentialRateConstant(
+        name, args['a'], args['k'])
+
+    except RuntimeError, e:
+        print e
+
+    try: markovModel.addRateConstant(rateConstant)
+    except RuntimeError, e:
+        print e
+
 def rate(name, **args):
     if args['type'] == 'constant':
         _addConstantRateConstant(name, **args)
@@ -64,7 +83,7 @@ def rate(name, **args):
     elif args['type'] == 'boltzman':
         print 'boltzman'
     elif args['type'] == 'exponential':
-        print 'exponential'
+        _addExponentialRateConstant(name, **args)
 
 def connect(name, fromState, toState):
     try: connection = ModFossa.connection(name, fromState, toState)

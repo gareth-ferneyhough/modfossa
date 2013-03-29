@@ -25,7 +25,7 @@ protected:
         RateConstantBase::SharedPointer 
             rate1(new ConstantRateConstant("rate1", 1));
         RateConstantBase::SharedPointer 
-            rate2(new ConstantRateConstant("rate2", 10));
+            rate2(new ExponentialRateConstant("rate2", 10, 20));
         
         
         Connection::SharedPointer connection1(
