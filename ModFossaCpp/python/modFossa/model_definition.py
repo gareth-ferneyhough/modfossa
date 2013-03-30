@@ -111,18 +111,24 @@ def getVoltageProtocol(experimentSweepName):
     except RuntimeError, e:
         print e
 
+def getStateNames():
+    names = results.getStateNames()
+    for name in names:
+        print name
+
 def plot(plotData):
     fig = plt.figure(1)
     ax = fig.add_subplot(111)
 
     for iteration in plotData:
-        ax.plot(iteration)
+        ax.plot(iteration, 'b')
 
     leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
     ax.set_xlabel('Time (ms)')
     ax.set_ylabel('Probability')
     ax.set_title('Channel Probability')
-
+    ax.autoscale_view(True,True,True)
+    plt.axis([0, 2000, -100, 200])
     plt.show()
 
 

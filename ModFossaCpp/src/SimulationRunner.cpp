@@ -9,7 +9,8 @@
 
 namespace ModFossa {
 
-    SimulationRunner::SimulationRunner() {
+    SimulationRunner::SimulationRunner() : 
+        simulation_has_been_run(false) {
         initialize();
     }
 
@@ -25,6 +26,19 @@ namespace ModFossa {
     }
     
     void SimulationRunner::runAllExperimentSweeps() {
+        
+        if(simulation_has_been_run) {
+            throw std::runtime_error("experiment can only be run once");
+        }
+        simulation_has_been_run = true;
+        
+        // First, initialize the results class with a pointer to the experiment.
+        // Initialization will set the relevant experiment information such as
+        // channel conductance, state names and gating variables, reversal
+        // potential, etc.
+        results->initialize(experiment);
+        
+        
         std::vector<ExperimentSweep::SharedPointer> sweeps = 
                 experiment->getAllExperimentSweeps();
         
@@ -32,16 +46,6 @@ namespace ModFossa {
         for(it = sweeps.begin(); it != sweeps.end(); ++it) {
             doRunExperimentSweep(*it);
         }
-    }
-
-    void SimulationRunner::runExperimentSweep(
-            std::string name) {
-
-        // Get the experiment sweep. This will throw if the sweep does not exist.
-        ExperimentSweep::SharedPointer experiment_sweep =
-                experiment->getExperimentSweep(name);
-        
-        doRunExperimentSweep(experiment_sweep);
     }
     
     void SimulationRunner::doRunExperimentSweep(
@@ -66,22 +70,23 @@ namespace ModFossa {
 
 
         // Get our results ready
-        Vector3d experiment_sweep_results;
+        Vector3dSharedPtr experiment_sweep_state_probabilities(new Vector3d());
 
         // Run protocol iteration, appending the results to our results each time.
         SerializedProtocol::const_iterator it;
         for (it = serialized_protocol->begin();
                 it != serialized_protocol->end(); ++it) {
 
-            experiment_sweep_results.push_back(simulator->runProtocolIteration(
-                    *it, state_of_the_world, transition_matrix));
+            experiment_sweep_state_probabilities->push_back(
+                simulator->runProtocolIteration(
+                        *it, state_of_the_world, transition_matrix));
         }
 
         // Save results. The results class will use the experimentSweep instance
         // and the results we just calculated to generate the various data 
         // required for analysis.
-        results->saveExperimentSweepProbabilities(
-                experiment_sweep, experiment_sweep_results);
+        results->createExperimentSweepResults(
+                experiment_sweep, experiment_sweep_state_probabilities);
     }
 
     void SimulationRunner::initialize() {

@@ -25,7 +25,10 @@ protected:
         RateConstantBase::SharedPointer 
             rate1(new ConstantRateConstant("rate1", 1));
         RateConstantBase::SharedPointer 
-            rate2(new ExponentialRateConstant("rate2", 10, 20));
+            rate2(new ConstantRateConstant("rate2", 100));
+        
+//        RateConstantBase::SharedPointer 
+//            rate2(new ExponentialRateConstant("rate2", 1, 2));
         
         
         Connection::SharedPointer connection1(
@@ -105,7 +108,7 @@ TEST_F(SimulationRunnerTest, runSweepSuccess) {
     // Validate Experiment
     experiment->validate();
        
-    simulation_runner.runExperimentSweep("experiment sweep 1");
+    simulation_runner.runAllExperimentSweeps();
 }
 
 /**
@@ -126,7 +129,7 @@ TEST_F(SimulationRunnerTest, runSteppedSweepSuccess) {
     // Validate Experiment
     experiment->validate();
        
-    simulation_runner.runExperimentSweep("experiment sweep 1");
+    simulation_runner.runAllExperimentSweeps();
 }
 
 

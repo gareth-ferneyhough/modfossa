@@ -14,15 +14,17 @@
 #include <ModFossa/ModelDefinition/Connection.h>
 #include <ModFossa/Common/Validation/ValidationResults.h>
 #include <ModFossa/Common/StateOfTheWorld.h>
+#include <ModFossa/Common/Concentration.h>
+#include <ModFossa/Common/ContainerTypes.h>
 
 namespace ModFossa {
 
 class MarkovModel {
 public:
     typedef ModFossa::shared_ptr<MarkovModel>::type SharedPointer;
-    typedef std::map<const std::string, RateConstantBase::SharedPointer > 
+    typedef std::map<std::string, RateConstantBase::SharedPointer > 
         RateMap;
-    typedef std::map<const std::string, State::SharedPointer > StateMap;
+    typedef std::map<std::string, State::SharedPointer > StateMap;
     typedef std::vector<Connection::SharedPointer > ConnectionsVector;
 
     MarkovModel();
@@ -35,7 +37,10 @@ public:
     void setInitialState(std::string initial_state);
     Validation::ValidationResults validate(
             const StateOfTheWorld::SharedPointer state_of_the_world);
-
+    
+    VectorSharedPtr getStateGatingVariables() const;
+    StringVecSharedPtr getStateNames() const;
+    
     bool isValid() const;
 
 private:

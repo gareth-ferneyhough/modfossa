@@ -66,35 +66,12 @@ experimentSweep('sweep', 'vp', Ca=250e-9)
 validate()
 run()
 
-#stateProbabilities = getStateProbabilities('sweep')
-#plot(stateProbabilities)
+getStateNames()
+
+stateProbabilities = getStateProbabilities('sweep')
+plotStates(stateProbabilities)
 
 voltageProtocol = getVoltageProtocol('sweep')
 plot(voltageProtocol)
 
 
-## Put this code in the library
-#run()
-#simulationRunner.runExperimentSweep('sweep')
-#sweepResults = simulationRunner.getExperimentSweepResults('sweep')
-
-#print 'number of protocol iterations: ', len(sweepResults)
-#print 'number of time steps', len(sweepResults[0])
-#print 'number of states', len(sweepResults[0][0])
-
-#iterationResults1 = sweepResults[0]
-
-
-
-#fig = plt.figure(1)
-#ax = fig.add_subplot(111)
-#ax.plot(iterationResults1)
-#ax.plot(mat[:,1])
-#ax.plot(mat[:,2])
-
-#leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
-#ax.set_xlabel('Time (ms)')
-#ax.set_ylabel('Probability')
-#ax.set_title('Channel Probability')
-
-#plt.show()

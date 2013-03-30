@@ -86,7 +86,8 @@ bool MarkovModel::connectionExists(string from_state, string to_state) const {
 
 void MarkovModel::setInitialState(string initial_state) {
     if (!this->initial_state.empty()) {
-        throw std::runtime_error("initial_state already set to " + this->initial_state);
+        throw std::runtime_error("initial_state already set to " \
+                                + this->initial_state);
     }
 
     if (initial_state.empty()) {
@@ -95,6 +96,36 @@ void MarkovModel::setInitialState(string initial_state) {
 
     this->initial_state = initial_state;
     is_valid = false;
+}
+
+//shared_ptr<MarkovModel::StateMap>::type MarkovModel::getStateMap() {
+//    
+//    shared_ptr<MarkovModel::StateMap>::type map_ptr(&map_of_states);
+//    return map_ptr;
+//}
+
+VectorSharedPtr MarkovModel::getStateGatingVariables() const {
+    VectorSharedPtr gating_variables (new Vector());
+    
+    StateMap::const_iterator it;
+    for(it = map_of_states.begin(); it != map_of_states.end(); ++it)
+    {
+        gating_variables->push_back(it->second->getGatingVariable());
+    }
+    
+    return gating_variables;
+    }   
+
+StringVecSharedPtr MarkovModel::getStateNames() const {
+    StringVecSharedPtr names (new StringVec());
+    
+    StateMap::const_iterator it;
+    for(it = map_of_states.begin(); it != map_of_states.end(); ++it)
+    {
+        names->push_back(it->first);
+    }
+    
+    return names;
 }
 
 bool MarkovModel::isValid() const {

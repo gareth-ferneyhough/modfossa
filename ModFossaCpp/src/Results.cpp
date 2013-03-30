@@ -6,12 +6,33 @@
  */
 
 #include <ModFossa/Results/Results.h>
+#include <cassert>
 
 namespace ModFossa {
-Results::Results() {
+Results::Results() : initialized(false) {
 }
 
 Results::~Results() {
+}
+
+/**
+ * Get relevant information from the Experiment class required to calculate
+ * the results structures. 
+ * 
+ * @param experiment SharedPointer to the Experiment class.
+ */
+void Results::initialize(Experiment::SharedPointer experiment) {
+    assert(initialized == false);
+    
+    // We need to get information about the states.
+    state_names = experiment->getMarkovModel()->getStateNames();
+    state_gating_variables = 
+            experiment->getMarkovModel()->getStateGatingVariables(); 
+    
+}
+
+StringVec Results::getStateNames() {
+    return *state_names;
 }
 
 Vector3d Results::getStateProbabilities(std::string name) {
@@ -22,12 +43,14 @@ Vector3d Results::getStateProbabilities(std::string name) {
     
     if (!experimentSweepResultsExist(name)) {
         throw std::runtime_error(
-                "ExperimentSweep results " + name + " does not exist");
+                "ExperimentSweep results " + name + " do not exist");
     }
-    return experiment_sweep_probabilities[name];
+    return *(experiment_sweep_probabilities[name]);
 }
 
-Vector2d Results::getVoltageProtocol(std::string experiment_sweep_name) {
+Vector2d Results::getVoltageProtocol(
+        std::string experiment_sweep_name) {
+    
     if (experiment_sweep_name.empty()) {
         throw std::runtime_error("Experiment sweep name cannot be empty");
     }
@@ -35,9 +58,9 @@ Vector2d Results::getVoltageProtocol(std::string experiment_sweep_name) {
     if (!experimentSweepResultsExist(experiment_sweep_name)) {
         throw std::runtime_error(
                 "ExperimentSweep results " + experiment_sweep_name \
-                + " does not exist");
+                + " do not exist");
     }
-    return experiment_sweep_voltage_protocol[experiment_sweep_name];
+    return *(experiment_sweep_voltage_protocol[experiment_sweep_name]);
 }
 
 
@@ -51,8 +74,9 @@ bool Results::experimentSweepResultsExist(std::string name) const {
     return false;
 }
 
-void Results::saveExperimentSweepProbabilities(
-        ExperimentSweep::SharedPointer sweep, Vector3d state_probabilities) {
+void Results::createExperimentSweepResults(
+        ExperimentSweep::SharedPointer sweep, 
+        Vector3dSharedPtr state_probabilities) {
     
     std::string experiment_sweep_name = sweep->getName();
     
@@ -66,15 +90,24 @@ void Results::saveExperimentSweepProbabilities(
 
     // Transform and save the voltage protocol as a 2d vector
     SerializedProtocolSharedPointer vp = sweep->getSerializedVoltageProtocol();
+    Vector2dSharedPtr voltage_protocol = voltageProtocolAsVector2d(vp);    
+    experiment_sweep_voltage_protocol[experiment_sweep_name] = voltage_protocol;
     
-    Vector2d voltage_protocol;
+    // Save the state names as 1d vector
+    
+}
+
+Vector2dSharedPtr Results::voltageProtocolAsVector2d(
+        SerializedProtocolSharedPointer vp) {
+    
+    Vector2dSharedPtr voltage_protocol(new Vector2d());
         
     SerializedProtocol::iterator protocol_iterator;
     for(protocol_iterator = vp->begin(); 
             protocol_iterator != vp->end(); 
             ++protocol_iterator) {
         
-        voltage_protocol.push_back(Vector());
+        voltage_protocol->push_back(Vector());
         int voltage_protocol_iteration_time_step = 0; // ms
        
         for(unsigned int inner_index = 0; 
@@ -98,13 +131,13 @@ void Results::saveExperimentSweepProbabilities(
             while(voltage_protocol_iteration_time_step !=
                     voltage_change_time) {
 
-                voltage_protocol.back().push_back(voltage);
+                voltage_protocol->back().push_back(voltage);
                 voltage_protocol_iteration_time_step++;
             }
         } 
     }
-    experiment_sweep_voltage_protocol[experiment_sweep_name] = 
-            voltage_protocol;
+    return voltage_protocol;
 }
+
 
 }

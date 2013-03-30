@@ -29,14 +29,15 @@ namespace ModFossa {
 
         Experiment::SharedPointer getExperiment() const;
         Results::SharedPointer getResultsClass() const;
-
+        
         void runAllExperimentSweeps();
-        void runExperimentSweep(std::string experiment_sweep_name);
 
     private:
         Experiment::SharedPointer experiment;
         Simulator::SharedPointer simulator;
         Results::SharedPointer results;
+        
+        bool simulation_has_been_run;
 
         /**
          * Initialize the Experiment and Simulator classes.

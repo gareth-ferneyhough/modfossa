@@ -39,6 +39,9 @@ using ModFossa::Results;
 using ModFossa::Vector;
 using ModFossa::Vector2d;
 using ModFossa::Vector3d;
+using ModFossa::VectorSharedPtr;
+using ModFossa::Vector2dSharedPtr;
+using ModFossa::Vector3dSharedPtr;
 
 template<class T1, class T2>
 struct PairToTupleConverter {
@@ -170,6 +173,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
             ;
     
     class_<Results, shared_ptr<Results> >("results")
+            .def("getStateNames", &Results::getStateNames)
             .def("getStateProbabilities", &Results::getStateProbabilities)
             .def("getVoltageProtocol", &Results::getVoltageProtocol)
             ;
@@ -211,7 +215,6 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<SimulationRunner>("simulationRunner")
             .def("experiment", &SimulationRunner::getExperiment)
             .def("results", &SimulationRunner::getResultsClass)
-            .def("runExperimentSweep", &SimulationRunner::runExperimentSweep)
             .def("runAllExperimentSweeps",
                 &SimulationRunner::runAllExperimentSweeps)
             ;
@@ -227,7 +230,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<Vector>("Vector")
             .def(vector_indexing_suite<Vector>())
             ;
-
+        
     class_<std::vector<std::string> >("stringVector")
             .def(vector_indexing_suite<std::vector<std::string> >())
             ;
