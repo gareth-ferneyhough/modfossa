@@ -159,6 +159,11 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("addConnection", &MarkovModel::addConnection)
             .def("addRateConstant", &MarkovModel::addRateConstant)
             .def("setInitialState", &MarkovModel::setInitialState)
+            .def("setMaxChannelConductance", 
+                &MarkovModel::setMaxChannelConductance)
+            .def("setReversalPotential", 
+                &MarkovModel::setReversalPotential)
+            .def("setInitialState", &MarkovModel::setInitialState)    
             .def("isValid", &MarkovModel::isValid)
             .def("validate", &MarkovModel::validate)
             ;
@@ -187,6 +192,8 @@ BOOST_PYTHON_MODULE(ModFossa) {
     enum_<ErrorType>("errorType")
             .value("no connections defined",
             ErrorType::NO_CONNECTIONS)
+            .value("maximum channel conductance not defined",
+            ErrorType::MAX_CONDUCTANCE_NOT_DEFINED)    
             .value("rate constant not defined",
             ErrorType::RATE_CONSTANT_NOT_DEFINED)
             .value("state not defined",

@@ -29,6 +29,8 @@ protected:
         markov_model->addRateConstant(rate1);
         markov_model->addConnection(connection);
         markov_model->setInitialState("state1");
+        markov_model->setMaxChannelConductance(1);
+        markov_model->setReversalPotential(1);
     }
     
     void addVoltageProtocol() {

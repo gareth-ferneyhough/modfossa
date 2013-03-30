@@ -54,6 +54,8 @@ rate('b2', type='sigmoidal', a=75, v_half=120, k=50)
 rate('b3', type='sigmoidal', a=100, v_half=120, k=50)
 
 initialState('C1')
+maxChannelConductance(1.12)
+reversalPotential(0)
 
 voltageProtocol('vp')
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=500)
@@ -66,10 +68,7 @@ experimentSweep('sweep', 'vp', Ca=250e-9)
 validate()
 run()
 
-getStateNames()
-
-stateProbabilities = getStateProbabilities('sweep')
-plotStates(stateProbabilities)
+plotStates('sweep')
 
 voltageProtocol = getVoltageProtocol('sweep')
 plot(voltageProtocol)

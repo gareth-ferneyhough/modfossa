@@ -31,6 +31,8 @@ public:
     void initialize(Experiment::SharedPointer experiment);
     
     StringVec   getStateNames();
+    Vector      getStateGatingVariables();
+    
     Vector      getIV(std::string experiment_sweep_name);
     Vector2d    getCurrents(std::string experiment_sweep_name);
     Vector2d    getVoltageProtocol(std::string experiment_sweep_name);
@@ -49,7 +51,7 @@ private:
     Vector2dSharedPtr voltageProtocolAsVector2d(
         SerializedProtocolSharedPointer vp);
         
-    
+    double max_conductance;
     StringVecSharedPtr state_names;
     VectorSharedPtr state_gating_variables;
     

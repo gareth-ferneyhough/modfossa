@@ -46,6 +46,16 @@ def initialState(name):
     except RuntimeError, e:
         print e
 
+def maxChannelConductance(conductance):
+    try: markovModel.setMaxChannelConductance(conductance)
+    except RuntimeError, e:
+        print e
+
+def reversalPotential(reversalPotential):
+    try: markovModel.setReversalPotential(reversalPotential)
+    except RuntimeError, e:
+        print e
+
 def isValid():
     return markovModel.isValid()
 
@@ -112,9 +122,28 @@ def getVoltageProtocol(experimentSweepName):
         print e
 
 def getStateNames():
-    names = results.getStateNames()
-    for name in names:
-        print name
+    try:
+        return results.getStateNames()
+
+    except RuntimeError, e:
+        print e    
+
+def plotStates(experimentSweepName):
+    plotData = getStateProbabilities(experimentSweepName)
+    names = getStateNames()
+
+    fig = plt.figure(1)
+    ax = fig.add_subplot(111)
+    ax.plot(plotData[0])
+
+    leg = ax.legend(names, 'center right', shadow=True)
+    #ax.set_xlabel('Time (ms)')
+    #ax.set_ylabel('Probability')
+    #ax.set_title('Channel Probability')
+    #ax.autoscale_view(True,True,True)
+    #plt.axis([0, 2000, -100, 200])
+    plt.show()
+
 
 def plot(plotData):
     fig = plt.figure(1)

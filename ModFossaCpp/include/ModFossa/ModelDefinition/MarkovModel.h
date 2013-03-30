@@ -35,9 +35,14 @@ public:
             const RateConstantBase::SharedPointer rate_constant);
     void addConnection(const Connection::SharedPointer connection);
     void setInitialState(std::string initial_state);
+    void setMaxChannelConductance(double max_channel_conductance);
+    void setReversalPotential(double reversal_potential);
+    
     Validation::ValidationResults validate(
             const StateOfTheWorld::SharedPointer state_of_the_world);
     
+    double getReversalPotential() const;
+    double getMaxChannelConductance() const;
     VectorSharedPtr getStateGatingVariables() const;
     StringVecSharedPtr getStateNames() const;
     
@@ -46,6 +51,8 @@ public:
 private:
     bool is_valid;
     std::string initial_state;
+    double max_channel_conductance;
+    double reversal_potential;
 
     RateMap map_of_rates;
     StateMap map_of_states;

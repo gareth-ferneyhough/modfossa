@@ -9,7 +9,8 @@
 #include <cassert>
 
 namespace ModFossa {
-Results::Results() : initialized(false) {
+Results::Results() : 
+initialized(false) {
 }
 
 Results::~Results() {
@@ -23,16 +24,29 @@ Results::~Results() {
  */
 void Results::initialize(Experiment::SharedPointer experiment) {
     assert(initialized == false);
-    
+    initialized = true;
     // We need to get information about the states.
     state_names = experiment->getMarkovModel()->getStateNames();
     state_gating_variables = 
-            experiment->getMarkovModel()->getStateGatingVariables(); 
-    
+            experiment->getMarkovModel()->getStateGatingVariables();
+    max_conductance = 
+            experiment->getMarkovModel()->getMaxChannelConductance();
 }
 
 StringVec Results::getStateNames() {
+    if(!initialized) {
+        throw std::runtime_error("Simulation must be run before \
+                                retrieving results");
+    }
     return *state_names;
+}
+
+Vector Results::getStateGatingVariables() {
+    if(!initialized) {
+        throw std::runtime_error("Simulation must be run before \
+                                retrieving results");
+    }
+    return *state_gating_variables;
 }
 
 Vector3d Results::getStateProbabilities(std::string name) {
@@ -78,6 +92,8 @@ void Results::createExperimentSweepResults(
         ExperimentSweep::SharedPointer sweep, 
         Vector3dSharedPtr state_probabilities) {
     
+    assert(initialized == true);
+    
     std::string experiment_sweep_name = sweep->getName();
     
     if(experimentSweepResultsExist(experiment_sweep_name)) {
@@ -91,10 +107,7 @@ void Results::createExperimentSweepResults(
     // Transform and save the voltage protocol as a 2d vector
     SerializedProtocolSharedPointer vp = sweep->getSerializedVoltageProtocol();
     Vector2dSharedPtr voltage_protocol = voltageProtocolAsVector2d(vp);    
-    experiment_sweep_voltage_protocol[experiment_sweep_name] = voltage_protocol;
-    
-    // Save the state names as 1d vector
-    
+    experiment_sweep_voltage_protocol[experiment_sweep_name] = voltage_protocol;    
 }
 
 Vector2dSharedPtr Results::voltageProtocolAsVector2d(

@@ -163,6 +163,8 @@ TEST_F(MarkovModelTest, validateSuccess) {
     markov_model->addState(state2);
 
     markov_model->setInitialState("from");
+    markov_model->setMaxChannelConductance(1);
+    markov_model->setReversalPotential(1);
 
     RateConstantBase::SharedPointer rc1(new ConstantRateConstant("rate", 1.1));
     markov_model->addRateConstant(rc1);
@@ -202,6 +204,8 @@ TEST_F(MarkovModelTest, validateSuccessWithLigandGated) {
     markov_model->addRateConstant(rate1);
     markov_model->addConnection(connection);
     markov_model->setInitialState("state1");
+    markov_model->setMaxChannelConductance(1);
+    markov_model->setReversalPotential(1);
 
     ValidationResults results = markov_model->validate(state_of_the_world);
     ASSERT_TRUE(results.overall_result == NO_WARNINGS);

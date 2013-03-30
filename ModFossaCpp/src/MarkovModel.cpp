@@ -10,7 +10,9 @@ using std::vector;
 namespace ModFossa {
 
 MarkovModel::MarkovModel() :
-is_valid(false) {
+is_valid(false),
+max_channel_conductance(-1),
+reversal_potential(-9999){
 }
 
 MarkovModel::~MarkovModel() {
@@ -128,6 +130,36 @@ StringVecSharedPtr MarkovModel::getStateNames() const {
     return names;
 }
 
+void MarkovModel::setMaxChannelConductance(double max_channel_conductance) {
+    if (max_channel_conductance == -1) {
+        throw std::runtime_error("max channel conductance has already " \
+                                    "been set");
+    }
+    
+    if (max_channel_conductance < 0) {
+        throw std::runtime_error("max channel conductance cannot be negative"); 
+    }
+    this->max_channel_conductance = max_channel_conductance;
+    is_valid = false;
+}
+
+void MarkovModel::setReversalPotential(double reversal_potential) {
+    if (reversal_potential == -9999) {
+        throw std::runtime_error("reversal potential has already been set");
+    }
+    
+    this->reversal_potential = reversal_potential;
+    is_valid = false;
+}
+
+double MarkovModel::getMaxChannelConductance() const{
+    return max_channel_conductance;
+}
+
+double MarkovModel::getReversalPotential() const{
+    return reversal_potential;
+}
+
 bool MarkovModel::isValid() const {
     return is_valid;
 }
@@ -158,6 +190,26 @@ Validation::ValidationResults MarkovModel::validate(
         errors.push_back(std::make_pair(
                 NO_CONNECTIONS, "No connections defined"));
 
+        error_level = ERRORS;
+    }
+    
+    // max conductance has been set?
+    if (max_channel_conductance == -1) {
+        errors.push_back(std::make_pair(
+                MAX_CONDUCTANCE_NOT_DEFINED, "Maximum channel conductance "\
+                                                "not defined"));
+    }
+
+    // reversal potential has been set?
+    /**
+     * @todo change this method of checking if reversal_potential has been
+     * initialized.
+     */
+    if (reversal_potential == -9999) {
+        errors.push_back(std::make_pair(
+                REVERSAL_POTENTIAL_NOT_DEFINED, "Reversal potential not "\
+                                                "defined "));
+        
         error_level = ERRORS;
     }
 
