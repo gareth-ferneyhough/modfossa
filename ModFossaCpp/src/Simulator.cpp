@@ -15,7 +15,7 @@ Simulator::Simulator() {
 Simulator::~Simulator() {
 }
 
-ProtocolIterationResults Simulator::runProtocolIteration(
+Vector2d Simulator::runProtocolIteration(
         ProtocolIteration protocol_iteration,   
         StateOfTheWorld::SharedPointer state_of_the_world, 
         TransitionMatrix::SharedPointer transition_matrix) {
@@ -60,7 +60,7 @@ ProtocolIterationResults Simulator::runProtocolIteration(
     
     
     // Save the initial conditions to our results structure.
-    ProtocolIterationResults results;
+    Vector2d results;
     results.push_back(std::vector<double>());
     
     double probability = 0;
@@ -125,7 +125,7 @@ ProtocolIterationResults Simulator::runProtocolIteration(
 }
    
 void Simulator::resultsMatrixToVector(
-        ProtocolIterationResults& results, const Matrix& mat) {
+        Vector2d& results, const Matrix& mat) {
 
     // Copy the results from the solver into our 2-D results vector.
     // The rows of the Matrix are our times. The columns are the state

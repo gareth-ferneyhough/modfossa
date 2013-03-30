@@ -26,6 +26,18 @@ void Experiment::initialize() {
     is_valid = false;
 }
 
+std::vector<ExperimentSweep::SharedPointer> 
+        Experiment::getAllExperimentSweeps() {
+    
+    std::vector<ExperimentSweep::SharedPointer> return_val;
+    
+    ExperimentSweepMap::const_iterator it;
+    for(it = experiment_sweeps.begin(); it != experiment_sweeps.end(); ++it) {
+        return_val.push_back(it->second);
+    }
+    return return_val;
+}
+
 ExperimentSweep::SharedPointer Experiment::getExperimentSweep(std::string name){
     if(!experimentSweepExists(name)) {
         throw std::runtime_error(

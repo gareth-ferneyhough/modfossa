@@ -4,8 +4,10 @@ import matplotlib.pyplot as plt
     
   #  def __init__():
 simulationRunner = ModFossa.simulationRunner()
+results = simulationRunner.results()
 experiment = simulationRunner.experiment()
 markovModel = experiment.markovModel()
+
 
 def state(name, conducting = False):
     try: state = ModFossa.state(name, conducting)
@@ -16,6 +18,105 @@ def state(name, conducting = False):
         markovModel.addState(state)
     except RuntimeError, e:
         print e
+
+def rate(name, **args):
+    if args['type'] == 'constant':
+        _addConstantRateConstant(name, **args)
+    elif args['type'] == 'sigmoidal':
+        _addSigmoidalRateConstant(name, **args)
+    elif args['type'] == 'ligandGated':
+        _addLigandGatedRateConstant(name, **args)
+    elif args['type'] == 'boltzman':
+        print 'boltzman'
+    elif args['type'] == 'exponential':
+        _addExponentialRateConstant(name, **args)
+
+def connect(name, fromState, toState):
+    try: connection = ModFossa.connection(name, fromState, toState)
+    except RuntimeError, e:
+        print e
+
+    try:
+        markovModel.addConnection(connection)
+    except RuntimeError, e:
+        print e
+
+def initialState(name):
+    try: markovModel.setInitialState(name)
+    except RuntimeError, e:
+        print e
+
+def isValid():
+    return markovModel.isValid()
+
+def validate():
+    results = experiment.validate()
+    print 'Validation results:',
+
+    if len(results) == 0:
+        print 'model is valid.'
+
+    else:
+        print 'model is invalid. See details below.'
+        for r in results:
+            print r
+
+def voltageProtocol(name):
+    try: 
+        vp = ModFossa.voltageProtocol(name)
+        experiment.addVoltageProtocol(vp)
+    except RuntimeError, e:
+        print e
+
+def voltageProtocolAddStage(vpName, stageName, **args):
+    if len(args) == 2:
+        _addConstantVoltageStage(vpName, stageName, **args)
+
+    elif len(args) == 4:
+        _addSteppedVoltageStage(vpName, stageName, **args)
+
+    else:
+        print 'Incorrent number of arguments to voltageProtocolAddStage'
+
+def experimentSweep(name, voltageProtocolName, **args):
+    try: 
+        exp = ModFossa.experimentSweep(name, voltageProtocolName)
+
+        for k, v in args.items():
+            exp.addConcentration(ModFossa.concentration(k, v))
+
+        experiment.addExperimentSweep(exp)
+
+    except RuntimeError, e:
+        print e
+
+def run():
+    try:
+        simulationRunner.runAllExperimentSweeps()
+
+    except RuntimeError, e:
+        print e
+
+def getStateProbabilities(experimentSweepName):
+    try:
+        return results.getStateProbabilities(experimentSweepName)
+
+    except RuntimeError, e:
+        print e
+
+def plot(plotData):
+    fig = plt.figure(1)
+    ax = fig.add_subplot(111)
+
+    # todo: Fix this: only plotting first protocol iteration
+    ax.plot(plotData[0])
+
+    leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
+    ax.set_xlabel('Time (ms)')
+    ax.set_ylabel('Probability')
+    ax.set_title('Channel Probability')
+
+    plt.show()
 
 
 def _addConstantRateConstant(name, **args):
@@ -94,47 +195,6 @@ def _addExponentialRateConstant(name, **args):
     except RuntimeError, e:
         print e
 
-def rate(name, **args):
-    if args['type'] == 'constant':
-        _addConstantRateConstant(name, **args)
-    elif args['type'] == 'sigmoidal':
-        _addSigmoidalRateConstant(name, **args)
-    elif args['type'] == 'ligandGated':
-        _addLigandGatedRateConstant(name, **args)
-    elif args['type'] == 'boltzman':
-        print 'boltzman'
-    elif args['type'] == 'exponential':
-        _addExponentialRateConstant(name, **args)
-
-def connect(name, fromState, toState):
-    try: connection = ModFossa.connection(name, fromState, toState)
-    except RuntimeError, e:
-        print e
-
-    try:
-        markovModel.addConnection(connection)
-    except RuntimeError, e:
-        print e
-
-def initialState(name):
-    try: markovModel.setInitialState(name)
-    except RuntimeError, e:
-        print e
-
-def isValid():
-    return markovModel.isValid()
-
-def validate():
-    return experiment.validate()
-
-def voltageProtocol(name):
-    try: 
-        vp = ModFossa.voltageProtocol(name)
-        experiment.addVoltageProtocol(vp)
-    except RuntimeError, e:
-        print e
-
-
 def _addSteppedVoltageStage(vpName, stageName, **args):
 
     if not 'start' in args:
@@ -160,7 +220,6 @@ def _addSteppedVoltageStage(vpName, stageName, **args):
     except RuntimeError, e:
         print e
 
-
 def _addConstantVoltageStage(vpName, stageName, **args):
     if not 'voltage' in args:
         raise RuntimeError("argument \'voltage\' not found when adding "
@@ -173,27 +232,5 @@ def _addConstantVoltageStage(vpName, stageName, **args):
     try: 
         vp = experiment.getVoltageProtocol(vpName)
         vp.addConstantStage(stageName, args['voltage'], args['duration'])
-    except RuntimeError, e:
-        print e
-
-def voltageProtocolAddStage(vpName, stageName, **args):
-    if len(args) == 2:
-        _addConstantVoltageStage(vpName, stageName, **args)
-
-    elif len(args) == 4:
-        _addSteppedVoltageStage(vpName, stageName, **args)
-
-    else:
-        print 'Incorrent number of arguments to voltageProtocolAddStage'
-
-def experimentSweep(name, voltageProtocolName, **args):
-    try: 
-        exp = ModFossa.experimentSweep(name, voltageProtocolName)
-
-        for k, v in args.items():
-            exp.addConcentration(ModFossa.concentration(k, v))
-
-        experiment.addExperimentSweep(exp)
-
     except RuntimeError, e:
         print e

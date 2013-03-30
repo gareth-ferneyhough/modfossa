@@ -8,11 +8,12 @@
 #ifndef MATRIX_H
 #define	MATRIX_H
 
+// Use armadillo linear algebra for our matrix class
 #include <armadillo>
 
 namespace ModFossa {
 typedef arma::mat Matrix;
-};
+}
 
 #endif	/* MATRIX_H */
 

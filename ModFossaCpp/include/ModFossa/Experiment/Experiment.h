@@ -9,6 +9,7 @@
 #define	EXPERIMENT_H
 
 #include <map>
+#include <ModFossa/Common/ContainerTypes.h>
 #include <ModFossa/ModelDefinition/MarkovModel.h>
 #include <ModFossa/Experiment/VoltageProtocol.h>
 #include <ModFossa/Experiment/ExperimentSweep.h>
@@ -69,6 +70,7 @@ public:
      */
     Validation::ValidationResults validate();
     
+    std::vector<ExperimentSweep::SharedPointer> getAllExperimentSweeps();
     ExperimentSweep::SharedPointer getExperimentSweep(std::string name);
     VoltageProtocol::SharedPointer getVoltageProtocol(std::string name);
     

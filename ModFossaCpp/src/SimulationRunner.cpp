@@ -19,30 +19,39 @@ namespace ModFossa {
     Experiment::SharedPointer SimulationRunner::getExperiment() const {
         return experiment;
     }
-
-    ExperimentSweepResults SimulationRunner::getExperimentSweepResults(
-            std::string name) {
-
-        if (!experimentSweepResultsExist(name)) {
-            throw std::runtime_error(
-                    "ExperimentSweep results " + name + " does not exist");
+    
+    Results::SharedPointer SimulationRunner::getResultsClass() const {
+        return results;
+    }
+    
+    void SimulationRunner::runAllExperimentSweeps() {
+        std::vector<ExperimentSweep::SharedPointer> sweeps = 
+                experiment->getAllExperimentSweeps();
+        
+        std::vector<ExperimentSweep::SharedPointer>::const_iterator it;
+        for(it = sweeps.begin(); it != sweeps.end(); ++it) {
+            doRunExperimentSweep(*it);
         }
-        return results_map[name];
     }
 
     void SimulationRunner::runExperimentSweep(
             std::string name) {
+
+        // Get the experiment sweep. This will throw if the sweep does not exist.
+        ExperimentSweep::SharedPointer experiment_sweep =
+                experiment->getExperimentSweep(name);
+        
+        doRunExperimentSweep(experiment_sweep);
+    }
+    
+    void SimulationRunner::doRunExperimentSweep(
+        ExperimentSweep::SharedPointer experiment_sweep) {
 
         // Make sure that we have already validated the experiment.
         if (!experiment->isValid()) {
             throw std::runtime_error("Experiment must be validated\
                                   before it can be run");
         }
-
-        // Get the experiment sweep. This will throw if the sweep does not exist.
-        ExperimentSweep::SharedPointer experiment_sweep =
-                experiment->getExperimentSweep(name);
-
 
         // Create StateOfTheWorld from ExperimentSweep
         StateOfTheWorld::SharedPointer state_of_the_world(
@@ -57,33 +66,25 @@ namespace ModFossa {
 
 
         // Get our results ready
-        ExperimentSweepResults results;
+        Vector3d experiment_sweep_results;
 
         // Run protocol iteration, appending the results to our results each time.
         SerializedProtocol::const_iterator it;
         for (it = serialized_protocol->begin();
                 it != serialized_protocol->end(); ++it) {
 
-            results.push_back(simulator->runProtocolIteration(
+            experiment_sweep_results.push_back(simulator->runProtocolIteration(
                     *it, state_of_the_world, transition_matrix));
         }
 
         // Save results to map
-        results_map[name] = results;
+        results->saveExperimentSweepProbabilities(
+                experiment_sweep->getName(), experiment_sweep_results);
     }
 
     void SimulationRunner::initialize() {
         experiment = Experiment::SharedPointer(new Experiment());
         simulator = Simulator::SharedPointer(new Simulator());
-    }
-
-    bool SimulationRunner::experimentSweepResultsExist(std::string name) const {
-        ResultsMap::const_iterator it;
-        it = results_map.find(name);
-
-        if (it != results_map.end()) {
-            return true;
-        }
-        return false;
+        results = Results::SharedPointer(new Results());
     }
 }

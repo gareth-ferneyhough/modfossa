@@ -8,11 +8,11 @@
 #ifndef SIMULATOR_H
 #define	SIMULATOR_H
 
+#include <ModFossa/Common/ContainerTypes.h>
 #include <ModFossa/Common/TransitionMatrix.h>
 #include <ModFossa/Common/StateOfTheWorld.h>
 #include <ModFossa/Common/SharedPtr.h>
 #include <ModFossa/Experiment/ODESolver.h>
-#include <ModFossa/Experiment/Results.h>
 #include <ModFossa/Experiment/SerializedProtocol.h>
 
 namespace ModFossa {
@@ -23,7 +23,7 @@ public:
     Simulator();
     ~Simulator();
     
-    ProtocolIterationResults runProtocolIteration(
+    Vector2d runProtocolIteration(
     ProtocolIteration protocol_iteration,   
     StateOfTheWorld::SharedPointer state_of_the_world, 
     TransitionMatrix::SharedPointer transition_matrix);
@@ -32,7 +32,7 @@ private:
     const double dt = 0.001;
     
     void resultsMatrixToVector(
-        ProtocolIterationResults& results, const Matrix& mat); 
+        Vector2d& results, const Matrix& mat); 
 };
 }
 

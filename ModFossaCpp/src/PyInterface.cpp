@@ -35,6 +35,10 @@ using ModFossa::SigmoidalRateConstant;
 using ModFossa::VoltageProtocol;
 using ModFossa::ExperimentSweep;
 using ModFossa::Concentration;
+using ModFossa::Results;
+using ModFossa::Vector;
+using ModFossa::Vector2d;
+using ModFossa::Vector3d;
 
 template<class T1, class T2>
 struct PairToTupleConverter {
@@ -164,6 +168,10 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("addExperimentSweep", &Experiment::addExperimentSweep)
             .def("getExperimentSweep", &Experiment::getExperimentSweep)
             ;
+    
+    class_<Results, shared_ptr<Results> >("results")
+            .def("getStateProbabilities", &Results::getStateProbabilities)
+            ;
 
     enum_<ErrorLevel>("errorLevel")
             .value("no_warnings", ErrorLevel::NO_WARNINGS)
@@ -200,30 +208,26 @@ BOOST_PYTHON_MODULE(ModFossa) {
             ;
 
     class_<SimulationRunner>("simulationRunner")
-            .def("version", &SimulationRunner::getVersion)
             .def("experiment", &SimulationRunner::getExperiment)
+            .def("results", &SimulationRunner::getResultsClass)
             .def("runExperimentSweep", &SimulationRunner::runExperimentSweep)
-            .def("getExperimentSweepResults",
-            &SimulationRunner::getExperimentSweepResults)
+            .def("runAllExperimentSweeps",
+                &SimulationRunner::runAllExperimentSweeps)
+            ;
+
+    class_<Vector3d>("Vector3d")
+            .def(vector_indexing_suite<Vector3d>())
+            ;
+
+    class_<Vector2d>("Vector2d")
+            .def(vector_indexing_suite<Vector2d>())
+            ;
+
+    class_<Vector>("Vector")
+            .def(vector_indexing_suite<Vector>())
             ;
 
     class_<std::vector<std::string> >("stringVector")
             .def(vector_indexing_suite<std::vector<std::string> >())
-            ;
-
-    class_<std::vector<std::vector<std::vector<std::vector<double> > > > >("fourDVector")
-            .def(vector_indexing_suite<std::vector<std::vector<std::vector<std::vector<double> > > > >())
-            ;
-
-    class_<std::vector<std::vector<std::vector<double> > > >("threeDVector")
-            .def(vector_indexing_suite<std::vector<std::vector<std::vector<double> > > >())
-            ;
-
-    class_<std::vector<std::vector<double> > >("twoDVector")
-            .def(vector_indexing_suite<std::vector<std::vector<double> > >())
-            ;
-
-    class_<std::vector<double> >("doubleVector")
-            .def(vector_indexing_suite<std::vector<double> >())
             ;
 }

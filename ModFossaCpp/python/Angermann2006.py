@@ -61,44 +61,36 @@ voltageProtocolAddStage('vp', 'step', voltage=100, duration=500)
 
 experimentSweep('sweep', 'vp', Ca=250e-9)
 
+validate()
+run()
 
-
-results = validate()
-print 'validation results:'
-for r in results:
-	print r
+stateProbabilities = getStateProbabilities('sweep')
+plot(stateProbabilities)
 
 
 
 ## Put this code in the library
-simulationRunner.runExperimentSweep('sweep')
-sweepResults = simulationRunner.getExperimentSweepResults('sweep')
+#run()
+#simulationRunner.runExperimentSweep('sweep')
+#sweepResults = simulationRunner.getExperimentSweepResults('sweep')
 
-print 'number of protocol iterations: ', len(sweepResults)
-print 'number of time steps', len(sweepResults[0])
-print 'number of states', len(sweepResults[0][0])
+#print 'number of protocol iterations: ', len(sweepResults)
+#print 'number of time steps', len(sweepResults[0])
+#print 'number of states', len(sweepResults[0][0])
 
-iterationResults1 = sweepResults[0]
-
-
-### calculate current ###
-for i in iterationResults1:
-	probs = ''
-	for j in i:
-		probs += str(j)
-	print probs
+#iterationResults1 = sweepResults[0]
 
 
 
-fig = plt.figure(1)
-ax = fig.add_subplot(111)
-ax.plot(iterationResults1)
+#fig = plt.figure(1)
+#ax = fig.add_subplot(111)
+#ax.plot(iterationResults1)
 #ax.plot(mat[:,1])
 #ax.plot(mat[:,2])
 
-leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
-ax.set_xlabel('Time (ms)')
-ax.set_ylabel('Probability')
-ax.set_title('Channel Probability')
+#leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
+#ax.set_xlabel('Time (ms)')
+#ax.set_ylabel('Probability')
+#ax.set_title('Channel Probability')
 
-plt.show()
+#plt.show()
