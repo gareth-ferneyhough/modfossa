@@ -25,7 +25,7 @@ private:
     int getIndex() const;
     const std::string name;
     const bool is_conducting;
-    const double gating_variable;
+    double gating_variable;
     int index;
     bool is_initial_state;
 };

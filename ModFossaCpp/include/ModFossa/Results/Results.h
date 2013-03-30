@@ -45,18 +45,25 @@ private:
     
     bool experimentSweepResultsExist(std::string name) const;
     
-    void createExperimentSweepResults(ExperimentSweep::SharedPointer sweep, 
+    void createExperimentSweepResults(
+        ExperimentSweep::SharedPointer sweep, 
         Vector3dSharedPtr state_probabilities);
     
     Vector2dSharedPtr voltageProtocolAsVector2d(
         SerializedProtocolSharedPointer vp);
+    
+    Vector2dSharedPtr calculateCurrents(
+        Vector3dSharedPtr state_probabilities, 
+        Vector2dSharedPtr voltages);
         
+    double reversal_potential;
     double max_conductance;
     StringVecSharedPtr state_names;
     VectorSharedPtr state_gating_variables;
     
     ResultsMap3d experiment_sweep_probabilities;
     ResultsMap2d experiment_sweep_voltage_protocol;
+    ResultsMap2d experiment_sweep_currents;
 };
 }
 #endif	/* RESULTS_H */

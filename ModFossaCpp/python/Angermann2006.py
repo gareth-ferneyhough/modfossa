@@ -58,8 +58,11 @@ maxChannelConductance(1.12)
 reversalPotential(0)
 
 voltageProtocol('vp')
+#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
+#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
+#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=500)
-voltageProtocolAddStage('vp', 'step', voltage=100, duration=500)
+#voltageProtocolAddStage('vp', 'step', voltage=100, duration=500)
 voltageProtocolAddStage('vp', 'step2', start=-80, step=20, stop=40, duration=300)
 voltageProtocolAddStage('vp', 'hold2', voltage=-40, duration=300)
 
@@ -68,9 +71,10 @@ experimentSweep('sweep', 'vp', Ca=250e-9)
 validate()
 run()
 
-plotStates('sweep')
+#plotStates('sweep')
+plotCurrents('sweep')
 
-voltageProtocol = getVoltageProtocol('sweep')
-plot(voltageProtocol)
+#voltageProtocol = getVoltageProtocol('sweep')
+#plot(voltageProtocol)
 
 

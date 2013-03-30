@@ -126,7 +126,14 @@ def getStateNames():
         return results.getStateNames()
 
     except RuntimeError, e:
-        print e    
+        print e  
+
+def getCurrents(experimentSweepName):
+    try:
+        return results.getCurrents(experimentSweepName)
+
+    except RuntimeError, e:
+        print e  
 
 def plotStates(experimentSweepName):
     plotData = getStateProbabilities(experimentSweepName)
@@ -144,6 +151,23 @@ def plotStates(experimentSweepName):
     #plt.axis([0, 2000, -100, 200])
     plt.show()
 
+
+def plotCurrents(experimentSweepName):
+    plotData = getCurrents(experimentSweepName)
+    names = getStateNames()
+
+    fig = plt.figure(1)
+    ax = fig.add_subplot(111)
+    for currentTrace in plotData:
+        ax.plot(currentTrace)
+
+    #leg = ax.legend(names, 'center right', shadow=True)
+    #ax.set_xlabel('Time (ms)')
+    #ax.set_ylabel('Probability')
+    #ax.set_title('Channel Probability')
+    #ax.autoscale_view(True,True,True)
+    #plt.axis([0, 2000, -100, 200])
+    plt.show()
 
 def plot(plotData):
     fig = plt.figure(1)

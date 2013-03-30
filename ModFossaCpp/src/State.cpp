@@ -20,7 +20,7 @@ is_initial_state(false) {
     }
     
     if(!is_conducting) {
-        gating_variable = 0.0;
+        this->gating_variable = 0.0;
     }
 }
 
