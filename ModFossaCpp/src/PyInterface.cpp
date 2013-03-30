@@ -171,6 +171,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
     
     class_<Results, shared_ptr<Results> >("results")
             .def("getStateProbabilities", &Results::getStateProbabilities)
+            .def("getVoltageProtocol", &Results::getVoltageProtocol)
             ;
 
     enum_<ErrorLevel>("errorLevel")

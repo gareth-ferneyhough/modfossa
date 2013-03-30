@@ -58,15 +58,19 @@ initialState('C1')
 voltageProtocol('vp')
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=500)
 voltageProtocolAddStage('vp', 'step', voltage=100, duration=500)
+voltageProtocolAddStage('vp', 'step2', start=-80, step=20, stop=40, duration=300)
+voltageProtocolAddStage('vp', 'hold2', voltage=-40, duration=300)
 
 experimentSweep('sweep', 'vp', Ca=250e-9)
 
 validate()
 run()
 
-stateProbabilities = getStateProbabilities('sweep')
-plot(stateProbabilities)
+#stateProbabilities = getStateProbabilities('sweep')
+#plot(stateProbabilities)
 
+voltageProtocol = getVoltageProtocol('sweep')
+plot(voltageProtocol)
 
 
 ## Put this code in the library

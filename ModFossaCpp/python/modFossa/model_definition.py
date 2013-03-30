@@ -104,12 +104,19 @@ def getStateProbabilities(experimentSweepName):
     except RuntimeError, e:
         print e
 
+def getVoltageProtocol(experimentSweepName):
+    try:
+        return results.getVoltageProtocol(experimentSweepName)
+
+    except RuntimeError, e:
+        print e
+
 def plot(plotData):
     fig = plt.figure(1)
     ax = fig.add_subplot(111)
 
-    # todo: Fix this: only plotting first protocol iteration
-    ax.plot(plotData[0])
+    for iteration in plotData:
+        ax.plot(iteration)
 
     leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
     ax.set_xlabel('Time (ms)')

@@ -14,6 +14,7 @@
 
 #include <ModFossa/Common/ContainerTypes.h>
 #include <ModFossa/Common/SharedPtr.h>
+#include <ModFossa/Experiment/ExperimentSweep.h>
 
 
 namespace ModFossa {
@@ -21,7 +22,8 @@ namespace ModFossa {
 class Results {
 public:
     typedef shared_ptr<Results>::type SharedPointer;
-    typedef std::map<std::string, Vector3d> ResultsMap;
+    typedef std::map<std::string, Vector3d> ResultsMap3d;
+    typedef std::map<std::string, Vector2d> ResultsMap2d;
     
     Results();
     ~Results();
@@ -36,10 +38,11 @@ private:
     
     bool experimentSweepResultsExist(std::string name) const;
     
-    void saveExperimentSweepProbabilities(std::string experimentSweepName, 
-    Vector3d state_probabilities);
+    void saveExperimentSweepProbabilities(ExperimentSweep::SharedPointer sweep, 
+        Vector3d state_probabilities);
     
-    ResultsMap experiment_sweep_probabilities;
+    ResultsMap3d experiment_sweep_probabilities;
+    ResultsMap2d experiment_sweep_voltage_protocol;
 
 };
 }

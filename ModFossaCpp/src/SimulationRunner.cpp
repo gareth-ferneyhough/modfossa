@@ -77,9 +77,11 @@ namespace ModFossa {
                     *it, state_of_the_world, transition_matrix));
         }
 
-        // Save results to map
+        // Save results. The results class will use the experimentSweep instance
+        // and the results we just calculated to generate the various data 
+        // required for analysis.
         results->saveExperimentSweepProbabilities(
-                experiment_sweep->getName(), experiment_sweep_results);
+                experiment_sweep, experiment_sweep_results);
     }
 
     void SimulationRunner::initialize() {

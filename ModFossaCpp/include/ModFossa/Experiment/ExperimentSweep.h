@@ -25,8 +25,7 @@ public:
     
     ExperimentSweep(
         const std::string name, 
-        const std::string voltage_protocol_name);//, 
-        //const ConcentrationMap concentration_map);
+        const std::string voltage_protocol_name);
     
     ~ExperimentSweep();
     
