@@ -71,6 +71,39 @@ protected:
         experiment->addVoltageProtocol(vp);
     }
     
+     void addShortVoltageProtocol() {
+        // Define VoltageProtocol
+        VoltageProtocol::SharedPointer vp(
+            new VoltageProtocol("voltage protocol 1"));
+
+        vp->addConstantStage("hold1", -80, 1);
+        vp->addConstantStage("hold2", -80, 2);
+        vp->addConstantStage("hold2", -80, 3);
+        vp->addConstantStage("hold1", -80, 4);
+        vp->addConstantStage("hold2", -80, 5);
+        vp->addConstantStage("hold2", -80, 6);
+        vp->addConstantStage("hold1", -80, 7);
+        vp->addConstantStage("hold2", -80, 8);
+        vp->addConstantStage("hold2", -80, 9);
+        vp->addConstantStage("hold2", -80, 10);
+
+        // Add VoltageProtocol
+        experiment->addVoltageProtocol(vp);
+    }
+     
+    void addLongVoltageProtocol() {
+        // Define VoltageProtocol
+        VoltageProtocol::SharedPointer vp(
+            new VoltageProtocol("voltage protocol 1"));
+
+        vp->addConstantStage("hold1", -80, 1100);
+        //vp->addConstantStage("hold2", -80, 2);
+        //vp->addConstantStage("hold2", -80, 3);
+        
+        // Add VoltageProtocol
+        experiment->addVoltageProtocol(vp);
+    }
+    
     void addExperimentSweep() {
         // Define ConcentrationMap
         ExperimentSweep::ConcentrationMap concentrations;
@@ -134,8 +167,57 @@ TEST_F(SimulationRunnerTest, runSteppedSweepSuccess) {
     simulation_runner.runAllExperimentSweeps();
 }
 
+/**
+ * Test Case X.1 - Test results length
+ * Use Case: X.1 - Main Success Scenario
+ */
+TEST_F(SimulationRunnerTest, testResultsLength) {
+    
+    // Create a valid MarkovModel with a rate dependent on Ca
+    createValidMarkovModel();
+    
+    // Add valid VoltageProtocol
+    addShortVoltageProtocol();
+    
+    // Add ExperimentSweep with a concentration defined for Ca
+    addExperimentSweep();
+    
+    // Validate Experiment
+    experiment->validate();
+      
+    simulation_runner.runAllExperimentSweeps();   
+    
+    Results::SharedPointer results = simulation_runner.getResultsClass();
+    
+    Vector2d currents = results->getCurrents("experiment sweep 1");
+    ASSERT_EQ(currents.front().size(), (unsigned int)55);
+}
 
-
+/**
+ * Test Case X.1 - Test results length 2
+ * Use Case: X.1 - Main Success Scenario
+ */
+TEST_F(SimulationRunnerTest, testResultsLength2) {
+    
+    // Create a valid MarkovModel with a rate dependent on Ca
+    createValidMarkovModel();
+    
+    // Add valid VoltageProtocol
+    addLongVoltageProtocol();
+    
+    // Add ExperimentSweep with a concentration defined for Ca
+    addExperimentSweep();
+    
+    // Validate Experiment
+    experiment->validate();
+      
+    simulation_runner.runAllExperimentSweeps();   
+    
+    Results::SharedPointer results = simulation_runner.getResultsClass();
+    
+    Vector2d currents = results->getCurrents("experiment sweep 1");
+    ASSERT_EQ(currents.front().size(), (unsigned int)1100);
+}
 
 
 

@@ -89,22 +89,35 @@ Vector2d Simulator::runProtocolIteration(
     // necessary to calculate the stop time of the second to last stage.
     for(unsigned int i = 0; i < protocol_iteration.size()-1; ++i) {
                
-        double stop_time = protocol_iteration[i+1].first / 1000;
+        int stop_time = protocol_iteration[i+1].first;// / 1000.0;
         double voltage = protocol_iteration[i].second;
-        double start_time = protocol_iteration[i].first / 1000;
+        int start_time = protocol_iteration[i].first;// / 1000.0;
         
         // If this is our first iteration, start not at time 0, but at dt.
         // Time 0 is the initial conditions, and they have already been saved
         // to the results.
         if(i == 0) {
-            start_time += dt;
+            //start_time += dt;
+            start_time += 1;
         } 
                       
         // Create the tspan
+//        int number_of_time_steps = (stop_time - start_time) / dt;
+//        int loop_counter = 0;
+//        std::vector<double> tspan;
+//        while(loop_counter < number_of_time_steps) {
+//            tspan.push_back(loop_counter * dt + start_time);
+//            std::cout << loop_counter * dt + start_time << ",";
+//            ++loop_counter;
+//
+//        }
+        
         std::vector<double> tspan;
-        for(double t = start_time; t <= stop_time; t+=dt){
+        for(unsigned int t = start_time; t < stop_time; ++t){
             tspan.push_back(t);
         }
+        
+        
                     
         // Set state_of_the_world initial voltage
         // We are doing this twice the first time. Fix it.

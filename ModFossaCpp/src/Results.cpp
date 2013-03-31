@@ -134,14 +134,14 @@ namespace ModFossa {
         Vector2dSharedPtr currents(new Vector2d());
 
         unsigned int number_of_protocol_iterations = state_probabilities->size();
-        unsigned int number_of_time_steps = state_probabilities->front().size() - 3;
+        unsigned int number_of_time_steps = state_probabilities->front().size();
         unsigned int number_of_states = state_probabilities->front().front().size();
 
         std::cout << "tsetps: " << number_of_time_steps << std::endl;
         std::cout << "vsetps: " << voltages->front().size() << std::endl;
         
         assert(voltages->size() == number_of_protocol_iterations);
-        //assert(voltages->front().size() == number_of_time_steps);
+        assert(voltages->front().size() == number_of_time_steps);
 
         for (unsigned int protocol_iteration_index = 0;
                 protocol_iteration_index < number_of_protocol_iterations;
@@ -157,20 +157,13 @@ namespace ModFossa {
                         (*state_probabilities)[protocol_iteration_index][time_index];
                 double voltage = (*voltages)[protocol_iteration_index][time_index];
                 double current = 0;
-                //std::cout << voltage << std::endl;
+
                 for (unsigned int state_index = 0;
                         state_index < number_of_states;
                         ++state_index) {
 
                     current += state_probs[state_index] *
                             (*state_gating_variables)[state_index];
-                            
-                                                       
-                            
-                            //std::cout << (*state_gating_variables)[state_index];
-//                            if((*state_gating_variables)[state_index] != 0) {
-//                                std::cout << current << std::endl;
-//                            }
                 }
                 current *= max_conductance * (voltage - reversal_potential);
                 currents->back().push_back(current);

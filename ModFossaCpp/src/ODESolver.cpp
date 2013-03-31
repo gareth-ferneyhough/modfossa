@@ -87,8 +87,8 @@ int ODESolver::solve(std::vector<double> tspan,
     int flag = 0;
     for (unsigned int time_step = 0; time_step < tspan.size(); ++time_step) { 
         
-        realtype tout = tspan[time_step];
-        realtype tstop = tspan.back();
+        realtype tout = tspan[time_step] / 1000.0;
+        realtype tstop = tspan.back() / 1000.0;
         // Set the stop time equal to the time at which the voltage changes
         // next. This is to ensure that the solver does not integrate past the
         // stop time, which could mess up the results. 
