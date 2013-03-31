@@ -136,9 +136,6 @@ namespace ModFossa {
         unsigned int number_of_protocol_iterations = state_probabilities->size();
         unsigned int number_of_time_steps = state_probabilities->front().size();
         unsigned int number_of_states = state_probabilities->front().front().size();
-
-        std::cout << "tsetps: " << number_of_time_steps << std::endl;
-        std::cout << "vsetps: " << voltages->front().size() << std::endl;
         
         assert(voltages->size() == number_of_protocol_iterations);
         assert(voltages->front().size() == number_of_time_steps);

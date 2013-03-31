@@ -97,8 +97,11 @@ protected:
             new VoltageProtocol("voltage protocol 1"));
 
         vp->addConstantStage("hold1", -80, 1100);
-        //vp->addConstantStage("hold2", -80, 2);
-        //vp->addConstantStage("hold2", -80, 3);
+        vp->addConstantStage("hold2", -80, 1101);
+        vp->addConstantStage("hold2", -80, 1102);
+        vp->addConstantStage("hold1", -80, 1103);
+        vp->addConstantStage("hold2", -80, 1104);
+        vp->addConstantStage("hold2", -80, 1105);
         
         // Add VoltageProtocol
         experiment->addVoltageProtocol(vp);
@@ -170,6 +173,9 @@ TEST_F(SimulationRunnerTest, runSteppedSweepSuccess) {
 /**
  * Test Case X.1 - Test results length
  * Use Case: X.1 - Main Success Scenario
+ * 
+ * Test that the size of the output is correct given various (short) voltage
+ * hold stages.
  */
 TEST_F(SimulationRunnerTest, testResultsLength) {
     
@@ -196,6 +202,9 @@ TEST_F(SimulationRunnerTest, testResultsLength) {
 /**
  * Test Case X.1 - Test results length 2
  * Use Case: X.1 - Main Success Scenario
+ * 
+ * Test that the size of the output is correct given various (long) voltage
+ * hold stages.
  */
 TEST_F(SimulationRunnerTest, testResultsLength2) {
     
@@ -216,7 +225,7 @@ TEST_F(SimulationRunnerTest, testResultsLength2) {
     Results::SharedPointer results = simulation_runner.getResultsClass();
     
     Vector2d currents = results->getCurrents("experiment sweep 1");
-    ASSERT_EQ(currents.front().size(), (unsigned int)1100);
+    ASSERT_EQ(currents.front().size(), (unsigned int)6615);
 }
 
 

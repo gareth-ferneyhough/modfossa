@@ -29,7 +29,11 @@ public:
     TransitionMatrix::SharedPointer transition_matrix);
 
 private:
-    const double dt = 0.001;
+    
+    // const double dt = 0.001; 
+    // Not using currently. Our time step is 
+    // one millisecond, and our time units we pass to the solver
+    // are in milliseconds.
     
     void resultsMatrixToVector(
         Vector2d& results, const Matrix& mat); 

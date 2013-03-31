@@ -149,7 +149,8 @@ BOOST_PYTHON_MODULE(ModFossa) {
             init < std::string, double>())
             ;
 
-    class_<State, shared_ptr<State> >("state", init < std::string, bool>())
+    class_<State, shared_ptr<State> >(
+        "state", init <std::string, bool, double>())
             .def("name", &State::getName)
             .def("conducting", &State::getIsConducting)
             ;

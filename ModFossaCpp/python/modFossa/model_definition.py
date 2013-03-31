@@ -9,8 +9,8 @@ experiment = simulationRunner.experiment()
 markovModel = experiment.markovModel()
 
 
-def state(name, conducting = False):
-    try: state = ModFossa.state(name, conducting)
+def state(name, conducting = False, gating = 1.0):
+    try: state = ModFossa.state(name, conducting, gating)
     except RuntimeError, e:
         print e
 

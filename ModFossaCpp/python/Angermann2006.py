@@ -14,8 +14,8 @@
 
 from modFossa import *
 
-state('O1', conducting=True)
-state('O2')
+state('O1', conducting=True, gating=1.0)
+state('O2', conducting=True, gating=0.5)
 state('O3')
 state('C1')
 state('C2')
@@ -39,39 +39,34 @@ connect('O1', 'C2', 'b1')
 connect('O2', 'C3', 'b2')
 connect('O3', 'C4', 'b3')
 
-#maxConductance(1.16)
-#reversalPotential(0)
-
 rate('koff', type='constant', k=50)
-rate('kon', type='ligandGated', k=20e6, ligand='Ca', power=1)
+rate('kon', type='ligandGated', k=25e6, ligand='Ca', power=1)
 
-rate('a1', type='constant', k=75)
-rate('a2', type='constant', k=150)
-rate('a3', type='constant', k=300)
+rate('a1', type='constant', k=1)
+rate('a2', type='constant', k=25)
+rate('a3', type='constant', k=200)
 
-rate('b1', type='sigmoidal', a=10, v_half=75, k=50)
-rate('b2', type='sigmoidal', a=75, v_half=120, k=50)
-rate('b3', type='sigmoidal', a=100, v_half=120, k=50)
+rate('b1', type='sigmoidal', a=60, v_half=-40, k=40)
+rate('b2', type='sigmoidal', a=35, v_half=0, k=50)
+rate('b3', type='sigmoidal', a=25, v_half=140, k=40)
 
 initialState('C1')
-maxChannelConductance(1.12)
+maxChannelConductance(1.16)
 reversalPotential(0)
 
 voltageProtocol('vp')
-#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
-#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
-#voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=1)
-voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=500)
-#voltageProtocolAddStage('vp', 'step', voltage=100, duration=500)
-voltageProtocolAddStage('vp', 'step2', start=-80, step=20, stop=40, duration=300)
-voltageProtocolAddStage('vp', 'hold2', voltage=-40, duration=300)
+voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=100)
+voltageProtocolAddStage('vp', 'step', start=-100, stop=140, step=20, duration=1000)
+voltageProtocolAddStage('vp', 'hold2', voltage=-80, duration=1000)
 
-experimentSweep('sweep', 'vp', Ca=250e-9)
+
+experimentSweep('sweep', 'vp', Ca=1000e-9)
 
 validate()
 run()
 
-#plotStates('sweep')
+
+currents = getCurrents('sweep')
 plotCurrents('sweep')
 
 #voltageProtocol = getVoltageProtocol('sweep')
