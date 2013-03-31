@@ -51,15 +51,18 @@ private:
     
     Vector2dSharedPtr voltageProtocolAsVector2d(
         SerializedProtocolSharedPointer vp);
-    
+        
     Vector2dSharedPtr calculateCurrents(
         Vector3dSharedPtr state_probabilities, 
         Vector2dSharedPtr voltages);
         
     double reversal_potential;
     double max_conductance;
+    double membrane_capacitance;
+    
     StringVecSharedPtr state_names;
     VectorSharedPtr state_gating_variables;
+    VectorSharedPtr voltage_protocol_steps;
     
     ResultsMap3d experiment_sweep_probabilities;
     ResultsMap2d experiment_sweep_voltage_protocol;

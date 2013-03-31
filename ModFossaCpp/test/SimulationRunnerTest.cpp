@@ -46,6 +46,7 @@ protected:
         markov_model->setInitialState("state1");
         markov_model->setMaxChannelConductance(1);
         markov_model->setReversalPotential(1);
+        markov_model->setMembraneCapacitance(100);
     }
     
     void addVoltageProtocol() {

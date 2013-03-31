@@ -13,6 +13,7 @@
 #include <stdexcept>
 
 #include <ModFossa/Common/SharedPtr.h>
+#include <ModFossa/Common/ContainerTypes.h>
 #include <ModFossa/Experiment/SerializedProtocol.h>
 
 namespace ModFossa {
@@ -69,6 +70,7 @@ public:
 private:   
     
     friend class Experiment;
+    friend class Results;
     friend class VoltageProtocolTest;
     
     /** 
@@ -92,6 +94,8 @@ private:
     };
     
     std::vector<VoltageProtocolStage> voltage_protocol_stages;
+    VectorSharedPtr getVoltageProtocolSteps();
+    VectorSharedPtr voltage_protocol_steps;
     
     std::string name;
     SerializedProtocolSharedPointer serialized_data;

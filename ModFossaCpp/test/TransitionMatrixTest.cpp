@@ -53,6 +53,7 @@ protected:
         markov_model->setInitialState("s1");
         markov_model->setMaxChannelConductance(1.1);
         markov_model->setReversalPotential(0);
+        markov_model->setMembraneCapacitance(100);
 
         StateOfTheWorld::ConcentrationMap concentrations;
         state_of_the_world = StateOfTheWorld::SharedPointer(

@@ -12,7 +12,8 @@ namespace ModFossa {
 MarkovModel::MarkovModel() :
 is_valid(false),
 max_channel_conductance(-1),
-reversal_potential(-9999){
+reversal_potential(-9999),
+membrane_capacitance(-1){
 }
 
 MarkovModel::~MarkovModel() {
@@ -130,25 +131,38 @@ StringVecSharedPtr MarkovModel::getStateNames() const {
     return names;
 }
 
-void MarkovModel::setMaxChannelConductance(double max_channel_conductance) {
-    if (max_channel_conductance == -1) {
+void MarkovModel::setMaxChannelConductance(double conductance_mS_per_cm2) {
+    if (conductance_mS_per_cm2 == -1) {
         throw std::runtime_error("max channel conductance has already " \
                                     "been set");
     }
     
-    if (max_channel_conductance < 0) {
+    if (conductance_mS_per_cm2 < 0) {
         throw std::runtime_error("max channel conductance cannot be negative"); 
     }
-    this->max_channel_conductance = max_channel_conductance;
+    this->max_channel_conductance = conductance_mS_per_cm2;
     is_valid = false;
 }
 
-void MarkovModel::setReversalPotential(double reversal_potential) {
-    if (reversal_potential == -9999) {
+void MarkovModel::setReversalPotential(double reversal_potential_mV) {
+    if (reversal_potential_mV == -9999) {
         throw std::runtime_error("reversal potential has already been set");
     }
     
-    this->reversal_potential = reversal_potential;
+    this->reversal_potential = reversal_potential_mV;
+    is_valid = false;
+}
+
+void MarkovModel::setMembraneCapacitance(double capacitance_pF) {
+    if (capacitance_pF == -1) {
+        throw std::runtime_error("max channel conductance has already " \
+                                    "been set");
+    }
+    
+    if (capacitance_pF < 0) {
+        throw std::runtime_error("membrane capacitance cannot be negative"); 
+    }
+    this->membrane_capacitance = capacitance_pF;
     is_valid = false;
 }
 
@@ -158,6 +172,10 @@ double MarkovModel::getMaxChannelConductance() const{
 
 double MarkovModel::getReversalPotential() const{
     return reversal_potential;
+}
+
+double MarkovModel::getMembraneCapacitance() const{
+    return membrane_capacitance;
 }
 
 bool MarkovModel::isValid() const {
@@ -198,9 +216,9 @@ Validation::ValidationResults MarkovModel::validate(
         errors.push_back(std::make_pair(
                 MAX_CONDUCTANCE_NOT_DEFINED, "Maximum channel conductance "\
                                                 "not defined"));
-    }
-
-    // reversal potential has been set?
+        error_level = ERRORS;
+    }       
+    
     /**
      * @todo change this method of checking if reversal_potential has been
      * initialized.
@@ -212,6 +230,15 @@ Validation::ValidationResults MarkovModel::validate(
         
         error_level = ERRORS;
     }
+    
+    // membrane capacitance has been set?
+    if (membrane_capacitance == -1) {
+        errors.push_back(std::make_pair(
+                MEMBRANE_CAPACITANCE_NOT_DEFINED, 
+                "Membrane capacitance not defined"));
+        
+        error_level = ERRORS;
+    }  
 
     // check connections that rate_constants and states exist
     for (unsigned int i = 0; i < connections.size(); ++i) {

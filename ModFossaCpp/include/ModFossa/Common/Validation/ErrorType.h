@@ -16,6 +16,7 @@ namespace ModFossa {
             // MarkovModel Errors
             NO_CONNECTIONS, 
             MAX_CONDUCTANCE_NOT_DEFINED,
+            MEMBRANE_CAPACITANCE_NOT_DEFINED,
             REVERSAL_POTENTIAL_NOT_DEFINED,
             RATE_CONSTANT_NOT_DEFINED,
             STATE_NOT_DEFINED, 

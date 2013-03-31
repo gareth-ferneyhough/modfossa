@@ -14,6 +14,8 @@ VoltageProtocol::VoltageProtocol(std::string name) :
     if (name.empty()) {
         throw std::runtime_error("VoltageProtocol name cannot be empty");
     }
+    
+    voltage_protocol_steps = VectorSharedPtr(new Vector());
 }
 
 VoltageProtocol::~VoltageProtocol() {
@@ -61,10 +63,16 @@ void VoltageProtocol::addSteppedStage(std::string name, int voltage_start,
                 ": voltage_step has incorrect sign");
     }
     
-    //Everything is awesome, so add the stage.
+    // Everything is awesome, so add the stage.
     VoltageProtocolStage stage(name, voltage_start, voltage_stop, 
             voltage_step, duration);
     voltage_protocol_stages.push_back(stage);
+    
+    // Finally, create and save vector of the step voltages. This is used by 
+    // results class when calculating the IV curve.
+    for(int v = voltage_start; v <= voltage_stop; v+= voltage_step) {
+        voltage_protocol_steps->push_back(v);
+    } 
 }
 
 void VoltageProtocol::CheckNameNotEmpty(std::string name) const {
@@ -162,6 +170,10 @@ SerializedProtocolSharedPointer VoltageProtocol::serializeVoltageProtocol() {
     }
     
     return serialized_data;
+}
+
+VectorSharedPtr VoltageProtocol::getVoltageProtocolSteps() {
+    return voltage_protocol_steps;
 }
 
 int VoltageProtocol::numberOfSteps(int start, int stop, int step) const {

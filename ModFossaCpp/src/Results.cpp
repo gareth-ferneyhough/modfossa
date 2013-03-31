@@ -28,10 +28,12 @@ namespace ModFossa {
         initialized = true;
 
         MarkovModel::SharedPointer markov_model = experiment->getMarkovModel();
+        this->experiment = experiment;
         state_names = markov_model->getStateNames();
         state_gating_variables = markov_model->getStateGatingVariables();
         max_conductance = markov_model->getMaxChannelConductance();
         reversal_potential = markov_model->getReversalPotential();
+        membrane_capacitance =  markov_model->getMembraneCapacitance();
     }
 
     StringVec Results::getStateNames() {
@@ -121,6 +123,11 @@ namespace ModFossa {
         SerializedProtocolSharedPointer vp = sweep->getSerializedVoltageProtocol();
         Vector2dSharedPtr voltage_protocol = voltageProtocolAsVector2d(vp);
         experiment_sweep_voltage_protocol[experiment_sweep_name] = voltage_protocol;
+        
+        // Save the voltage protocol steps, used to calculate the IV curve
+        voltage_protocol_steps = 
+                experiment->getVoltageProtocol(
+                sweep->getVoltageProtocolName())->getVoltageProtocolSteps();
 
         // Calculate the currents
         experiment_sweep_currents[experiment_sweep_name] =
@@ -181,6 +188,13 @@ namespace ModFossa {
         return currents;
     }
 
+    /**
+     * Convert the serialized voltage protocol into a more usable form for 
+     * plotting and calculating currents.
+     * 
+     * @todo Would be nice if this was returned from the Simulator so that
+     * we didn't have to do extra work here to create it.
+     */
     Vector2dSharedPtr Results::voltageProtocolAsVector2d(
             SerializedProtocolSharedPointer vp) {
 
@@ -201,7 +215,7 @@ namespace ModFossa {
                 double voltage = ((*protocol_iterator)[inner_index]).second;
 
                 int change_time_index;
-                // We are currently at the last protocol stage
+
                 if (inner_index == protocol_iterator->size() - 1) {
                     change_time_index = inner_index;
                 } else {
@@ -244,21 +258,20 @@ namespace ModFossa {
                 + " do not exist");
         }
         
-        // Get our current values at the specified time.
-       
-        Vector2dSharedPtr voltages = 
-                experiment_sweep_voltage_protocol[experiment_sweep_name];
-
+        if(voltage_protocol_steps->size() == 0) {
+            throw std::runtime_error("Cannot create IV curve because the "\
+                                     "voltage protocol has no stepped stage");
+        }
+        
         Vector2dSharedPtr currents = 
                 experiment_sweep_currents[experiment_sweep_name];
         
         // Make sure our current and voltage data are the same dimensions.        
-        unsigned int number_voltage_steps = voltages->size();
-        unsigned int number_time_steps = (*voltages)[0].size();
+        unsigned int number_voltage_steps = voltage_protocol_steps->size();
+        unsigned int number_time_steps = (*currents)[0].size();
              
         assert(currents->size() == number_voltage_steps);
-        assert((*currents)[0].size() == number_time_steps);
-        
+                
         // Make sure that user's time value is within range.
         if(time_ms < 0 || time_ms >= number_time_steps) {
             throw std::runtime_error("Requested time value for IV curve is "\
@@ -271,11 +284,12 @@ namespace ModFossa {
         iv_curve.push_back(Vector()); // currents
         
         for(unsigned int voltage_step_index = 0; 
-                voltage_step_index < voltages->size(); 
+                voltage_step_index < number_voltage_steps; 
                 ++ voltage_step_index) {
             
-            iv_curve[0].push_back((*voltages)[voltage_step_index][1000]); // FIX
-            iv_curve[1].push_back((*currents)[voltage_step_index][time_ms]); 
+            iv_curve[0].push_back((*voltage_protocol_steps)[voltage_step_index]);
+            iv_curve[1].push_back(1E6*(*currents)[voltage_step_index][time_ms] 
+                / membrane_capacitance); 
         }
         return iv_curve;
     }

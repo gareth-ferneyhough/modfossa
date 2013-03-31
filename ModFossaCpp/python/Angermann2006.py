@@ -53,6 +53,7 @@ rate('b3', type='sigmoidal', a=25, v_half=140, k=40)
 initialState('C1')
 maxChannelConductance(1.16)
 reversalPotential(0)
+membraneCapacitance(100)
 
 voltageProtocol('vp')
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=100)
@@ -67,7 +68,7 @@ run()
 
 plotIV('sweep', 1200)
 
-#plotCurrents('sweep')
+plotCurrents('sweep')
 
 #voltageProtocol = getVoltageProtocol('sweep')
 #plot(voltageProtocol)

@@ -164,6 +164,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
                 &MarkovModel::setMaxChannelConductance)
             .def("setReversalPotential", 
                 &MarkovModel::setReversalPotential)
+            .def("setMembraneCapacitance", &MarkovModel::setMembraneCapacitance)
             .def("setInitialState", &MarkovModel::setInitialState)    
             .def("isValid", &MarkovModel::isValid)
             .def("validate", &MarkovModel::validate)
@@ -198,6 +199,8 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .value("maximum channel conductance not defined",
             ErrorType::MAX_CONDUCTANCE_NOT_DEFINED)    
             .value("rate constant not defined",
+            ErrorType::MEMBRANE_CAPACITANCE_NOT_DEFINED)    
+            .value("membrane capacitance not defined",
             ErrorType::RATE_CONSTANT_NOT_DEFINED)
             .value("state not defined",
             ErrorType::STATE_NOT_DEFINED)

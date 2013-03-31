@@ -69,6 +69,11 @@ def reversalPotential(reversalPotential):
     except RuntimeError, e:
         print e
 
+def membraneCapacitance(capacitance_pf):
+    try: markovModel.setMembraneCapacitance(capacitance_pf)
+    except RuntimeError, e:
+        print e
+
 def isValid():
     return markovModel.isValid()
 
