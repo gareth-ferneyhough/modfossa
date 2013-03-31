@@ -181,6 +181,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
     class_<Results, shared_ptr<Results> >("results")
             .def("getStateNames", &Results::getStateNames)
             .def("getCurrents", &Results::getCurrents)
+            .def("getIV", &Results::getIV)
             .def("getStateProbabilities", &Results::getStateProbabilities)
             .def("getVoltageProtocol", &Results::getVoltageProtocol)
             ;

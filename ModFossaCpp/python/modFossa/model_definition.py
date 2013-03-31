@@ -1,4 +1,5 @@
 import ModFossa
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 #class modFossa:
     
@@ -31,12 +32,24 @@ def rate(name, **args):
     elif args['type'] == 'exponential':
         _addExponentialRateConstant(name, **args)
 
-def connect(name, fromState, toState):
-    try: connection = ModFossa.connection(name, fromState, toState)
-    except RuntimeError, e:
-        print e
+def connect(**args):
+    if len(args) != 3:
+        print 'Incorrent number of arguments to connect'
 
-    try:
+    if not 'from_state' in args:
+        raise RuntimeError("argument \'from_state\' not found when adding "
+                            "connection")
+
+    if not 'to_state' in args:
+        raise RuntimeError("argument \'to_state\' not found when adding "
+                            "connection")
+
+    if not 'rate' in args:
+        raise RuntimeError("argument \'rate\' not found when adding "
+                            "connection")
+
+    try: 
+        connection = ModFossa.connection(args['from_state'], args['to_state'], args['rate'])
         markovModel.addConnection(connection)
     except RuntimeError, e:
         print e
@@ -135,6 +148,13 @@ def getCurrents(experimentSweepName):
     except RuntimeError, e:
         print e  
 
+def getIV(experimentSweepName, time_ms):
+    try:
+        return results.getIV(experimentSweepName, time_ms)
+
+    except RuntimeError, e:
+        print e 
+
 def plotStates(experimentSweepName):
     plotData = getStateProbabilities(experimentSweepName)
     names = getStateNames()
@@ -149,6 +169,30 @@ def plotStates(experimentSweepName):
     #ax.set_title('Channel Probability')
     #ax.autoscale_view(True,True,True)
     #plt.axis([0, 2000, -100, 200])
+    plt.show()
+
+
+def plotIV(experimentSweepName, time_ms):
+    plotData = getIV(experimentSweepName, time_ms)
+    
+    #fig = plt.figure(1)
+    fig = plt.figure(figsize=(4,3), facecolor='w', edgecolor='k') 
+    ax = fig.add_subplot(111)
+    ax.plot(plotData[0], plotData[1], color='red', linewidth=3, marker='o',
+        markerfacecolor='red', markersize=7)
+
+    #leg = ax.legend(names, 'center right', shadow=True)
+    # Make x and y ticklabels smaller 
+    for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
+    for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
+    mpl.rcParams['axes.linewidth'] = 0.8 
+    ax.set_xlabel('V (mV)')
+    ax.set_ylabel('I (pA/pF)')
+    ax.set_title('IV')
+    #ax.minorticks_on()
+    ax.set_xticks(plotData[0])
+    #ax.autoscale_view(True,True,True)
+    plt.xlim(xmin=-110)
     plt.show()
 
 

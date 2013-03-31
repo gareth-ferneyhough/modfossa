@@ -127,6 +127,18 @@ namespace ModFossa {
                 calculateCurrents(state_probabilities, voltage_protocol);
     }
 
+    
+    /**
+     * Calculate the currents for an experiment sweep given a 3d vector of 
+     * state probabilities, and a 2d vector of voltages. Other values used 
+     * are: maximum conductance, reversal potential, and channel gating values.
+     * 
+     * @todo This needs to be vectorized.
+     * 
+     * @param state_probabilities
+     * @param voltages
+     * @return 
+     */
     Vector2dSharedPtr Results::calculateCurrents(
             Vector3dSharedPtr state_probabilities,
             Vector2dSharedPtr voltages) {
@@ -209,6 +221,62 @@ namespace ModFossa {
         }
         return voltage_protocol;
     }
+    
+    /**
+     * Calculate the IV curve for an experiment sweep at the given time in 
+     * milliseconds. The units on the vertical axis are pA/pF. The 
+     * horizontal axis is milliVolts.
+     * 
+     * @param experiment_sweep_name
+     * @param time_ms Time in milliseconds at which to calculate the IV curve.
+     * @return 
+     */
+    Vector2d Results::getIV(std::string experiment_sweep_name, 
+            unsigned int time_ms) {
+        
+        if (experiment_sweep_name.empty()) {
+            throw std::runtime_error("Experiment sweep name cannot be empty");
+        }
 
+        if (!experimentSweepResultsExist(experiment_sweep_name)) {
+            throw std::runtime_error(
+                    "ExperimentSweep results " + experiment_sweep_name \
+                + " do not exist");
+        }
+        
+        // Get our current values at the specified time.
+       
+        Vector2dSharedPtr voltages = 
+                experiment_sweep_voltage_protocol[experiment_sweep_name];
 
+        Vector2dSharedPtr currents = 
+                experiment_sweep_currents[experiment_sweep_name];
+        
+        // Make sure our current and voltage data are the same dimensions.        
+        unsigned int number_voltage_steps = voltages->size();
+        unsigned int number_time_steps = (*voltages)[0].size();
+             
+        assert(currents->size() == number_voltage_steps);
+        assert((*currents)[0].size() == number_time_steps);
+        
+        // Make sure that user's time value is within range.
+        if(time_ms < 0 || time_ms >= number_time_steps) {
+            throw std::runtime_error("Requested time value for IV curve is "\
+                                    "outside of the range for the given "\
+                                    "experiment sweep");
+        }
+        
+        Vector2d iv_curve;
+        iv_curve.push_back(Vector()); // voltages
+        iv_curve.push_back(Vector()); // currents
+        
+        for(unsigned int voltage_step_index = 0; 
+                voltage_step_index < voltages->size(); 
+                ++ voltage_step_index) {
+            
+            iv_curve[0].push_back((*voltages)[voltage_step_index][1000]); // FIX
+            iv_curve[1].push_back((*currents)[voltage_step_index][time_ms]); 
+        }
+        return iv_curve;
+    }
 }

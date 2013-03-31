@@ -33,7 +33,7 @@ public:
     StringVec   getStateNames();
     Vector      getStateGatingVariables();
     
-    Vector      getIV(std::string experiment_sweep_name);
+    Vector2d    getIV(std::string experiment_sweep_name, unsigned int time_ms);
     Vector2d    getCurrents(std::string experiment_sweep_name);
     Vector2d    getVoltageProtocol(std::string experiment_sweep_name);
     Vector3d    getStateProbabilities(std::string experiment_sweep_name);    
