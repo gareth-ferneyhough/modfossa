@@ -50,7 +50,7 @@ rate('b1', type='sigmoidal', a=60, v_half=-40, k=40)
 rate('b2', type='sigmoidal', a=35, v_half=0, k=50)
 rate('b3', type='sigmoidal', a=25, v_half=140, k=40)
 
-initialState('C1')
+initialState('C1') # todo: this should not be required, since we are getting to steady state
 maxChannelConductance(1.16)
 reversalPotential(0)
 membraneCapacitance(100)
@@ -58,18 +58,44 @@ membraneCapacitance(100)
 voltageProtocol('vp')
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=100)
 voltageProtocolAddStage('vp', 'step', start=-100, stop=140, step=20, duration=1000)
-voltageProtocolAddStage('vp', 'hold2', voltage=-80, duration=1000)
+voltageProtocolAddStage('vp', 'hold2', voltage=-80, duration=500)
 
+sweeps = []
+sweeps.append(20)
+sweeps.append(100)
+sweeps.append(250)
+sweeps.append(500)
+sweeps.append(750)
+sweeps.append(1000)
 
-experimentSweep('sweep', 'vp', Ca=1000e-9)
+for sweep in sweeps:
+	name = 'angermann_ca' + str(sweep)
+	concentration = sweep*pow(10, -9)
+	experimentSweep(name, 'vp', Ca=concentration)
 
 validate()
 run()
 
-plotIV('sweep', 1200)
 
-plotCurrents('sweep')
+#iv_late = plotMultipleIV(sweeps, 'angermann_ca', 1099, -10, 50, 40)
+#iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
 
+#iv_tail = plotMultipleIV(sweeps, 'angermann_ca', 1100, -30, 30, 20)
+#iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
+
+currents = plotMultipleCurrents(sweeps, 'angermann_ca')
+currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
+
+#plotMultipleCurrents(sweeps, 'angermann_ca')
+
+#for sweep in sweeps:
+	#name = 'angermann_ca' + str(sweep)
+	#currents = getCurrents(name)
+
+	#currents = plotCurrents(name)
+	#currents.savefig('../results/' + name + 'currents.eps', format='eps')
+
+#plotIV('sweep', 1000)
 #voltageProtocol = getVoltageProtocol('sweep')
 #plot(voltageProtocol)
 

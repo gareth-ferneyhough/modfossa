@@ -1,6 +1,7 @@
 import ModFossa
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 #class modFossa:
     
   #  def __init__():
@@ -177,6 +178,56 @@ def plotStates(experimentSweepName):
     plt.show()
 
 
+def plotMultipleCurrents(sweeps, prefix):
+    fig = plt.figure(figsize=(10,10), facecolor='w', edgecolor='k') 
+    for i, sweep in enumerate(sweeps):
+        name = prefix + str(sweep)
+
+        plotData = getCurrents(name)
+        ax = fig.add_subplot(len(sweeps)/2, 2, i + 1)
+        for currentTrace in plotData:
+            plt.plot(currentTrace, color='black', linewidth=0.5)
+
+        # Make x and y ticklabels smaller 
+        for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
+        for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
+        mpl.rcParams['axes.linewidth'] = 0.8 
+        ax.set_xlabel('time (ms)')
+        ax.set_ylabel('I (pA)')        
+        plt.ylim(-30, 50)
+        plt.text(100, 40, str(sweep) + 'nM [Ca]i')
+
+    plt.show()
+    return fig
+
+
+def plotMultipleIV(sweeps, prefix, time_ms, ymin, ymax, labelheight):
+    fig = plt.figure(figsize=(10,10), facecolor='w', edgecolor='k') 
+    for i, sweep in enumerate(sweeps):
+        name = prefix + str(sweep)
+
+        plotData = getIV(name, time_ms)
+        ax = fig.add_subplot(len(sweeps)/2, 2, i + 1)
+        plt.plot(plotData[0], plotData[1], color='red', linewidth=3, marker='o',
+            markerfacecolor='red', markersize=7)
+
+        # Make x and y ticklabels smaller 
+        for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
+        for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
+        mpl.rcParams['axes.linewidth'] = 0.8 
+        ax.set_xlabel('V (mV)')
+        ax.set_ylabel('I (pA/pF)')
+        #ax.set_title(name)
+        ax.minorticks_on()
+        ax.set_xticks([-100, -60, -20, 20, 60, 100, 140])
+        plt.ylim(ymin, ymax)
+        plt.xlim(xmin=-110)
+        plt.text(-100, labelheight, str(sweep) + 'nM [Ca]i')
+
+    plt.show()
+    return fig
+
+
 def plotIV(experimentSweepName, time_ms):
     plotData = getIV(experimentSweepName, time_ms)
     
@@ -200,23 +251,22 @@ def plotIV(experimentSweepName, time_ms):
     plt.xlim(xmin=-110)
     plt.show()
 
-
 def plotCurrents(experimentSweepName):
     plotData = getCurrents(experimentSweepName)
-    names = getStateNames()
 
-    fig = plt.figure(1)
+    fig = plt.figure(figsize=(6,4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
     for currentTrace in plotData:
-        ax.plot(currentTrace)
+        ax.plot(currentTrace, 'k', linewidth=0.5)
 
-    #leg = ax.legend(names, 'center right', shadow=True)
-    #ax.set_xlabel('Time (ms)')
-    #ax.set_ylabel('Probability')
-    #ax.set_title('Channel Probability')
-    #ax.autoscale_view(True,True,True)
-    #plt.axis([0, 2000, -100, 200])
-    plt.show()
+    for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
+    for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
+    mpl.rcParams['axes.linewidth'] = 0.8 
+    ax.set_xlabel('Time (ms)')
+    ax.set_ylabel('I (pA)')
+    fig.tight_layout()
+    return fig
+    #plt.show()
 
 def plot(plotData):
     fig = plt.figure(1)
@@ -231,6 +281,7 @@ def plot(plotData):
     ax.set_title('Channel Probability')
     ax.autoscale_view(True,True,True)
     plt.axis([0, 2000, -100, 200])
+    
     plt.show()
 
 

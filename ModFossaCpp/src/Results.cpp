@@ -288,8 +288,7 @@ namespace ModFossa {
                 ++ voltage_step_index) {
             
             iv_curve[0].push_back((*voltage_protocol_steps)[voltage_step_index]);
-            iv_curve[1].push_back(1E6*(*currents)[voltage_step_index][time_ms] 
-                / membrane_capacitance); 
+            iv_curve[1].push_back((*currents)[voltage_step_index][time_ms]); 
         }
         return iv_curve;
     }
