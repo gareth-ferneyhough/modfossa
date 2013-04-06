@@ -304,7 +304,7 @@ def plotStates(experimentSweepName):
     plt.show()
 
 def plotVoltageProtocol(experimentSweepName):
-    fig = plt.figure(figsize=(10,10), facecolor='w', edgecolor='k') 
+    fig = plt.figure(figsize=(8, 4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
     plotData = getVoltageProtocol(experimentSweepName)
     
@@ -430,7 +430,7 @@ def plot(plotData):
     plt.show()
 
 def plotGvsCa(sweeps, prefix, time):
-    fig = plt.figure(figsize=(4,4), facecolor='w', edgecolor='k') 
+    fig = plt.figure(figsize=(6, 4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
 
     # First, get number of voltages that we have, N.
@@ -440,7 +440,6 @@ def plotGvsCa(sweeps, prefix, time):
 
     for i in range(len(conductances)):
         gAtVoltages.append([])
-    print len(gAtVoltages)
 
     for i in range(len(gAtVoltages)):
         gAtVoltages[i].append([])
@@ -463,12 +462,46 @@ def plotGvsCa(sweeps, prefix, time):
     mpl.rcParams['axes.linewidth'] = 0.8 
     ax.set_xlabel('Ca[i] (nM)')
     ax.set_ylabel('Chord Conductance (nS/pF)')
-    #ax.set_title(name)
     ax.minorticks_on()
-    #ax.set_xticks([-100, -60, -20, 20, 60, 100, 140])
     plt.xlim(xmax = 1100)
-    #plt.xlim(xmin=-110)
-    #plt.text(-100, labelheight, str(sweep) + 'nM [Ca]i')
+    plt.show()
+    return fig
 
+def plotGvsV(sweeps, prefix, time):
+    fig = plt.figure(figsize=(6, 4), facecolor='w', edgecolor='k') 
+    ax = fig.add_subplot(111)
+
+    # First, get number of sweeps that we have, N.
+    # We will create N lists to plot.
+    gAtSweeps=[]
+
+    for i in range(len(sweeps)):
+        gAtSweeps.append([])
+
+    for i in range(len(gAtSweeps)):
+        gAtSweeps[i].append([])
+        gAtSweeps[i].append([])
+
+    voltageProtocol = getVoltageProtocol(prefix + str(sweeps[0]))
+
+    for i, sweep in enumerate(sweeps):
+        name = prefix + str(sweep)
+
+        conductances = getConductances(name)
+        for j, iteration_conductance in enumerate(conductances):
+            gAtSweeps[i][0].append(voltageProtocol[j][time])
+            gAtSweeps[i][1].append(iteration_conductance[time])
+
+    for gAtSweep in gAtSweeps:
+        plt.plot(gAtSweep[0], gAtSweep[1], color='black', linewidth=1, marker='o', 
+                markerfacecolor='black', markersize=1)
+    # Make x and y ticklabels smaller 
+    for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
+    for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
+    mpl.rcParams['axes.linewidth'] = 0.8 
+    ax.set_xlabel('V (mV)')
+    ax.set_ylabel('Chord Conductance (nS/pF)')
+    ax.minorticks_on()
+    #plt.xlim(xmax = 1100)
     plt.show()
     return fig
