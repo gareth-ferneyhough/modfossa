@@ -66,7 +66,7 @@ sweeps.append(100)
 sweeps.append(250)
 sweeps.append(500)
 sweeps.append(750)
-sweeps.append(1000)
+#sweeps.append(1000)
 
 for sweep in sweeps:
 	name = 'angermann_ca' + str(sweep)
@@ -83,8 +83,8 @@ run()
 #iv_tail = plotMultipleIV(sweeps, 'angermann_ca', 1100, -30, 30, 20)
 #iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
 
-currents = plotMultipleCurrents(sweeps, 'angermann_ca')
-currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
+#currents = plotMultipleCurrents(sweeps, 'angermann_ca')
+#currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
 
 #plotMultipleCurrents(sweeps, 'angermann_ca')
 

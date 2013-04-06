@@ -12,7 +12,7 @@ else()
     message(FATAL_ERROR "CMakeLists.txt has not been tested/written for your compiler.")
 endif()
 
-find_package(Boost COMPONENTS python REQUIRED)
+find_package(Boost COMPONENTS python chrono REQUIRED)
 message("Include dirs of boost: " ${Boost_INCLUDE_DIRS} )
 message("Libs of boost: " ${Boost_LIBRARIES} )
 

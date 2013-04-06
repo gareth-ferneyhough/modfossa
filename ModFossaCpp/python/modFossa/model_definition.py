@@ -250,6 +250,7 @@ def plotIV(experimentSweepName, time_ms):
     #ax.autoscale_view(True,True,True)
     plt.xlim(xmin=-110)
     plt.show()
+    return fig
 
 def plotCurrents(experimentSweepName):
     plotData = getCurrents(experimentSweepName)
@@ -265,8 +266,8 @@ def plotCurrents(experimentSweepName):
     ax.set_xlabel('Time (ms)')
     ax.set_ylabel('I (pA)')
     fig.tight_layout()
+    plt.show()
     return fig
-    #plt.show()
 
 def plot(plotData):
     fig = plt.figure(1)

@@ -5,6 +5,7 @@
  * Created on March 23, 2013, 9:23 PM
  */
 
+#include <boost/chrono/chrono.hpp>
 #include <ModFossa/Experiment/SimulationRunner.h>
 
 namespace ModFossa {
@@ -26,7 +27,10 @@ namespace ModFossa {
     }
     
     void SimulationRunner::runAllExperimentSweeps() {
-        
+        // Start timer.
+        boost::chrono::system_clock::time_point start = 
+            boost::chrono::system_clock::now();
+
         if(simulation_has_been_run) {
             throw std::runtime_error("experiment can only be run once");
         }
@@ -46,6 +50,13 @@ namespace ModFossa {
         for(it = sweeps.begin(); it != sweeps.end(); ++it) {
             doRunExperimentSweep(*it);
         }
+
+        // Stop timer
+        boost::chrono::duration<double> sec = 
+            boost::chrono::system_clock::now() - start;
+
+        std::cout << "time elapsed in runAllExperimentSweeps(): " 
+            << sec.count() << " seconds" << std::endl;
     }
     
     void SimulationRunner::doRunExperimentSweep(
