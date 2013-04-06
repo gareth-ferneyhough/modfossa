@@ -51,9 +51,10 @@ rate('b2', type='sigmoidal', a=35, v_half=0, k=50)
 rate('b3', type='sigmoidal', a=25, v_half=140, k=40)
 
 initialState('C1') # todo: this should not be required, since we are getting to steady state
+membraneCapacitance(100) # todo: this should not be required either
+
 maxChannelConductance(1.16)
 reversalPotential(0)
-membraneCapacitance(100)
 
 voltageProtocol('vp')
 voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=100)
@@ -66,7 +67,7 @@ sweeps.append(100)
 sweeps.append(250)
 sweeps.append(500)
 sweeps.append(750)
-#sweeps.append(1000)
+sweeps.append(1000)
 
 for sweep in sweeps:
 	name = 'angermann_ca' + str(sweep)
@@ -86,17 +87,10 @@ run()
 #currents = plotMultipleCurrents(sweeps, 'angermann_ca')
 #currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
 
-#plotMultipleCurrents(sweeps, 'angermann_ca')
+gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
+gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
 
-#for sweep in sweeps:
-	#name = 'angermann_ca' + str(sweep)
-	#currents = getCurrents(name)
-
-	#currents = plotCurrents(name)
-	#currents.savefig('../results/' + name + 'currents.eps', format='eps')
-
-#plotIV('sweep', 1000)
-#voltageProtocol = getVoltageProtocol('sweep')
-#plot(voltageProtocol)
+#voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
+#voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
 
 

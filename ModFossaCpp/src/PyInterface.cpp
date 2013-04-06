@@ -185,6 +185,7 @@ BOOST_PYTHON_MODULE(ModFossa) {
             .def("getIV", &Results::getIV)
             .def("getStateProbabilities", &Results::getStateProbabilities)
             .def("getVoltageProtocol", &Results::getVoltageProtocol)
+            .def("getConductances", &Results::getConductances)
             ;
 
     enum_<ErrorLevel>("errorLevel")

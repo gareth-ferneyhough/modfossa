@@ -33,9 +33,10 @@ public:
     StringVec   getStateNames();
     Vector      getStateGatingVariables();
     
-    Vector2d    getIV(std::string experiment_sweep_name, unsigned int time_ms);
     Vector2d    getCurrents(std::string experiment_sweep_name);
+    Vector2d    getConductances(std::string experiment_sweep_name);
     Vector2d    getVoltageProtocol(std::string experiment_sweep_name);
+    Vector2d    getIV(std::string experiment_sweep_name, unsigned int time_ms);
     Vector3d    getStateProbabilities(std::string experiment_sweep_name);    
     
 private:
@@ -55,6 +56,8 @@ private:
     Vector2dSharedPtr calculateCurrents(
         Vector3dSharedPtr state_probabilities, 
         Vector2dSharedPtr voltages);
+    Vector2dSharedPtr calculateConductances(
+            Vector3dSharedPtr state_probabilities);
         
     double reversal_potential;
     double max_conductance;
@@ -67,6 +70,7 @@ private:
     ResultsMap3d experiment_sweep_probabilities;
     ResultsMap2d experiment_sweep_voltage_protocol;
     ResultsMap2d experiment_sweep_currents;
+    ResultsMap2d experiment_sweep_conductances;
 };
 }
 #endif	/* RESULTS_H */

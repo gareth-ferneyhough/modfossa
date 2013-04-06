@@ -77,6 +77,19 @@ namespace ModFossa {
         }
         return *(experiment_sweep_currents[name]);
     }
+    
+    Vector2d Results::getConductances(std::string name) {
+
+        if (name.empty()) {
+            throw std::runtime_error("Experiment sweep name cannot be empty");
+        }
+
+        if (!experimentSweepResultsExist(name)) {
+            throw std::runtime_error(
+                    "ExperimentSweep results " + name + " do not exist");
+        }
+        return *(experiment_sweep_conductances[name]);
+    }
 
     Vector2d Results::getVoltageProtocol(
             std::string experiment_sweep_name) {
@@ -129,11 +142,55 @@ namespace ModFossa {
                 experiment->getVoltageProtocol(
                 sweep->getVoltageProtocolName())->getVoltageProtocolSteps();
 
+        /**
+         * @todo Combine calculateConductances and calculateCurrents
+         */
+        
         // Calculate the currents
         experiment_sweep_currents[experiment_sweep_name] =
                 calculateCurrents(state_probabilities, voltage_protocol);
+        
+        // Calculate the conductances
+        experiment_sweep_conductances[experiment_sweep_name] =
+                calculateConductances(state_probabilities);
     }
 
+    Vector2dSharedPtr Results::calculateConductances(
+            Vector3dSharedPtr state_probabilities) {
+
+        Vector2dSharedPtr conductances(new Vector2d());
+
+        unsigned int number_of_protocol_iterations = state_probabilities->size();
+        unsigned int number_of_time_steps = state_probabilities->front().size();
+        unsigned int number_of_states = state_probabilities->front().front().size();
+       
+        for (unsigned int protocol_iteration_index = 0;
+                protocol_iteration_index < number_of_protocol_iterations;
+                ++protocol_iteration_index) {
+
+            conductances->push_back(Vector());
+
+            for (unsigned int time_index = 0;
+                    time_index < number_of_time_steps;
+                    ++time_index) {
+
+                Vector state_probs =
+                        (*state_probabilities)[protocol_iteration_index][time_index];
+                double conductance = 0;
+
+                for (unsigned int state_index = 0;
+                        state_index < number_of_states;
+                        ++state_index) {
+
+                    conductance += state_probs[state_index] *
+                            (*state_gating_variables)[state_index];
+                }
+                conductance *= max_conductance;
+                conductances->back().push_back(conductance);
+            }
+        }
+        return conductances;
+    }
     
     /**
      * Calculate the currents for an experiment sweep given a 3d vector of 
