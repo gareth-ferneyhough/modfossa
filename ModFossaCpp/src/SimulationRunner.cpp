@@ -26,7 +26,8 @@ namespace ModFossa {
         return results;
     }
     
-    void SimulationRunner::runAllExperimentSweeps() {
+    void SimulationRunner::runAllExperimentSweeps(
+        bool start_at_steady_state) {
         // Start timer.
         boost::chrono::system_clock::time_point start = 
             boost::chrono::system_clock::now();
@@ -48,7 +49,7 @@ namespace ModFossa {
         
         std::vector<ExperimentSweep::SharedPointer>::const_iterator it;
         for(it = sweeps.begin(); it != sweeps.end(); ++it) {
-            doRunExperimentSweep(*it);
+            doRunExperimentSweep(*it, start_at_steady_state);
         }
 
         // Stop timer
@@ -60,7 +61,8 @@ namespace ModFossa {
     }
     
     void SimulationRunner::doRunExperimentSweep(
-        ExperimentSweep::SharedPointer experiment_sweep) {
+        ExperimentSweep::SharedPointer experiment_sweep,
+        bool start_at_steady_state) {
 
         // Make sure that we have already validated the experiment.
         if (!experiment->isValid()) {
@@ -90,7 +92,9 @@ namespace ModFossa {
 
             experiment_sweep_state_probabilities->push_back(
                 simulator->runProtocolIteration(
-                        *it, state_of_the_world, transition_matrix));
+                        *it, state_of_the_world, 
+                        transition_matrix, 
+                        start_at_steady_state));
         }
 
         // Save results. The results class will use the experimentSweep instance

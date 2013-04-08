@@ -30,7 +30,7 @@ namespace ModFossa {
         Experiment::SharedPointer getExperiment() const;
         Results::SharedPointer getResultsClass() const;
         
-        void runAllExperimentSweeps();
+        void runAllExperimentSweeps(bool start_at_steady_state = true);
 
     private:
         Experiment::SharedPointer experiment;
@@ -44,7 +44,8 @@ namespace ModFossa {
          */
         void initialize();
         
-        void doRunExperimentSweep(ExperimentSweep::SharedPointer sweep);
+        void doRunExperimentSweep(ExperimentSweep::SharedPointer sweep,
+                bool start_at_steady_state = true);
     };
 }
 

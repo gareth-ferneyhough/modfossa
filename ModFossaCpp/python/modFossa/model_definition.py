@@ -1,14 +1,18 @@
 import ModFossa
+import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-import numpy as np
+from itertools import cycle
+
 #class modFossa:
     
   #  def __init__():
+
 simulationRunner = ModFossa.simulationRunner()
 results = simulationRunner.results()
 experiment = simulationRunner.experiment()
 markovModel = experiment.markovModel()
+_startAtSteadyState = True;
 
 
 def state(name, conducting = False, gating = 1.0):
@@ -75,6 +79,10 @@ def membraneCapacitance(capacitance_pf):
     except RuntimeError, e:
         print e
 
+def startAtSteadyState(value):
+    global _startAtSteadyState
+    _startAtSteadyState = value
+
 def isValid():
     return markovModel.isValid()
 
@@ -121,7 +129,7 @@ def experimentSweep(name, voltageProtocolName, **args):
 
 def run():
     try:
-        simulationRunner.runAllExperimentSweeps()
+        simulationRunner.runAllExperimentSweeps(_startAtSteadyState)
 
     except RuntimeError, e:
         print e
@@ -291,17 +299,30 @@ def plotStates(experimentSweepName):
     plotData = getStateProbabilities(experimentSweepName)
     names = getStateNames()
 
-    fig = plt.figure(1)
+    fig = plt.figure(figsize=(8, 5), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
-    ax.plot(plotData[0])
+
+    style = cycle(['r-', 'b--', 'g-.'])
+    states = []
+    
+    numStates = len(plotData[0][0])
+    for n in range(numStates):
+        states.append([])
+
+    for time in plotData[0]:
+        for i, state in enumerate(time):
+            states[i].append(state)
+            print state
+
+    for state in states:
+        ax.plot(state, next(style), linewidth=2)
 
     leg = ax.legend(names, 'center right', shadow=True)
-    #ax.set_xlabel('Time (ms)')
-    #ax.set_ylabel('Probability')
-    #ax.set_title('Channel Probability')
-    #ax.autoscale_view(True,True,True)
-    #plt.axis([0, 2000, -100, 200])
+    ax.set_xlabel('Time (ms)')
+    ax.set_ylabel('Probability')
+    
     plt.show()
+    return fig
 
 def plotVoltageProtocol(experimentSweepName):
     fig = plt.figure(figsize=(8, 4), facecolor='w', edgecolor='k') 

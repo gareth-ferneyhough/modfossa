@@ -26,7 +26,8 @@ public:
     Vector2d runProtocolIteration(
     ProtocolIteration protocol_iteration,   
     StateOfTheWorld::SharedPointer state_of_the_world, 
-    TransitionMatrix::SharedPointer transition_matrix);
+    TransitionMatrix::SharedPointer transition_matrix,
+    bool start_at_steady_state);
 
 private:
     
