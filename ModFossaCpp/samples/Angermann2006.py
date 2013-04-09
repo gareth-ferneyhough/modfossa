@@ -78,22 +78,26 @@ validate()
 run()
 
 
-iv_late = plotMultipleIV(sweeps, 'angermann_ca', 1099, -10, 50, 40)
-iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
+#iv_late = plotMultipleIV(sweeps, 'angermann_ca', 1099, -10, 50, 40)
+#iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
 
-iv_tail = plotMultipleIV(sweeps, 'angermann_ca', 1100, -30, 30, 20)
-iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
+#iv_tail = plotMultipleIV(sweeps, 'angermann_ca', 1100, -30, 30, 20)
+#iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
 
-currents = plotMultipleCurrents(sweeps, 'angermann_ca')
-currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
+#currents = plotMultipleCurrents(sweeps, 'angermann_ca')
+#currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
 
-gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
-gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
+currentsSingleColumn = plotCurrentsSingleColumn(sweeps, 'angermann_ca')
+currentsSingleColumn.savefig('../results/' + 'angermann_ca_currents_single_column.eps', format='eps')
 
-gVsV = plotGvsV(sweeps, 'angermann_ca', 1099)
-gVsV.savefig('../results/' + 'angermann_ca_g_vs_v.eps', format='eps')
+#gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
+#gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
 
-voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
-voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
+#gVsV = plotGvsV(sweeps, 'angermann_ca', 1099)
+#gVsV.savefig('../results/' + 'angermann_ca_g_vs_v.eps', format='eps')
+
+#voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
+#voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
+
 
 

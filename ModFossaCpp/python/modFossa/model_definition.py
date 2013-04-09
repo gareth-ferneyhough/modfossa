@@ -312,7 +312,6 @@ def plotStates(experimentSweepName):
     for time in plotData[0]:
         for i, state in enumerate(time):
             states[i].append(state)
-            print state
 
     for state in states:
         ax.plot(state, next(style), linewidth=2)
@@ -344,7 +343,7 @@ def plotVoltageProtocol(experimentSweepName):
     return fig
 
 def plotMultipleCurrents(sweeps, prefix):
-    fig = plt.figure(figsize=(10,10), facecolor='w', edgecolor='k') 
+    fig = plt.figure(figsize=(10, 10), facecolor='w', edgecolor='k') 
     for i, sweep in enumerate(sweeps):
         name = prefix + str(sweep)
 
@@ -364,6 +363,34 @@ def plotMultipleCurrents(sweeps, prefix):
 
     plt.show()
     return fig
+
+
+def plotCurrentsSingleColumn(sweeps, prefix):
+    fig = plt.figure(figsize=(4,10), facecolor='w', edgecolor='k') 
+    for i, sweep in enumerate(sweeps):
+        name = prefix + str(sweep)
+
+        plotData = getCurrents(name)
+        ax = fig.add_subplot(len(sweeps) + 1, 1, i + 1)
+        for currentTrace in plotData:
+            plt.plot(currentTrace, color='black', linewidth=0.5)
+
+        ax.set_axis_off()
+        plt.ylim(-30, 50)
+        plt.text(0, 50, str(sweep) + 'nM [Ca]i', fontsize=10)
+
+
+    ## Plot voltage protocol at bottom
+    ax = fig.add_subplot(len(sweeps) + 1, 1, len(sweeps) + 1)
+    plotData = getVoltageProtocol(prefix + str(sweeps[0]))
+    
+    for iteration in plotData:
+        plt.plot(iteration, color='black', linewidth=0.8)
+
+    ax.set_axis_off()    
+
+    plt.show()
+    return fig    
 
 
 def plotMultipleIV(sweeps, prefix, time_ms, ymin, ymax, labelheight):
