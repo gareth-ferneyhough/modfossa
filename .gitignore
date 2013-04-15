@@ -3,7 +3,7 @@
 *.so
 *.lib
 *.a
-/ModFossaCpp/project/ModFossaCpp/
-/ModFossaCpp/build
-/ModFossaCpp/doc/html
-/ModFossaCpp/doc/latex
+/ModFossa/project/ModFossaCpp/
+/ModFossa/build
+/ModFossa/doc/html
+/ModFossa/doc/latex
