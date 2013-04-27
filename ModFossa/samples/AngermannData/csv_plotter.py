@@ -35,7 +35,7 @@ def main():
 
 	names = ['1000 nM Ca', '750 nM Ca', '500 nM Ca', '250 nM Ca', '100 nM Ca', '20 nM Ca']
 
-	fig = plt.figure(figsize=(10, 6), facecolor='w', edgecolor='k') 
+	fig = plt.figure(figsize=(6,4), facecolor='w', edgecolor='k') 
 	ax = fig.add_subplot(111)
 
 	for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
@@ -60,7 +60,7 @@ def main():
 	plt.xlim(-110, 150)
 
 	plt.show()
-	plt.savefig('../../results/' + 'angermann_g_vs_v_atp_experimental.eps', format='eps')
+	fig.savefig('../../results/' + 'angermann_g_vs_v_atp_experimental.eps', format='eps')
 
 def curveFit(x, y, ax, style):
 
