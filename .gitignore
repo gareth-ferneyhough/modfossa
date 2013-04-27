@@ -3,6 +3,7 @@
 *.so
 *.lib
 *.a
+*~
 /ModFossa/project/ModFossaCpp/
 /ModFossa/build
 /ModFossa/doc/html
