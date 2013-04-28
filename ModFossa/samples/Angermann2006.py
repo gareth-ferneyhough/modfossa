@@ -69,51 +69,25 @@ addConcentration('concentrations', Ca=500E-9)
 addConcentration('concentrations', Ca=750E-9)
 addConcentration('concentrations', Ca=1000E-9)
 
-sweeps = []
-sweeps.append(20E-9)
-sweeps.append(100E-9)
-sweeps.append(250E-9)
-sweeps.append(500E-9)
-sweeps.append(750E-9)
-sweeps.append(1000E-9)
-
-#for sweep in sweeps:
-#	name = 'angermann_ca' + str(sweep)
-#	concentration = sweep*pow(10, -9)
-#	experimentSweep(name, 'vp', Ca=concentration)
-
-
 experiment('angermann', 'vp', 'concentrations')
 validate()
 run()
 
+# Plotting
+currents = plotMultipleCurrents('angermann')
+gVsV = plotGvsV('angermann', time_ms = 1099)
+gVsCa = plotGvsConcentration('angermann', time_ms = 1099)
 
 iv_late = plotMultipleIV('angermann', 
-			 time_ms=1099, ymin=-10, 
-			 ymax=50, labelHeight=40)
-
-#iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
+			 time_ms = 1099, ymin = -10, 
+			 ymax = 50, labelHeight = 40)
 
 iv_tail = plotMultipleIV('angermann', 
-			 time_ms=1100, ymin=-30, 
-			 ymax=30, labelHeight=20)
+			 time_ms = 1100, ymin = -30, 
+			 ymax = 30, labelHeight = 20)
 
+#iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
 #iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
-
-currents = plotMultipleCurrents('angermann')
 #currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
-
-#currentsSingleColumn = plotCurrentsSingleColumn(sweeps, 'angermann_ca')
-#currentsSingleColumn.savefig('../results/' + 'angermann_ca_currents_single_column.eps', format='eps')
-
-#gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
 #gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
-
-#gVsV = plotGvsV(sweeps, 'angermann_ca', 1099)
 #gVsV.savefig('../results/' + 'angermann_ca_g_vs_v.eps', format='eps')
-
-#voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
-#voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
-
-
-

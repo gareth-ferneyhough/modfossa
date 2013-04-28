@@ -6,7 +6,6 @@ from itertools import cycle
 
 import results
 
-#### Plotting ####
 def plotStates(experimentSweepName):
     plotData = getStateProbabilities(experimentSweepName)
     names = getStateNames()
@@ -66,8 +65,7 @@ def plotMultipleCurrents(experimentName):
 
         ax.set_axis_off()
         plt.ylim(-30, 50)
-        plt.text(0, 50, name + 'nM [Ca]i', fontsize=10)
-
+        plt.text(0, 50, name, fontsize=10)
 
     ## Plot voltage protocol at bottom
     ax = fig.add_subplot(numSweeps + 1, 1, numSweeps + 1)
@@ -77,7 +75,6 @@ def plotMultipleCurrents(experimentName):
         plt.plot(iteration, color='black', linewidth=0.8)
 
     ax.set_axis_off()    
-
     plt.show()
     return fig    
 
@@ -100,7 +97,7 @@ def plotMultipleIV(experimentName, time_ms, ymin, ymax, labelHeight):
         ax.set_xticks([-100, -60, -20, 20, 60, 100, 140])
         plt.ylim(ymin, ymax)
         plt.xlim(xmin=-110)
-        plt.text(-100, labelHeight, name + 'nM [Ca]i')
+        plt.text(-100, labelHeight, name)
 
     plt.show()
     return fig
@@ -147,29 +144,13 @@ def plotCurrents(experimentSweepName):
     plt.show()
     return fig
 
-def plot(plotData):
-    fig = plt.figure(1)
-    ax = fig.add_subplot(111)
-
-    for iteration in plotData:
-        ax.plot(iteration, 'b')
-
-    leg = ax.legend(('C1', 'C2', 'O'), 'center right', shadow=True)
-    ax.set_xlabel('Time (ms)')
-    ax.set_ylabel('Probability')
-    ax.set_title('Channel Probability')
-    ax.autoscale_view(True,True,True)
-    plt.axis([0, 2000, -100, 200])
-    
-    plt.show()
-
-def plotGvsCa(sweeps, prefix, time):
+def plotGvsConcentration(experimentName, time_ms):
     fig = plt.figure(figsize=(6, 4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
 
     # First, get number of voltages that we have, N.
     # We will create N lists to plot.
-    conductances = results.getConductances(prefix + str(sweeps[0]))
+    conductances = results.getConductances(_experimentSweepNames[experimentName][0])
     gAtVoltages=[]
 
     for i in range(len(conductances)):
@@ -179,17 +160,16 @@ def plotGvsCa(sweeps, prefix, time):
         gAtVoltages[i].append([])
         gAtVoltages[i].append([])
 
-    for sweep in sweeps:
-        name = prefix + str(sweep)
-
+    for name in _experimentSweepNames[experimentName]:
         conductances = results.getConductances(name)
         for i, iteration_conductance in enumerate(conductances):
-            gAtVoltages[i][0].append(sweep)
-            gAtVoltages[i][1].append(iteration_conductance[time])
+            gAtVoltages[i][0].append(_getConcentrationFromName(name))
+            gAtVoltages[i][1].append(iteration_conductance[time_ms])
 
     for gAtVoltage in gAtVoltages:
         plt.plot(gAtVoltage[0], gAtVoltage[1], color='black', linewidth=1, marker='o', 
                 markerfacecolor='black', markersize=1)
+
     # Make x and y ticklabels smaller 
     for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
     for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
@@ -201,30 +181,30 @@ def plotGvsCa(sweeps, prefix, time):
     plt.show()
     return fig
 
-def plotGvsV(sweeps, prefix, time):
+def plotGvsV(experimentName, time_ms):
     fig = plt.figure(figsize=(6, 4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
-
+    numSweeps = len(_experimentSweepNames[experimentName])
     # First, get number of sweeps that we have, N.
     # We will create N lists to plot.
+    
     gAtSweeps=[]
 
-    for i in range(len(sweeps)):
+    for i in range(numSweeps):
         gAtSweeps.append([])
 
     for i in range(len(gAtSweeps)):
         gAtSweeps[i].append([])
         gAtSweeps[i].append([])
 
-    voltageProtocol = results.getVoltageProtocol(prefix + str(sweeps[0]))
+    voltageProtocol = results.getVoltageProtocol(_experimentSweepNames[experimentName][0])
 
-    for i, sweep in enumerate(sweeps):
-        name = prefix + str(sweep)
+    for i, name in enumerate(_experimentSweepNames[experimentName]):
 
         conductances = results.getConductances(name)
         for j, iteration_conductance in enumerate(conductances):
-            gAtSweeps[i][0].append(voltageProtocol[j][time])
-            gAtSweeps[i][1].append(iteration_conductance[time])
+            gAtSweeps[i][0].append(voltageProtocol[j][time_ms])
+            gAtSweeps[i][1].append(iteration_conductance[time_ms])
 
     for gAtSweep in gAtSweeps:
         plt.plot(gAtSweep[0], gAtSweep[1], color='black', linewidth=1, marker='o', 
@@ -239,3 +219,13 @@ def plotGvsV(sweeps, prefix, time):
     #plt.xlim(xmax = 1100)
     plt.show()
     return fig
+
+def _getConcentrationFromName(experimentSweepName):
+    """Return the concentration defined in the experiment sweep
+       in nM (nano-molar)
+    """
+    startOfConcentration = experimentSweepName.rfind('_') + 1
+    concentration = experimentSweepName[startOfConcentration:]
+    concentration = float(concentration) * 1E9
+    return concentration
+
