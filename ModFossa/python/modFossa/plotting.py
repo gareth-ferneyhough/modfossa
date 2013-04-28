@@ -1,4 +1,4 @@
-#from globals import *
+from globals import *
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from itertools import cycle
