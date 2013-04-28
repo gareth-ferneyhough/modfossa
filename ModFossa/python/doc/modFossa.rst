@@ -9,6 +9,14 @@ modFossa Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`experiment` Module
+------------------------
+
+.. automodule:: modFossa.experiment
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`globals` Module
 ---------------------
 

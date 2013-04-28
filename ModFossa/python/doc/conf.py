@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # modFossa documentation build configuration file, created by
-# sphinx-quickstart on Sun Apr 28 10:18:50 2013.
+# sphinx-quickstart on Sun Apr 28 10:38:31 2013.
 #
 # This file is execfile()d with the current directory set to its containing dir.
 #
