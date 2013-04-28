@@ -9,7 +9,7 @@ def state(name, conducting = False, gating = 1.0):
     :param gating: scales the conductance of the state. Only used 
                    *conducting* is True. Default value is 1.0. 
     """
-    try: state = modFossaCpp.state(name, conducting, gating)
+    try: state = ModFossa.state(name, conducting, gating)
     except RuntimeError, e:
         print e
 
@@ -22,7 +22,7 @@ def rate(name, **args):
     u"""Create a rate constant.
 
     :param name: name of the rate constant. Must be unique.
-    :param **args: required arguments specifying the type and parameters of the rate constant.
+    :param args: required arguments specifying the type and parameters of the rate constant.
 
     The type of rate constant to create is specified by the
     *type* argument. This is required. The various rate constant
@@ -199,7 +199,7 @@ def _addExponentialRateConstant(name, **args):
     except RuntimeError, e:
         print e
 
-    try: markovModel.addRateConstant(rateConstant)
+    try: _markovModel.addRateConstant(rateConstant)
     except RuntimeError, e:
         print e
 

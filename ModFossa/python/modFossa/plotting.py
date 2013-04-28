@@ -1,4 +1,5 @@
 from globals import *
+from experiment import _experimentSweepNames
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from itertools import cycle
@@ -53,47 +54,24 @@ def plotVoltageProtocol(experimentSweepName):
     plt.show()
     return fig
 
-def plotMultipleCurrents(sweeps, prefix):
-    fig = plt.figure(figsize=(10, 10), facecolor='w', edgecolor='k') 
-    for i, sweep in enumerate(sweeps):
-        name = prefix + str(sweep)
-
-        plotData = results.getCurrents(name)
-        ax = fig.add_subplot(len(sweeps)/2, 2, i + 1)
-        for currentTrace in plotData:
-            plt.plot(currentTrace, color='black', linewidth=0.5)
-
-        # Make x and y ticklabels smaller 
-        for tick in plt.gca().xaxis.get_major_ticks(): tick.label1.set_fontsize(10) 
-        for tick in plt.gca().yaxis.get_major_ticks(): tick.label1.set_fontsize(10)
-        mpl.rcParams['axes.linewidth'] = 0.8 
-        ax.set_xlabel('time (ms)')
-        ax.set_ylabel('I (pA)')        
-        plt.ylim(-30, 50)
-        plt.text(100, 40, str(sweep) + 'nM [Ca]i')
-
-    plt.show()
-    return fig
-
-
-def plotCurrentsSingleColumn(sweeps, prefix):
+def plotMultipleCurrents(experimentName):
     fig = plt.figure(figsize=(4,10), facecolor='w', edgecolor='k') 
-    for i, sweep in enumerate(sweeps):
-        name = prefix + str(sweep)
+    numSweeps = len(_experimentSweepNames[experimentName])
 
+    for i, name in enumerate(_experimentSweepNames[experimentName]):
         plotData = results.getCurrents(name)
-        ax = fig.add_subplot(len(sweeps) + 1, 1, i + 1)
+        ax = fig.add_subplot(numSweeps + 1, 1, i + 1)
         for currentTrace in plotData:
             plt.plot(currentTrace, color='black', linewidth=0.5)
 
         ax.set_axis_off()
         plt.ylim(-30, 50)
-        plt.text(0, 50, str(sweep) + 'nM [Ca]i', fontsize=10)
+        plt.text(0, 50, name + 'nM [Ca]i', fontsize=10)
 
 
     ## Plot voltage protocol at bottom
-    ax = fig.add_subplot(len(sweeps) + 1, 1, len(sweeps) + 1)
-    plotData = results.getVoltageProtocol(prefix + str(sweeps[0]))
+    ax = fig.add_subplot(numSweeps + 1, 1, numSweeps + 1)
+    plotData = results.getVoltageProtocol(_experimentSweepNames[experimentName][0])
     
     for iteration in plotData:
         plt.plot(iteration, color='black', linewidth=0.8)
@@ -104,13 +82,11 @@ def plotCurrentsSingleColumn(sweeps, prefix):
     return fig    
 
 
-def plotMultipleIV(sweeps, prefix, time_ms, ymin, ymax, labelheight):
+def plotMultipleIV(experimentName, time_ms, ymin, ymax, labelHeight):
     fig = plt.figure(figsize=(10,10), facecolor='w', edgecolor='k') 
-    for i, sweep in enumerate(sweeps):
-        name = prefix + str(sweep)
-
+    for i, name in enumerate(_experimentSweepNames[experimentName]):
         plotData = results.getIV(name, time_ms)
-        ax = fig.add_subplot(len(sweeps)/2, 2, i + 1)
+        ax = fig.add_subplot(len(_experimentSweepNames[experimentName])/2, 2, i + 1)
         plt.plot(plotData[0], plotData[1], color='red', linewidth=3, marker='o',
             markerfacecolor='red', markersize=7)
 
@@ -120,12 +96,11 @@ def plotMultipleIV(sweeps, prefix, time_ms, ymin, ymax, labelheight):
         mpl.rcParams['axes.linewidth'] = 0.8 
         ax.set_xlabel('V (mV)')
         ax.set_ylabel('I (pA/pF)')
-        #ax.set_title(name)
         ax.minorticks_on()
         ax.set_xticks([-100, -60, -20, 20, 60, 100, 140])
         plt.ylim(ymin, ymax)
         plt.xlim(xmin=-110)
-        plt.text(-100, labelheight, str(sweep) + 'nM [Ca]i')
+        plt.text(-100, labelHeight, name + 'nM [Ca]i')
 
     plt.show()
     return fig

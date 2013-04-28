@@ -61,43 +61,59 @@ voltageProtocolAddStage('vp', 'hold', voltage=-50, duration=100)
 voltageProtocolAddStage('vp', 'step', start=-100, stop=140, step=20, duration=1000)
 voltageProtocolAddStage('vp', 'hold2', voltage=-80, duration=500)
 
+concentrationProtocol('concentrations')
+addConcentration('concentrations', Ca=20E-9)
+addConcentration('concentrations', Ca=100E-9)
+addConcentration('concentrations', Ca=250E-9)
+addConcentration('concentrations', Ca=500E-9)
+addConcentration('concentrations', Ca=750E-9)
+addConcentration('concentrations', Ca=1000E-9)
+
 sweeps = []
-sweeps.append(20)
-sweeps.append(100)
-sweeps.append(250)
-sweeps.append(500)
-sweeps.append(750)
-sweeps.append(1000)
+sweeps.append(20E-9)
+sweeps.append(100E-9)
+sweeps.append(250E-9)
+sweeps.append(500E-9)
+sweeps.append(750E-9)
+sweeps.append(1000E-9)
 
-for sweep in sweeps:
-	name = 'angermann_ca' + str(sweep)
-	concentration = sweep*pow(10, -9)
-	experimentSweep(name, 'vp', Ca=concentration)
+#for sweep in sweeps:
+#	name = 'angermann_ca' + str(sweep)
+#	concentration = sweep*pow(10, -9)
+#	experimentSweep(name, 'vp', Ca=concentration)
 
+
+experiment('angermann', 'vp', 'concentrations')
 validate()
 run()
 
 
-iv_late = plotMultipleIV(sweeps, 'angermann_ca', 1099, -10, 50, 40)
-iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
+iv_late = plotMultipleIV('angermann', 
+			 time_ms=1099, ymin=-10, 
+			 ymax=50, labelHeight=40)
 
-iv_tail = plotMultipleIV(sweeps, 'angermann_ca', 1100, -30, 30, 20)
-iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
+#iv_late.savefig('../results/' + 'angermann_ca_late.eps', format='eps')
 
-currents = plotMultipleCurrents(sweeps, 'angermann_ca')
-currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
+iv_tail = plotMultipleIV('angermann', 
+			 time_ms=1100, ymin=-30, 
+			 ymax=30, labelHeight=20)
 
-currentsSingleColumn = plotCurrentsSingleColumn(sweeps, 'angermann_ca')
-currentsSingleColumn.savefig('../results/' + 'angermann_ca_currents_single_column.eps', format='eps')
+#iv_tail.savefig('../results/' + 'angermann_ca_tail.eps', format='eps')
 
-gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
-gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
+currents = plotMultipleCurrents('angermann')
+#currents.savefig('../results/' + 'angermann_ca_currents.eps', format='eps')
 
-gVsV = plotGvsV(sweeps, 'angermann_ca', 1099)
-gVsV.savefig('../results/' + 'angermann_ca_g_vs_v.eps', format='eps')
+#currentsSingleColumn = plotCurrentsSingleColumn(sweeps, 'angermann_ca')
+#currentsSingleColumn.savefig('../results/' + 'angermann_ca_currents_single_column.eps', format='eps')
 
-voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
-voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
+#gVsCa = plotGvsCa(sweeps, 'angermann_ca', 1099)
+#gVsCa.savefig('../results/' + 'angermann_ca_g_vs_cai.eps', format='eps')
+
+#gVsV = plotGvsV(sweeps, 'angermann_ca', 1099)
+#gVsV.savefig('../results/' + 'angermann_ca_g_vs_v.eps', format='eps')
+
+#voltageProtocol = plotVoltageProtocol('angermann_ca' + str(sweeps[0]))
+#voltageProtocol.savefig('../results/' + 'angermann_ca_voltage_protocol.eps', format='eps')
 
 
 

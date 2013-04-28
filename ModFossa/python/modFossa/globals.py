@@ -1,7 +1,7 @@
 import ModFossa
 
-modFossaCpp = ModFossa
-simulationRunner = ModFossa.simulationRunner()
-results = simulationRunner.results()
-experiment = simulationRunner.experiment()
-markovModel = experiment.markovModel()
+_modFossaCpp = ModFossa
+_simulationRunner = ModFossa.simulationRunner()
+_results = _simulationRunner.results()
+_experiment = _simulationRunner.experiment()
+markovModel = _experiment.markovModel()
