@@ -104,7 +104,7 @@ def experimentSweep(name, voltageProtocolName, **args):
         exp = _modFossaCpp.experimentSweep(name, voltageProtocolName)
 
         for k, v in args.items():
-            exp.addConcentration(ModFossa.concentration(k, v))
+            exp.addConcentration(_modFossaCpp.concentration(k, v))
 
         _experiment.addExperimentSweep(exp)
 

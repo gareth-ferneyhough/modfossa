@@ -65,7 +65,7 @@ endif(DOXYGEN_FOUND)
 ################################
 file(GLOB SAMPLE_FILES ${SAMPLE_DIR}/*.cpp)
 add_executable(samples ${SAMPLE_FILES})
-target_link_libraries(samples ModFossa)
+target_link_libraries(samples ModFossa ${EXTRA_LIBS})
 
 ################################
 # GTest
@@ -81,10 +81,10 @@ file(GLOB TEST_FILES ${TEST_DIR}/*.cpp)
 add_executable( runUnitTests ${TEST_FILES})
 
 # Link test executable against gtest & gtest_main
-target_link_libraries(runUnitTests gtest gtest_main ModFossa)
+target_link_libraries(runUnitTests gtest gtest_main ModFossa ${EXTRA_LIBS})
 add_test( runUnitTests runUnitTests )
 
 
-install (TARGETS ModFossa DESTINATION .)
+install (TARGETS ModFossa DESTINATION lib)
 
 

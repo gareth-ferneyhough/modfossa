@@ -7,8 +7,8 @@ from itertools import cycle
 import results
 
 def plotStates(experimentSweepName):
-    plotData = getStateProbabilities(experimentSweepName)
-    names = getStateNames()
+    plotData = results.getStateProbabilities(experimentSweepName)
+    names = results.getStateNames()
 
     fig = plt.figure(figsize=(8, 5), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)
@@ -128,7 +128,7 @@ def plotIV(experimentSweepName, time_ms):
     return fig
 
 def plotCurrents(experimentSweepName):
-    plotData = getCurrents(experimentSweepName)
+    plotData = results.getCurrents(experimentSweepName)
 
     fig = plt.figure(figsize=(6,4), facecolor='w', edgecolor='k') 
     ax = fig.add_subplot(111)

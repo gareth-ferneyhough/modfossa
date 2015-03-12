@@ -4,10 +4,10 @@ state('C')
 state('O1', gating=0.5)
 state('O2', conducting=True)
 
-connect(from_state='C', to_state='O1', rate='k1')
-connect(from_state='O1', to_state='O2', rate='k2')
-connect(from_state='O1', to_state='C', rate='k3')
-connect(from_state='O2', to_state='O1', rate='k4')
+connect(fromState='C', toState='O1', rate='k1')
+connect(fromState='O1', toState='O2', rate='k2')
+connect(fromState='O1', toState='C', rate='k3')
+connect(fromState='O2', toState='O1', rate='k4')
 
 rate('k1', type='ligandGated', k=10e8, ligand='Ca', power=1)
 rate('k2', type='constant', k=1)
@@ -34,6 +34,6 @@ validate()
 run()
 
 states = plotStates('three_state')
-states.savefig('../results/' + 'three_state_probabilities.eps', format='eps')
+#states.savefig('../results/' + 'three_state_probabilities.eps', format='eps')
 
 currents = plotCurrents('three_state')

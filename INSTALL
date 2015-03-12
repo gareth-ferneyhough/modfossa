@@ -1,0 +1,24 @@
+download and install sundials 2.5.0
+http://computation.llnl.gov/casc/sundials/main.html
+./configure --enable-shared
+make
+sudo make install
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+
+#download and install armadillo 
+#http://arma.sourceforge.net/download.html
+#./configure
+#make 
+#sudo make install
+
+apt-get install libboost-chrono-dev, libboost-python-dev, cmake, python-matplotlib, libopenblas-dev, liblapack-dev, libarpack2-dev, libarmadillo-dev
+mkdir build 
+cd build
+cmake ..
+make
+sudo make install
+
+cd ../python
+sudo python setup.py install
+cp /usr/local/lib/ModFossa.so /usr/local/lib/python2.7/dist-packages/modFossa

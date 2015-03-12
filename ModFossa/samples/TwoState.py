@@ -3,8 +3,8 @@ from modFossa import *
 state('Open')
 state('Closed')
 
-connect(from_state='Closed', to_state='Open', rate='kon')
-connect(from_state='Open', to_state='Closed', rate='koff')
+connect(fromState='Closed', toState='Open', rate='kon')
+connect(fromState='Open', toState='Closed', rate='koff')
 
 rate('kon', type='constant', k=10)
 rate('koff', type='constant', k=1)
@@ -28,6 +28,6 @@ validate()
 run()
 
 states = plotStates('two_state')
-states.savefig('../results/' + 'two_state_probabilities.eps', format='eps')
+#states.savefig('../results/' + 'two_state_probabilities.eps', format='eps')
 
 
