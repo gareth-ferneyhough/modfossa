@@ -1,1 +1,0 @@
-/usr/bin/c++       CMakeFiles/sample2_unittest.dir/samples/sample2_unittest.cc.o CMakeFiles/sample2_unittest.dir/samples/sample2.cc.o  -o sample2_unittest -rdynamic -L/home/gareth/lib/gtest-1.6.0/build/src libgtest_main.a libgtest.a -lpthread -Wl,-rpath,/home/gareth/lib/gtest-1.6.0/build/src 

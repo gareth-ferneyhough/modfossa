@@ -1,24 +1,37 @@
-download and install sundials 2.5.0
-http://computation.llnl.gov/casc/sundials/main.html
+Installation instructions
+Tested on Ubuntu 14.04 64-bit
+-----------------------------
+
+1. Download and install Sundials 2.5.0 from http://computation.llnl.gov/casc/sundials/main.html
+Then extract the archive and run the follwing:
+cd sundials-2.5.0
 ./configure --enable-shared
 make
 sudo make install
 
+2. Put Sundials on your library path like so:
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
 
-#download and install armadillo 
-#http://arma.sourceforge.net/download.html
-#./configure
-#make 
-#sudo make install
+3. Run the following:
+sudo apt-get install libboost-chrono-dev, libboost-python-dev, cmake, python-matplotlib, libopenblas-dev, liblapack-dev, libarpack2-dev, libarmadillo-dev
 
-apt-get install libboost-chrono-dev, libboost-python-dev, cmake, python-matplotlib, libopenblas-dev, liblapack-dev, libarpack2-dev, libarmadillo-dev
+4. Make and install Modfossa:
+cd modfossa
 mkdir build 
 cd build
 cmake ..
 make
 sudo make install
 
+5. Install Modfossa Python library:
 cd ../python
 sudo python setup.py install
 cp /usr/local/lib/ModFossa.so /usr/local/lib/python2.7/dist-packages/modFossa
+
+6. Run the Python samples in the Modfossa directory.
+
+#download and install armadillo 
+#http://arma.sourceforge.net/download.html
+#./configure
+#make 
+#sudo make install
