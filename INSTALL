@@ -26,12 +26,6 @@ sudo make install
 5. Install Modfossa Python library:
 cd ../python
 sudo python setup.py install
-cp /usr/local/lib/ModFossa.so /usr/local/lib/python2.7/dist-packages/modFossa
+sudo cp /usr/local/lib/ModFossa.so /usr/local/lib/python2.7/dist-packages/modFossa
 
 6. Run the Python samples in the Modfossa directory.
-
-#download and install armadillo 
-#http://arma.sourceforge.net/download.html
-#./configure
-#make 
-#sudo make install
