@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <ModFossa/ModelDefinition/SigmoidalRateConstant.h>
 #include <ModFossa/Common/StateOfTheWorld.h>
+#include <math.h>
 
 using namespace ModFossa;
 using std::string;
@@ -88,7 +89,7 @@ TEST_F(SigmoidalRateConstantTest, getRate) {
     double actual = rate_constant->getRate(state_of_the_world);
     double expected = 1.0999363635;
 
-    double error = abs(actual - expected);
+    double error = fabs(actual - expected);
     ASSERT_LT(error, error_allowed);
 
     delete rate_constant;
